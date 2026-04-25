@@ -29,6 +29,14 @@ header {
 .logo {
     font-size: 1.8rem;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo img {
+    height: 52px;
+    width: auto;
 }
 
 nav ul {
