@@ -3,21 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оборудование — ЧПУ-склад</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Оборудование — ЧПУ-Склад</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 30px 0 40px;
+        }
+        .category-btn {
+            padding: 12px 24px;
+            background: #f8f9fa;
+            border: 2px solid #0066cc;
+            color: #0066cc;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .category-btn:hover,
+        .category-btn.active {
+            background: #0066cc;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        .product-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        .product-info {
+            padding: 18px;
+        }
+        .product-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.25rem;
+        }
+        .product-info p {
+            color: #555;
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        .price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #0066cc;
+            margin: 12px 0;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #0066cc;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .btn:hover {
+            background: #0052a3;
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="nav-container">
             <div class="logo">
-                <img src="logo.jpg" alt="ЧПУ-Склад">
+                <img src="../logo.jpg" alt="ЧПУ-Склад">
                 ЧПУ-склад
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="program.html">Программы</a></li>
-                    <li><a href="equipment.html" class="active">Оборудование</a></li>
+                    <li><a href="../index.html">Главная</a></li>
+                    <li><a href="../program.html">Программы</a></li>
+                    <li><a href="equipment.html">Оборудование</a></li>
                 </ul>
             </nav>
         </div>
@@ -25,60 +104,77 @@
 
     <main>
         <h1>Каталог оборудования</h1>
-        <p class="subtitle">Станки с ЧПУ, 3D-принтеры, лазерные гравёры и комплектующие</p>
 
-        <!-- Категории (можно потом сделать кликабельными) -->
+        <!-- Меню категорий -->
         <div class="categories">
-            <a href="#" class="category active">Все</a>
-            <a href="#" class="category">3D-принтеры</a>
-            <a href="#" class="category">Фрезерные станки</a>
-            <a href="#" class="category">Лазерные гравёры</a>
-            <a href="#" class="category">Манипуляторы и робототехника</a>
-            <a href="#" class="category">Комплектующие</a>
+            <a href="#" class="category-btn active" data-category="all">Все товары</a>
+            <a href="#" class="category-btn" data-category="frezernye">Фрезерные станки</a>
+            <a href="#" class="category-btn" data-category="3d-printer">3D-принтеры</a>
+            <a href="#" class="category-btn" data-category="laser">Лазерные гравёры</a>
+            <a href="#" class="category-btn" data-category="manipulyatory">Манипуляторы</a>
+            <a href="#" class="category-btn" data-category="komplekt">Комплектующие</a>
         </div>
 
-        <!-- Карточки оборудования -->
-        <div class="equipment-grid">
-                                   <!-- Станок ЧПУ 3040 -->
-            <div class="equipment-card">
-                <img src="images/cnc-3040.jpg" alt="Фрезерно-гравировальный станок ЧПУ 3040 1500Вт">
-                <h3>Фрезерно-гравировальный станок ЧПУ 3040</h3>
-                <p>Мощный настольный станок с водяным охлаждением шпинделя 1500 Вт. Идеален для гравировки, фрезеровки и мелкосерийного производства.</p>
-                <ul>
-                    <li><strong>Рабочее поле:</strong> 300 × 400 × 100 мм</li>
-                    <li><strong>Шпиндель:</strong> 1500 Вт (водяное охлаждение)</li>
-                    <li><strong>Обороты:</strong> до 24 000 об/мин</li>
-                    <li><strong>Привод:</strong> ШВП + профильные рельсы</li>
-                    <li><strong>Управление:</strong> GRBL через ПК</li>
-                </ul>
-                <div class="price">от 149 990 ₽</div>
-                <a href="equipment/cnc-3040.html" class="btn">Подробнее →</a>
-            </div>
-            <!-- Пример одной карточки — копируй и меняй под своё оборудование -->
-            <div class="equipment-card">
-                <img src="https://via.placeholder.com/400x300?text=3D+Принтер" alt="3D Принтер">
-                <h3>3D-принтер Creality Ender-3 V3</h3>
-                <p>Надёжный FDM-принтер с большим объёмом печати. Идеален для начинающих и малого бизнеса.</p>
-                <div class="price">от 28 000 ₽</div>
-                <a href="#" class="btn">Подробнее</a>
-            </div>
+        <!-- Секция Фрезерные станки -->
+        <div id="frezernye" class="category-section active">
+            <h2>Фрезерные станки</h2>
+            <div class="product-grid">
 
-            <div class="equipment-card">
-                <img src="https://via.placeholder.com/400x300?text=Фрезерный+станок" alt="Фрезерный станок">
-                <h3>Фрезерный станок с ЧПУ 6090</h3>
-                <p>Рабочая область 600×900 мм. Подходит для обработки дерева, МДФ, акрила и мягких металлов.</p>
-                <div class="price">от 185 000 ₽</div>
-                <a href="#" class="btn">Подробнее</a>
+                <!-- Карточка ЧПУ 3040 -->
+                <div class="product-card">
+                    <img src="cnc-3040/main.jpg" alt="ЧПУ 3040 1500Вт">
+                    <div class="product-info">
+                        <h3>ЧПУ 3040 (1500 Вт)</h3>
+                        <p>Рабочее поле 300×400×100 мм<br>
+                           ШВП + профильные рельсы<br>
+                           Водяное охлаждение</p>
+                        <div class="price">от 189 000 ₽</div>
+                        <a href="cnc-3040.html" class="btn">Подробнее →</a>
+                    </div>
+                </div>
+
+                <!-- Сюда будут добавляться другие фрезерные станки -->
             </div>
-
-            <!-- Добавляй сюда новые карточки по такому же шаблону -->
-
         </div>
+
+        <!-- Пока пустые секции для других категорий -->
+        <div id="3d-printer" class="category-section">
+            <h2>3D-принтеры</h2>
+            <p>Здесь будут карточки 3D-принтеров...</p>
+        </div>
+
+        <div id="laser" class="category-section">
+            <h2>Лазерные гравёры</h2>
+            <p>Здесь будут карточки лазерных станков...</p>
+        </div>
+
     </main>
 
     <footer>
         <p>© 2026 ЧПУ-склад • Все права защищены</p>
         <p>Разработано Рудаковым Александром Александровичем</p>
     </footer>
+
+    <script>
+        // Простое переключение категорий
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Убираем active у всех кнопок
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.getAttribute('data-category');
+
+                document.querySelectorAll('.category-section').forEach(section => {
+                    section.classList.remove('active');
+                    if (category === 'all' || section.id === category) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
