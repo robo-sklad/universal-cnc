@@ -26,6 +26,14 @@
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+        .note {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 0.95em;
+            border-left: 5px solid #28a745;
+        }
     </style>
 </head>
 <body>
@@ -78,7 +86,7 @@
         <h2>Важные рекомендации перед запуском</h2>
         <ul>
             <li>Обязательно включите водяной насос перед запуском шпинделя!</li>
-            <li>Частотник настроен на 400 (24 000 об/мин) с завода. Не меняйте настройки без необходимости.</li>
+            <li>Частотник настроен на 400 (24 000 об/мин) с завода.</li>
             <li>Перед началом работы дождитесь стабилизации оборотов шпинделя (~5 секунд).</li>
         </ul>
 
@@ -89,9 +97,9 @@
                 📄 Технический паспорт станка
             </a>
             
-            <a href="../equipment-data/cnc-3040/CNCV4.exe" 
+            <a href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/CNC.zip" 
                class="download-btn" style="background:#28a745;" target="_blank">
-                💾 Программа управления CNCV4
+                💾 Скачать программу CNCV4 (полный комплект ~28.5 МБ)
             </a>
             
             <a href="../equipment-data/cnc-3040/instrukciya.pdf" 
@@ -103,15 +111,17 @@
                class="download-btn" style="background:#ffc107; color:#000;" target="_blank">
                 ⚠️ Устранение неисправностей
             </a>
-            
-            <a href="../equipment-data/cnc-3040/The driver.EXE" 
-               class="download-btn" style="background:#6c757d;" target="_blank">
-                📀 Драйвер шаговых двигателей
-            </a>
         </div>
 
-        <p><strong>Программа CNCV4</strong> — основная программа управления для данного станка. 
-        Рекомендуется устанавливать драйвер перед первым запуском.</p>
+        <div class="note">
+            <strong>Как установить программу CNCV4:</strong><br>
+            1. Скачайте архив <strong>CNC.zip</strong><br>
+            2. Распакуйте его в любую папку на компьютере<br>
+            3. Запустите файл <strong>CNCV4.exe</strong><br>
+            <small>Все необходимые DLL-библиотеки уже включены в архив.</small>
+        </div>
+
+        <p><strong>Программа CNCV4</strong> — основная программа управления для станка ЧПУ 3040.</p>
     </main>
 
     <footer>
