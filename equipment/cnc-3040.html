@@ -6,144 +6,129 @@
     <title>ЧПУ 3040 1500Вт — ЧПУ-Склад</title>
     <link rel="stylesheet" href="../style.css">
     <style>
-        .main-image {
-            width: 100%;
-            max-width: 800px;           /* Ограничиваем максимальную ширину */
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            margin: 20px auto;
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .download-btn {
             display: block;
-        }
-
-        .product-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            align-items: flex-start;
-            margin: 30px 0;
-        }
-
-        .specs {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .price-box {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #0066cc;
-            margin: 20px 0;
-            padding: 15px;
-            background: #f0f8ff;
+            padding: 16px 20px;
             border-radius: 8px;
+            text-decoration: none;
             text-align: center;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s;
         }
-
-        .btn.large {
-            display: block;
-            width: 100%;
-            max-width: 320px;
-            margin: 20px auto;
-            padding: 16px;
-            font-size: 1.1rem;
-            text-align: center;
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-
-        /* Адаптация под мобильные */
-        @media (max-width: 768px) {
-            .product-info {
-                flex-direction: column;
-            }
-            .main-image {
-                max-width: 100%;
-                margin: 15px auto;
-            }
+        .note {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 0.95em;
+            border-left: 5px solid #28a745;
         }
     </style>
 </head>
 <body>
-
-<header>
-    <div class="nav-container">
-        <div class="logo">
-            <img src="../logo.jpg" alt="ЧПУ-Склад">
-            ЧПУ-Склад
-        </div>
-        <nav>
-            <ul>
-                <li><a href="../index.html">Главная</a></li>
-                <li><a href="../program.html">Программы</a></li>
-                <li><a href="../equipment.html">Оборудование</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main class="product-page">
-    <a href="../equipment.html" class="back-link" style="display:inline-block; margin:15px 0; color:#0066cc;">← Назад в каталог</a>
-    
-    <h1>Фрезерно-гравировальный станок ЧПУ 3040 (1500 Вт)</h1>
-
-    <div class="product-info">
-        <!-- Уменьшенное и адаптивное фото -->
-        <img src="../equipment-data/cnc-3040/main.jpg" 
-             alt="Фрезерно-гравировальный станок ЧПУ 3040" 
-             class="main-image">
-
-        <div class="specs">
-            <h2>Технические характеристики</h2>
-            <ul>
-                <li><strong>Рабочее поле (XYZ):</strong> 300 × 400 × 100 мм</li>
-                <li><strong>Мощность шпинделя:</strong> 1500 Вт (водяное охлаждение)</li>
-                <li><strong>Максимальные обороты:</strong> до 24 000 об/мин</li>
-                <li><strong>Привод осей:</strong> ШВП (шарико-винтовая передача)</li>
-                <li><strong>Направляющие:</strong> профильные рельсы</li>
-                <li><strong>Управление:</strong> GRBL / Mach3 / CNCV4</li>
-                <li><strong>Обрабатываемые материалы:</strong> дерево, фанера, акрил, ПВХ, мягкий алюминий</li>
-            </ul>
-
-            <div class="price-box">
-                Цена: от 189 000 ₽
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="../logo.jpg" alt="ЧПУ-Склад">
+                ЧПУ-склад
             </div>
-
-            <a href="https://ozon.ru/product/1168927920" target="_blank" class="btn large">Купить на Ozon</a>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Главная</a></li>
+                    <li><a href="../program.html">Программы</a></li>
+                    <li><a href="../equipment.html">Оборудование</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <h2>Важные рекомендации перед запуском</h2>
-    <ul>
-        <li>Обязательно включите водяной насос перед запуском шпинделя!</li>
-        <li>Частотник настроен на 400 Гц (24 000 об/мин) с завода.</li>
-        <li>Перед началом работы дождитесь стабилизации оборотов (~5 секунд).</li>
-    </ul>
+    <main class="product-page">
+        <a href="../equipment.html" class="back-link">← Назад в каталог</a>
+       
+        <h1>Фрезерно-гравировальный станок ЧПУ 3040 (1500 Вт) - раздел технической информации</h1>
+       
+        <div class="product-info">
+            <img src="../equipment-data/cnc-3040/main.jpg" 
+                 alt="Фрезерно-гравировальный станок ЧПУ 3040"
 
-    <h2>📥 Файлы для скачивания</h2>
-    <div class="download-grid">
-        <a href="../equipment-data/cnc-3040/passport.pdf" class="download-btn" style="background:#0066cc;" target="_blank">
-            📄 Технический паспорт станка
-        </a>
-        <a href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/CNC.zip" 
-           class="download-btn" style="background:#28a745;" target="_blank">
-            💾 Скачать программу CNCV4 (полный комплект)
-        </a>
-        <a href="../equipment-data/cnc-3040/instrukciya.pdf" class="download-btn" style="background:#0066cc;" target="_blank">
-            🔧 Инструкция по сборке и подключению
-        </a>
-    </div>
+                 class="main-image">
+           
+            <div class="specs">
+                <h2>Технические характеристики</h2>
+                <ul>
+                    <li><strong>Рабочее поле (XYZ):</strong> 300 × 400 × 100 мм</li>
+                    <li><strong>Мощность шпинделя:</strong> 1500 Вт (водяное охлаждение)</li>
+                    <li><strong>Максимальные обороты:</strong> до 24 000 об/мин</li>
+                    <li><strong>Охлаждение шпинделя:</strong> водяное</li>
+                    <li><strong>Привод осей:</strong> ШВП (шарико-винтовая передача)</li>
+                    <li><strong>Направляющие:</strong> профильные рельсы</li>
+                    <li><strong>Управление:</strong> GRBL (программа CNCV4)</li>
+                    <li><strong>Обрабатываемые материалы:</strong> дерево, фанера, акрил, ПВХ, алюминий, цветные металлы</li>
+                    <li><strong>Вес с упаковкой:</strong> ≈ 52 кг</li>
+                </ul>
+                <div class="price-box">
+                    <strong>Цена:</strong> от 189 000 ₽
+                </div>
+                <a href="https://ozon.ru/product/1168927920" target="_blank" class="btn large">Купить на Ozon</a>
+            </div>
+        </div>
 
-    <div class="note">
-        <strong>Как установить программу CNCV4:</strong><br>
-        1. Скачайте архив<br>
-        2. Распакуйте в любую папку<br>
-        3. Запустите файл <strong>CNCV4.exe</strong>
-    </div>
-</main>
+        <h2>Важные рекомендации перед запуском</h2>
+        <ul>
+            <li>Обязательно включите водяной насос перед запуском шпинделя!</li>
+            <li>Частотник настроен на 400 (24 000 об/мин) с завода.</li>
+            <li>Перед началом работы дождитесь стабилизации оборотов шпинделя (~5 секунд).</li>
+        </ul>
 
-<footer>
-    <p>© 2026 ЧПУ-Склад • Все права защищены</p>
-    <p>Поддержка: +7 961 991 01 76 (WhatsApp) | stepmotoren@yandex.ru</p>
-</footer>
+        <h2>📥 Файлы для скачивания</h2>
+        <div class="download-grid">
+            <a href="../equipment-data/cnc-3040/passport.pdf" 
+               class="download-btn" style="background:#0066cc;" target="_blank">
+                📄 Технический паспорт станка
+            </a>
+            
+            <a href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/CNC.zip" 
+               class="download-btn" style="background:#28a745;" target="_blank">
+                💾 Скачать программу CNCV4 (полный комплект ~28.5 МБ)
+            </a>
+            
+            <a href="../equipment-data/cnc-3040/instrukciya.pdf" 
+               class="download-btn" style="background:#0066cc;" target="_blank">
+                🔧 Инструкция по сборке и подключению
+            </a>
+            
+            <a href="../equipment-data/cnc-3040/troubleshooting.pdf" 
+               class="download-btn" style="background:#ffc107; color:#000;" target="_blank">
+                ⚠️ Устранение неисправностей
+            </a>
+        </div>
 
+        <div class="note">
+            <strong>Как установить программу CNCV4:</strong><br>
+            1. Скачайте архив <strong>CNC.zip</strong><br>
+            2. Распакуйте его в любую папку на компьютере<br>
+            3. Запустите файл <strong>CNCV4.exe</strong><br>
+            <small>Все необходимые DLL-библиотеки уже включены в архив.</small>
+        </div>
+
+        <p><strong>Программа CNCV4</strong> — основная программа управления для станка ЧПУ 3040.</p>
+    </main>
+
+    <footer>
+        <p>© 2026 ЧПУ-склад • Все права защищены</p>
+        <p> Поддержка пользователей:+79619910176 (WhatsApp),stepmotoren@yandex.ru </p>
+    </footer>
 </body>
 </html>
+
