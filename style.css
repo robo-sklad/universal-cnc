@@ -1,80 +1,106 @@
-тело {
-семейство шрифтов: Ариал, без засечек;
-margin: 0;
-наполнение: 0;
-Предыстория: #f8f9fa;
-цвет: #333;
-высота линии: 1,6;
-}/* Шапка с меню */
-заголовок {
-Предыстория: #0d6efd;
-цвет: белый;
-наполнение: 1rem 0;
-положение: липкое;
-верх: 0;
-z-индекс: 100;
-box shadow: 0 2px 10px rgba(0,0,0,0.1);
-}.nav-container {
-максимальная ширина: 1200px;
-Margin: 0 auto;
-Дисплей: гибкий;
-обоснование-содержание: пробел-между;
-выровнять элементы: центр;
-Наполнение: 0 20px;
-}/* Логотип */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Шапка с меню */
+header {
+    background: #0d6efd;
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+/* Логотип */
 .logo {
-Дисплей: гибкий;
-выровнять элементы: центр;
-Пробел: 12px;
-размер шрифта: 1,8 рем;
-Толщиной шрифта: жирным;
-цвет: белый;
-оформление текста: отсутствует;
-}.logo img {
-высота: 55px;
-ширина: авто;
-радиус границы: 4px;
-}/* Меню */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.logo img {
+    height: 55px;
+    width: auto;
+    border-radius: 4px;
+}
+
+/* Меню */
 nav ul {
-В стиле списка: нет;
-margin: 0;
-наполнение: 0;
-Дисплей: гибкий;
-Зазор: 25px;
-}nav a {
-цвет: белый;
-оформление текста: отсутствует;
-Вес шрифта: 500;
-наполнение: 10px 18px;
-радиус границы: 6px;
-переход: все 0,3 секунды;
-}nav a:hover,
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 25px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+nav a:hover,
 nav a.active {
-цвет фона: RGBA(255,255,255,0.25);
-}/* Основной контент */
+    background-color: rgba(255,255,255,0.25);
+}
+
+/* Основной контент */
 main {
-максимальная ширина: 1200px;
-Margin: 30px auto;
-Наполнение: 0 20px;
-}раздел {
-Фон: белый;
-наполнение: 25px;
-margin-bottom: 25px;
-радиус границы: 8px;
-box-shadow: 0 2px 12px RGBA (0,0,0,0.08);
-}h1, h2 {
-цвет: #0d6efd;
-}/* Футер */
-Основание {
-Выравнивание текста: центр;
-наполнение: 30px 20px;
-Предыстория: #0d6efd;
-цвет: белый;
-верхняя граница: 40px;
-}a {
-цвет: #0d6efd;
-}img {
-максимальная ширина: 100%;
-высота: авто;
-радиус границы: 6px;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+section {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+h1, h2 {
+    color: #0d6efd;
+}
+
+/* Футер */
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    background: #0d6efd;
+    color: white;
+    margin-top: 40px;
+}
+
+a {
+    color: #0d6efd;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
 }
