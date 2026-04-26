@@ -7,7 +7,6 @@ body {
     line-height: 1.6;
 }
 
-/* Шапка с меню */
 header {
     background: #0d6efd;
     color: white;
@@ -27,7 +26,6 @@ header {
     padding: 0 20px;
 }
 
-/* Логотип */
 .logo {
     display: flex;
     align-items: center;
@@ -35,22 +33,19 @@ header {
     font-size: 1.8rem;
     font-weight: bold;
     color: white;
-    text-decoration: none;
 }
 
 .logo img {
     height: 55px;
     width: auto;
-    border-radius: 4px;
 }
 
-/* Меню */
 nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 25px;
+    gap: 30px;
 }
 
 nav a {
@@ -59,7 +54,7 @@ nav a {
     font-weight: 500;
     padding: 10px 18px;
     border-radius: 6px;
-    transition: all 0.3s;
+    transition: 0.3s;
 }
 
 nav a:hover,
@@ -67,7 +62,6 @@ nav a.active {
     background-color: rgba(255,255,255,0.25);
 }
 
-/* Основной контент */
 main {
     max-width: 1200px;
     margin: 30px auto;
@@ -86,7 +80,6 @@ h1, h2 {
     color: #0d6efd;
 }
 
-/* Футер */
 footer {
     text-align: center;
     padding: 30px 20px;
@@ -97,10 +90,4 @@ footer {
 
 a {
     color: #0d6efd;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 6px;
 }
