@@ -7,37 +7,64 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header>
-    <div class="nav-container">
-        <div class="logo">
-            <img src="logo.jpg" alt="ЧПУ-Склад">
-            ЧПУ-Склад
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="logo.jpg" alt="ЧПУ-Склад">
+                ЧПУ-склад
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="program.html">Программы</a></li>
+                    <li><a href="equipment.html" class="active">Оборудование</a></li>
+                </ul>
+            </nav>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="program.html">Программы</a></li>
-                <li><a href="equipment.html" class="active">Оборудование</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+    </header>
 
-<main>
-    <h1 style="text-align: center; margin: 60px 0 40px; color: #0d6efd;">Оборудование</h1>
-    
-    <section>
-        <h2>Каталог оборудования</h2>
-        <p>Здесь будет размещён каталог станков и оборудования.</p>
-        <p>Пока страница в разработке.</p>
-    </section>
-</main>
+    <main>
+        <h1>Каталог оборудования</h1>
+        <p class="subtitle">Станки с ЧПУ, 3D-принтеры, лазерные гравёры и комплектующие</p>
 
-<footer>
-    <p>© 2026 ЧПУ-склад • Все права защищены</p>
-    <p>Программа разработана Рудаковым Александром Александровичем</p>
-</footer>
+        <!-- Категории (можно потом сделать кликабельными) -->
+        <div class="categories">
+            <a href="#" class="category active">Все</a>
+            <a href="#" class="category">3D-принтеры</a>
+            <a href="#" class="category">Фрезерные станки</a>
+            <a href="#" class="category">Лазерные гравёры</a>
+            <a href="#" class="category">Манипуляторы и робототехника</a>
+            <a href="#" class="category">Комплектующие</a>
+        </div>
 
+        <!-- Карточки оборудования -->
+        <div class="equipment-grid">
+            
+            <!-- Пример одной карточки — копируй и меняй под своё оборудование -->
+            <div class="equipment-card">
+                <img src="https://via.placeholder.com/400x300?text=3D+Принтер" alt="3D Принтер">
+                <h3>3D-принтер Creality Ender-3 V3</h3>
+                <p>Надёжный FDM-принтер с большим объёмом печати. Идеален для начинающих и малого бизнеса.</p>
+                <div class="price">от 28 000 ₽</div>
+                <a href="#" class="btn">Подробнее</a>
+            </div>
+
+            <div class="equipment-card">
+                <img src="https://via.placeholder.com/400x300?text=Фрезерный+станок" alt="Фрезерный станок">
+                <h3>Фрезерный станок с ЧПУ 6090</h3>
+                <p>Рабочая область 600×900 мм. Подходит для обработки дерева, МДФ, акрила и мягких металлов.</p>
+                <div class="price">от 185 000 ₽</div>
+                <a href="#" class="btn">Подробнее</a>
+            </div>
+
+            <!-- Добавляй сюда новые карточки по такому же шаблону -->
+
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 ЧПУ-склад • Все права защищены</p>
+        <p>Разработано Рудаковым Александром Александровичем</p>
+    </footer>
 </body>
 </html>
