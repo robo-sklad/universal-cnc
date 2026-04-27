@@ -2,54 +2,190 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Технический паспорт — ЧПУ 3040 1500Вт</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Технический паспорт — Станок ЧПУ 1.5 кВт</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-        h1, h2 { color: #003366; }
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { border: 1px solid #333; padding: 10px; text-align: left; }
-        th { background: #f0f0f0; }
-        .highlight { background: #e6f7ff; padding: 15px; border-left: 5px solid #0066cc; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        h1 { margin: 0; font-size: 2.4em; }
+        h2 {
+            color: #1e40af;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        .section {
+            padding: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #1e40af;
+            color: white;
+        }
+        .highlight {
+            background: #eff6ff;
+            padding: 20px;
+            border-left: 6px solid #3b82f6;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #fef3c7;
+            border-left: 6px solid #f59e0b;
+            padding: 15px;
+        }
+        footer {
+            background: #1e3a8a;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 0.95em;
+        }
+        .model {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e40af;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
     </style>
 </head>
 <body>
-    <h1>Технический паспорт</h1>
-    <h2>Фрезерно-гравировальный станок с ЧПУ 3040 (1500 Вт)</h2>
+    <div class="container">
 
-    <p><strong>Модель:</strong> CNC-3040 1500Вт<br>
-    <strong>Производитель / Поставщик:</strong> ЧПУ-Склад</p>
+        <!-- Шапка -->
+        <header>
+            <h1>ТЕХНИЧЕСКИЙ ПАСПОРТ</h1>
+            <p style="font-size:1.3em; margin:10px 0 0 0;">Фрезерно-гравировальный станок с ЧПУ</p>
+            <p style="font-size:1.3em; margin:10px 0 0 0;">Модели: 2030 • 3040 • 4060 • 6090</p>
+            <p style="margin-top:15px; font-size:1.1em;">Водяной шпиндель 1.5 кВт (ER11)</p>
+        </header>
 
-    <h2>Основные характеристики</h2>
-    <table>
-        <tr><th>Параметр</th><th>Значение</th></tr>
-        <tr><td>Рабочее поле (X×Y×Z)</td><td>300 × 400 × 100 мм</td></tr>
-        <tr><td>Мощность шпинделя</td><td>1500 Вт (водяное охлаждение)</td></tr>
-        <tr><td>Скорость вращения шпинделя</td><td>6000–24000 об/мин</td></tr>
-        <tr><td>Цанга</td><td>ER11</td></tr>
-        <tr><td>Привод осей</td><td>Шарико-винтовая передача (ШВП)</td></tr>
-        <tr><td>Направляющие</td><td>Профильные рельсы</td></tr>
-        <tr><td>Управление</td><td>GRBL (программа CNCV4)</td></tr>
-        <tr><td>Точность позиционирования</td><td>0,01–0,05 мм</td></tr>
-        <tr><td>Максимальная скорость подачи</td><td>до 5000 мм/мин</td></tr>
-        <tr><td>Вес станка (с упаковкой)</td><td>≈ 52 кг</td></tr>
-    </table>
+        <div class="section">
+            <h2>Поздравляем с покупкой!</h2>
+            <p>Вы приобрели надёжный и мощный настольный ЧПУ-станок профессионального уровня. Благодаря жёсткой конструкции на квадратных направляющих, шарико-винтовой передаче и мощному водяному шпинделю 1,5 кВт станок отлично справляется с обработкой:</p>
+            <ul>
+                <li>Дерева, фанеры, МДФ</li>
+                <li>Акрила, пластика, ПВХ</li>
+                <li>Алюминия, меди, латуни</li>
+                <li>Текстолита, эбонита, гипса и других материалов</li>
+            </ul>
+            <p class="highlight"><strong>Главное преимущество:</strong> длительная стабильная работа без перегрева шпинделя благодаря водяному охлаждению.</p>
+        </div>
 
-    <div class="highlight">
-        <strong>Важно:</strong> Перед запуском шпинделя обязательно включите водяной насос!<br>
-        Частотник настроен на 400 Гц (24 000 об/мин) с завода.
+        <!-- Основные характеристики -->
+        <div class="section" style="background:#f8fafc;">
+            <h2>Основные технические характеристики</h2>
+            <table>
+                <tr><th>Параметр</th><th>Значение</th></tr>
+                <tr><td>Мощность шпинделя</td><td><strong>1,5 кВт (1500 Вт)</strong></td></tr>
+                <tr><td>Тип охлаждения шпинделя</td><td><strong>Водяное</strong> (профессиональное)</td></tr>
+                <tr><td>Цанга</td><td>ER11 (под хвостовик фрезы Ø 1–8 мм)</td></tr>
+                <tr><td>Максимальные обороты</td><td>до 24 000 об/мин</td></tr>
+                <tr><td>Рабочая область (пример для 4060)</td><td>X: 600 мм × Y: 400 мм × Z: 120 мм</td></tr>
+                <tr><td>Габаритные размеры (4060)</td><td>840 × 650 × 500 мм</td></tr>
+                <tr><td>Привод осей</td><td>Шаговые двигатели + шарико-винтовая передача (ball screw)</td></tr>
+                <tr><td>Направляющие</td><td>Квадратные линейные рельсы (высокая жёсткость)</td></tr>
+                <tr><td>Y-ось</td><td>Двойной шариковый винт (повышенная стабильность)</td></tr>
+                <tr><td>Контроллер</td><td>CNCV4</td></tr>
+                <tr><td>Подключение</td><td>USB (CH340)</td></tr>
+                <tr><td>Питание</td><td>220 В, 50/60 Гц</td></tr>
+                <tr><td>Точность позиционирования</td><td>до 0,05–0,1 мм (после калибровки)</td></tr>
+            </table>
+        </div>
+
+        <!-- Настройки GRBL -->
+        <div class="section">
+            <h2>Рекомендуемые настройки GRBL (стартовые)</h2>
+            <table>
+                <tr><th>Параметр</th><th>Значение</th><th>Комментарий</th></tr>
+                <tr><td>$100 / $101 / $102</td><td>400–800</td><td>Шаги на мм (обязательно откалибровать!)</td></tr>
+                <tr><td>$110 / $111</td><td>3000–5000 мм/мин</td><td>Макс. скорость X и Y</td></tr>
+                <tr><td>$112</td><td>800–2000 мм/мин</td><td>Макс. скорость Z</td></tr>
+                <tr><td>$22</td><td>1</td><td>Включить Homing</td></tr>
+                <tr><td>$30</td><td>24000</td><td>Макс. обороты шпинделя</td></tr>
+                <tr><td>$32</td><td>0</td><td>Режим фрезера</td></tr>
+            </table>
+            <p><strong>После изменения параметров нажмите Reset или переподключите USB.</strong></p>
+        </div>
+
+        <!-- Режимы обработки -->
+        <div class="section" style="background:#f8fafc;">
+            <h2>Рекомендуемые режимы обработки</h2>
+            <table>
+                <tr><th>Материал</th><th>Подача (мм/мин)</th><th>Обороты (об/мин)</th></tr>
+                <tr><td>Дерево, фанера, МДФ</td><td>800 – 2000</td><td>12 000 – 18 000</td></tr>
+                <tr><td>Акрил, пластик, ПВХ</td><td>1000 – 2500</td><td>15 000 – 20 000</td></tr>
+                <tr><td>Алюминий, медь, латунь</td><td>300 – 800</td><td>8 000 – 15 000 + СОЖ</td></tr>
+                <tr><td>Текстолит, эбонит</td><td>600 – 1500</td><td>10 000 – 16 000</td></tr>
+            </table>
+        </div>
+
+        <!-- Важные предупреждения -->
+        <div class="section">
+            <h2>⚠️ Важные правила безопасности</h2>
+            <div class="warning">
+                <strong>Никогда не включайте шпиндель без работающей помпы водяного охлаждения!</strong><br>
+                Это приведёт к перегреву и выходу шпинделя из строя.
+            </div>
+            <ul>
+                <li>Всегда выполняйте Homing перед началом работы</li>
+                <li>Запускайте симуляцию G-code перед реальной обработкой</li>
+                <li>Используйте защитные очки и респиратор</li>
+                <li>Подключайте станок только к заземлённой розетке 220 В</li>
+                <li>Не оставляйте станок без присмотра</li>
+            </ul>
+        </div>
+
+        <!-- Первый запуск и поддержка -->
+        <div class="section">
+            <h2>Первый запуск и поддержка</h2>
+            <p>Подробная инструкция по сборке и первому запуску прилагается в комплекте (PDF).</p>
+            <p>Если возникнут вопросы — пишите нам:</p>
+            <p><strong>Телефон:</strong> +7 961 991-01-76<br>
+               <strong>Email:</strong> stepmotoren@yandex.ru</p>
+            <p>Мы всегда на связи и помогаем нашим покупателям.</p>
+        </div>
+
+        <!-- Подвал -->
+        <footer>
+            <p><strong>Спасибо, что выбрали наш станок!</strong></p>
+            <p>Мы уверены, что он станет надёжным помощником в ваших проектах и будет радовать точностью и стабильностью долгие годы.</p>
+            <p style="margin-top:15px;">© 2026 | Технический паспорт — Версия 1.0</p>
+        </footer>
+
     </div>
-
-    <h2>Комплектация</h2>
-    <ul>
-        <li>Станок в сборе</li>
-        <li>Шпиндель 1500 Вт с водяным охлаждением + помпа</li>
-        <li>Контроллер GRBL</li>
-        <li>Программа управления CNCV4 + драйвер</li>
-        <li>Набор цанг ER11</li>
-        <li>Кабели, инструмент для сборки</li>
-    </ul>
-
-    <p><strong>Дата:</strong> 2026 год<br>
-    <strong>Гарантия:</strong> согласно условиям поставщика</p>
 </body>
 </html>
