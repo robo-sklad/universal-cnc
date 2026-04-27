@@ -91,4 +91,33 @@ footer {
 a {
     color: #0d6efd;
 }
+@media screen and (max-width: 768px) {
+    /* Выстраиваем логотип и меню друг под другом */
+    .nav-container {
+        flex-direction: column;
+        gap: 15px; /* Расстояние между логотипом и списком меню */
+        padding: 15px 0;
+    }
+
+    /* Центрируем логотип */
+    .logo {
+        justify-content: center;
+        margin: 0;
+    }
+
+    /* Делаем меню на всю ширину и центрируем пункты */
+    nav ul {
+        flex-direction: row; /* Оставляем в ряд или меняем на column, если пунктов много */
+        flex-wrap: wrap;    /* Чтобы пункты переносились на новую строку, если не влезают */
+        justify-content: center;
+        gap: 10px;
+        padding: 0;
+    }
+
+    nav a {
+        padding: 8px 12px;
+        font-size: 14px; /* Немного уменьшаем шрифт для мобильных */
+    }
+}
+
 
