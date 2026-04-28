@@ -6,80 +6,141 @@
     <title>Mach3 — ЧПУ-Склад</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Дополнительные стили специально для Mach3 */
-        .mach3-hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('screenshot-main.png');
-            background-size: cover;
+        .hero-mach3 {
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), #111;
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 90px 20px 70px;
         }
         .chat-btn {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 25px;
+            right: 25px;
+            width: 68px;
+            height: 68px;
             background: #0066cc;
             color: white;
-            width: 70px;
-            height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            box-shadow: 0 6px 25px rgba(0,102,204,0.4);
+            font-size: 34px;
+            box-shadow: 0 6px 25px rgba(0, 102, 204, 0.45);
             cursor: pointer;
             z-index: 1000;
-            transition: 0.3s;
+            transition: all 0.3s;
         }
         .chat-btn:hover {
-            transform: scale(1.15);
+            transform: scale(1.12);
+            background: #0055aa;
+        }
+
+        /* Чат окно */
+        #chat-window {
+            position: fixed;
+            bottom: 110px;
+            right: 25px;
+            width: 390px;
+            height: 560px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+            border: 1px solid #ccc;
+        }
+        #chat-header {
+            background: #0066cc;
+            color: white;
+            padding: 16px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 85%;
+        }
+        .bot { background: white; align-self: flex-start; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .user { background: #0066cc; color: white; align-self: flex-end; }
+
+        #chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+        #chat-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Навигация (можно скопировать из index.html и добавить ссылку на mach3) -->
-
-    <div class="mach3-hero">
+    <!-- Hero блок -->
+    <div class="hero-mach3">
         <h1>Mach3</h1>
-        <p style="font-size: 1.4rem; margin-top: 15px;">Готовые профили • Макросы • Настройка • Помощь</p>
+        <p style="font-size: 1.4rem; margin-top: 15px;">Готовые профили, макросы, инструкции и профессиональная настройка</p>
     </div>
 
     <div style="max-width: 1100px; margin: 40px auto; padding: 0 20px;">
         
-        <h2>Готовые решения для Mach3</h2>
-        <p>Здесь собраны все материалы, которые помогут быстро и стабильно запустить ваш станок под Mach3.</p>
+        <h2>Что есть в разделе Mach3</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-top: 30px;">
+            
+            <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.08);">
+                <h3>Готовые профили</h3>
+                <p>Проверенные .xml файлы под популярные станки и контроллеры (MKS-V, MKX, UC100, NVCM и др.).</p>
+                <p><strong>Цена от 990 ₽</strong></p>
+            </div>
 
-        <!-- Сюда вставь контент, который мы делали раньше: профили, макросы, индивидуальная настройка и т.д. -->
+            <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.08);">
+                <h3>Макросы</h3>
+                <p>Полезные макросы: поиск края, замер инструмента, смена инструмента, работа с 4-й осью и другие.</p>
+            </div>
 
-        <div style="margin: 40px 0;">
-            <a href="#" class="btn" style="background:#0066cc; color:white; padding:15px 30px; text-decoration:none; border-radius:6px;">
-                Купить готовые профили
-            </a>
-            <a href="#" class="btn" style="background:#e74c3c; color:white; padding:15px 30px; text-decoration:none; border-radius:6px; margin-left:15px;">
-                Заказать индивидуальную настройку
-            </a>
+            <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.08);">
+                <h3>Индивидуальная настройка</h3>
+                <p>Сделаем рабочий профиль Mach3 специально под ваш станок и контроллер.</p>
+                <p><strong>От 3500 ₽</strong></p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 50px 0;">
+            <a href="#" style="background:#0066cc; color:white; padding:16px 32px; border-radius:6px; text-decoration:none; font-size:1.1rem;">Купить готовые профили</a>
+            <a href="#" style="background:#e74c3c; color:white; padding:16px 32px; border-radius:6px; text-decoration:none; font-size:1.1rem; margin-left:15px;">Заказать настройку</a>
         </div>
     </div>
 
     <!-- Плавающая кнопка чата -->
-    <div class="chat-btn" id="open-chat" title="Спросить ассистента по Mach3">
-        🤖
-    </div>
+    <div class="chat-btn" id="open-chat">🤖</div>
 
-    <!-- Полноценное окно чата -->
-    <div id="chat-window" style="display:none; position:fixed; bottom:100px; right:30px; width:380px; height:520px; background:white; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.3); flex-direction:column; overflow:hidden; z-index:1001;">
-        <div style="background:#0066cc; color:white; padding:15px; font-weight:bold; display:flex; justify-content:space-between;">
-            <span>Ассистент Mach3</span>
-            <span id="close-chat" style="cursor:pointer;">✕</span>
+    <!-- Окно чата -->
+    <div id="chat-window">
+        <div id="chat-header">
+            <span>Ассистент по Mach3</span>
+            <span id="close-chat" style="cursor:pointer; font-size:22px;">✕</span>
         </div>
-        <div id="chat-body" style="flex:1; padding:20px; overflow-y:auto; background:#f9f9f9;">
-            <p><strong>Здравствуйте!</strong><br>Я — ассистент по Mach3.<br>Задайте любой вопрос.</p>
+        <div id="chat-messages">
+            <div class="message bot">Здравствуйте! Я — ассистент по Mach3.<br>Задайте любой вопрос по настройке, профилям или проблемам.</div>
         </div>
-        <div style="padding:15px; border-top:1px solid #ddd;">
-            <input type="text" id="chat-input" placeholder="Напишите вопрос..." style="width:100%; padding:12px; border:1px solid #ccc; border-radius:8px;">
-            <button id="chat-send-btn" style="margin-top:8px; width:100%; padding:12px; background:#0066cc; color:white; border:none; border-radius:6px;">Отправить</button>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Напишите ваш вопрос...">
+            <button id="chat-send" style="width:100%; padding:12px; background:#0066cc; color:white; border:none; border-radius:6px; margin-top:8px;">Отправить</button>
         </div>
     </div>
 
@@ -88,8 +149,8 @@
         const chatWindow = document.getElementById('chat-window');
         const closeChat = document.getElementById('close-chat');
         const chatInput = document.getElementById('chat-input');
-        const chatSendBtn = document.getElementById('chat-send-btn');
-        const chatBody = document.getElementById('chat-body');
+        const chatSend = document.getElementById('chat-send');
+        const chatMessages = document.getElementById('chat-messages');
 
         openChat.addEventListener('click', () => {
             chatWindow.style.display = 'flex';
@@ -100,34 +161,27 @@
             chatWindow.style.display = 'none';
         });
 
-        function addMessage(text, isUser) {
-            const msg = document.createElement('div');
-            msg.style.marginBottom = '12px';
-            msg.style.padding = '12px';
-            msg.style.borderRadius = '10px';
-            msg.style.maxWidth = '85%';
-            msg.style.background = isUser ? '#0066cc' : '#fff';
-            msg.style.color = isUser ? 'white' : 'black';
-            msg.style.alignSelf = isUser ? 'flex-end' : 'flex-start';
-            msg.textContent = text;
-            chatBody.appendChild(msg);
-            chatBody.scrollTop = chatBody.scrollHeight;
+        function addMessage(text, isUser = false) {
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'bot'}`;
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        chatSendBtn.addEventListener('click', () => {
+        chatSend.addEventListener('click', () => {
             const text = chatInput.value.trim();
             if (!text) return;
             addMessage(text, true);
             chatInput.value = '';
 
-            // Заглушка ответа
             setTimeout(() => {
-                addMessage("Спасибо за вопрос! Пока я в тестовом режиме. Скоро здесь будет полноценный умный ассистент.", false);
-            }, 700);
+                addMessage("Спасибо за вопрос! Сейчас я работаю в тестовом режиме. В ближайшее время здесь будет полноценный умный ассистент.");
+            }, 600);
         });
 
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') chatSendBtn.click();
+        chatInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') chatSend.click();
         });
     </script>
 
