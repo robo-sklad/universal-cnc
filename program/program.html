@@ -4,26 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Программы — ЧПУ-склад</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 30px 0 40px;
+            padding: 0 10px;
+        }
+        .category-btn {
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border: 2px solid #0066cc;
+            color: #0066cc;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .category-btn:hover,
+        .category-btn.active {
+            background: #0066cc;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 18px;
+        }
+        .product-info h3 {
+            margin: 0 0 12px 0;
+            font-size: 1.25rem;
+            line-height: 1.3;
+        }
+        .product-info p {
+            color: #555;
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        .price {
+            font-size: 1.35rem;
+            font-weight: bold;
+            color: #0066cc;
+            margin: 12px 0;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 12px 24px;
+            background: #0066cc;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+        }
+        .btn:hover {
+            background: #0052a3;
+        }
+
+        /* Адаптация для мобильных */
+        @media (max-width: 768px) {
+            .categories {
+                gap: 8px;
+            }
+            .category-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+            .product-card img {
+                height: 180px;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <header>
     <div class="nav-container">
         <div class="logo">
-            <img src="logo.jpg" alt="ЧПУ-Склад">
+            <img src="../logo.jpg" alt="ЧПУ-склад">
             ЧПУ-склад
         </div>
         <nav>
             <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="program.html" class="active">Программы</a></li>
+                <li><a href="../index.html">Главная</a></li>
+                <li><a href="../program.html" class="active">Программы</a></li>
                 <li><a href="equipment.html">Оборудование</a></li>
             </ul>
         </nav>
     </div>
 </header>
 
+<main>
+    <h1 style="text-align: center; margin: 40px 0 20px;">Программы</h1>
 <main>
       <!-- Карточка CNCV4 -->
             <div class="product-card">
