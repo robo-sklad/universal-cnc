@@ -184,6 +184,83 @@
             if (e.key === 'Enter') chatSend.click();
         });
     </script>
+<!-- Вставьте на страницу, где нужен бот-консультант по Mach3 -->
+<div id="deepseek-chat" style="position: fixed; bottom: 20px; right: 20px; width: 380px; background: #1e1e2e; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); font-family: system-ui; z-index: 10000;">
+    <div style="background: #0d0d1a; color: white; padding: 14px 16px; border-radius: 16px 16px 0 0; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 600;">🤖 Mach3 Эксперт</span>
+        <span style="font-size: 12px; opacity: 0.7;">на DeepSeek</span>
+    </div>
+    <div id="chat-log" style="height: 400px; overflow-y: auto; padding: 12px; background: #1e1e2e; color: #e0e0e0;"></div>
+    <div style="display: flex; padding: 12px; background: #2a2a3a; border-radius: 0 0 16px 16px;">
+        <input type="text" id="question" placeholder="Спросите про G-код, настройку Mach3..." style="flex: 1; padding: 10px; border: none; border-radius: 8px; background: #3a3a4a; color: white; outline: none;">
+        <button onclick="askDeepSeek()" style="margin-left: 8px; background: #0066cc; border: none; color: white; padding: 0 16px; border-radius: 8px; cursor: pointer;">➤</button>
+    </div>
+</div>
 
+<script>
+// Ваш API-ключ DeepSeek
+const DEEPSEEK_API_KEY = "ВАШ_КЛЮЧ_СЮДА"; // Замените на реальный!
+
+async function askDeepSeek() {
+    const questionInput = document.getElementById('question');
+    const question = questionInput.value.trim();
+    if (!question) return;
+    
+    const chatLog = document.getElementById('chat-log');
+    
+    // Добавляем вопрос пользователя
+    chatLog.innerHTML += `<div style="margin-bottom: 12px; text-align: right;"><strong>Вы:</strong> ${escapeHtml(question)}</div>`;
+    questionInput.value = '';
+    
+    // Индикатор загрузки
+    const loadingId = 'loading-' + Date.now();
+    chatLog.innerHTML += `<div id="${loadingId}" style="margin-bottom: 12px;"><em>🤔 Бот печатает...</em></div>`;
+    chatLog.scrollTop = chatLog.scrollHeight;
+    
+    try {
+        const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: 'deepseek-chat',
+                messages: [
+                    { 
+                        role: 'system', 
+                        content: 'Ты — эксперт по программе Mach3 для ЧПУ станков. Отвечай подробно, профессионально, но понятно для операторов станков. Помогай с G-кодами, настройкой, отладкой и типичными ошибками.' 
+                    },
+                    { role: 'user', content: question }
+                ],
+                temperature: 0.3,
+                max_tokens: 1000
+            })
+        });
+        
+        const data = await response.json();
+        const answer = data.choices[0].message.content;
+        
+        // Убираем индикатор и показываем ответ
+        document.getElementById(loadingId).remove();
+        chatLog.innerHTML += `<div style="margin-bottom: 12px; padding: 8px 12px; background: #2a2a3a; border-radius: 12px;"><strong>🛠️ Эксперт:</strong> ${escapeHtml(answer)}</div>`;
+    } catch (error) {
+        document.getElementById(loadingId).remove();
+        chatLog.innerHTML += `<div style="margin-bottom: 12px; color: #ff6b6b;"><strong>❌ Ошибка:</strong> Не удалось подключиться к DeepSeek. Попробуйте позже.</div>`;
+    }
+    chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Отправка по Enter
+document.getElementById('question').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') askDeepSeek();
+});
+</script>
 </body>
 </html>
