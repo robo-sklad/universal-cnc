@@ -1,37 +1,34 @@
+// api/chat.js
 export default async function handler(req, res) {
-    // Заголовки CORS
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-    // Обработка OPTIONS
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-
-    // Только POST
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Только POST запросы' });
+        return res.status(405).json({ error: 'Только POST запросы разрешены' });
     }
+
+    const { message } = req.body;
+
+    if (!message || message.trim() === '') {
+        return res.status(400).json({ error: 'Сообщение не может быть пустым' });
+    }
+
+    const apiKey = process.env.DEEPSEEK_API_KEY;
+
+    if (!apiKey) {
+        return res.status(500).json({ error: 'API ключ не настроен' });
+    }
+
+    const systemPrompt = `Ты — дружелюбный и опытный технический консультант магазина "ЧПУ-Склад".
+Ты хорошо разбираешься в Mach3 и в нашей программе "Универсал — система ЧПУ".
+Отвечай простым, понятным русским языком, как мастер с большим опытом.
+Если вопрос сложный или ты не уверен — честно говори и предлагай написать живому специалисту.
+
+Основные темы:
+- Настройка Mach3 (порты, постпроцессоры, ошибки)
+- Работа с программой "Универсал — система ЧПУ"
+- Выбор и настройка станков ЧПУ (2030, 3040, 4060, 6090)
+- Фрезы, цанги, охлаждение, комплектующие
+- Типичные проблемы и их решения`;
 
     try {
-        // Парсинг тела запроса
-        const body = await JSON.parse(req.body);
-        const userMessage = body.message;
-        const apiKey = 'sk-8ebd4ba18901482d9ac4b2932b3b7077';
-
-        const systemPrompt = `Ты — виртуальный консультант магазина "ЧПУ-Склад". 
-        Ты опытный инженер с 10-летним стажем. Твоя задача — помогать клиентам подбирать станки ЧПУ и настраивать программы, особенно Mach3 и нашу программу "Универсал — система ЧПУ". Отвечай простым, понятным языком, как опытный мастер.
-
-        База знаний:
-        1. Программа "Универсал": Это наша собственная разработка, замена Mach3. Она проще и дружелюбнее к новичкам.
-        2. Mach3: Популярная программа для управления станками ЧПУ. Мы помогаем с настройкой.
-        3. Станки: у нас есть фрезерные, лазерные, 3D-принтеры.
-        4. Доставка по всей России.
-        5. Гарантия на оборудование — 1 год.
-
-        Если не знаешь точного ответа на вопрос, предложи связаться с живым специалистом.`;
-
         const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -42,17 +39,28 @@ export default async function handler(req, res) {
                 model: 'deepseek-chat',
                 messages: [
                     { role: 'system', content: systemPrompt },
-                    { role: 'user', content: userMessage }
+                    { role: 'user', content: message }
                 ],
-                temperature: 0.7
+                temperature: 0.7,
+                max_tokens: 1200
             })
         });
 
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('DeepSeek error:', errorText);
+            throw new Error(`API Error: ${response.status}`);
+        }
+
         const data = await response.json();
-        res.status(200).json({ reply: data.choices[0].message.content });
+        const reply = data.choices[0].message.content;
+
+        return res.status(200).json({ reply });
 
     } catch (error) {
-        console.error('Ошибка:', error);
-        res.status(500).json({ reply: 'Извините, произошла ошибка. Попробуйте позже.' });
+        console.error('Ошибка DeepSeek:', error);
+        return res.status(500).json({ 
+            reply: 'Извините, сейчас возникла техническая проблема. Попробуйте отправить сообщение ещё раз или напишите нам напрямую по телефону.' 
+        });
     }
 }
