@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     }
 
     const userMessage = req.body.message;
-    const apiKey = 'ТВОЙ_КЛЮЧ_MISTRAL'; // <-- Вставь сюда свой Mistral API ключ
+    const apiKey = '3pLEERg3a0eKfrnjSuxSRvP0Isr7slPQ';
 
     const systemPrompt = `Ты — виртуальный консультант магазина "ЧПУ-Склад". 
 Ты опытный инженер с 10-летним стажем. Твоя задача — помогать клиентам 
@@ -19,7 +19,6 @@ export default async function handler(req, res) {
 Если не знаешь точного ответа на вопрос, предложи связаться с живым специалистом.`;
 
     try {
-        // Адрес API у Mistral другой!
         const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -27,7 +26,7 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'mistral-small-latest', // или 'mistral-medium-latest' для более умных ответов
+                model: 'mistral-small-latest',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userMessage }
@@ -37,7 +36,6 @@ export default async function handler(req, res) {
         });
 
         const data = await response.json();
-        // Ответ Mistral приходит в том же формате, что и у DeepSeek
         res.status(200).json({ reply: data.choices[0].message.content });
 
     } catch (error) {
