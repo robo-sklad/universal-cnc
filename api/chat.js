@@ -1,7 +1,7 @@
 // api/chat.js
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Только POST запросы разрешены' });
+        return res.status(405).json({ error: 'Только POST запросы' });
     }
 
     const { message } = req.body;
@@ -10,33 +10,22 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Сообщение не может быть пустым' });
     }
 
-    const apiKey = process.env.DEEPSEEK_API_KEY;
-
-    if (!apiKey) {
-        return res.status(500).json({ error: 'API ключ не настроен' });
-    }
+    const apiKey = process.env.GROK_API_KEY;   // ← Изменили название переменной
 
     const systemPrompt = `Ты — дружелюбный и опытный технический консультант магазина "ЧПУ-Склад".
-Ты хорошо разбираешься в Mach3 и в нашей программе "Универсал — система ЧПУ".
+Ты хорошо разбираешься в Mach3, программе "Универсал — система ЧПУ", настройке станков, фрезах и типичных проблемах.
 Отвечай простым, понятным русским языком, как мастер с большим опытом.
-Если вопрос сложный или ты не уверен — честно говори и предлагай написать живому специалисту.
-
-Основные темы:
-- Настройка Mach3 (порты, постпроцессоры, ошибки)
-- Работа с программой "Универсал — система ЧПУ"
-- Выбор и настройка станков ЧПУ (2030, 3040, 4060, 6090)
-- Фрезы, цанги, охлаждение, комплектующие
-- Типичные проблемы и их решения`;
+Если не уверен в ответе — честно говори и предлагай написать специалисту.`;
 
     try {
-        const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        const response = await fetch('https://api.x.ai/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'deepseek-chat',
+                model: "grok-4.20-reasoning",   // или grok-3 если нужно
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: message }
@@ -47,8 +36,8 @@ export default async function handler(req, res) {
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('DeepSeek error:', errorText);
+            const errorData = await response.text();
+            console.error('Grok API error:', errorData);
             throw new Error(`API Error: ${response.status}`);
         }
 
@@ -58,9 +47,9 @@ export default async function handler(req, res) {
         return res.status(200).json({ reply });
 
     } catch (error) {
-        console.error('Ошибка DeepSeek:', error);
+        console.error('Ошибка Grok API:', error);
         return res.status(500).json({ 
-            reply: 'Извините, сейчас возникла техническая проблема. Попробуйте отправить сообщение ещё раз или напишите нам напрямую по телефону.' 
+            reply: 'Извините, сейчас возникла техническая проблема. Попробуйте чуть позже или напишите нам напрямую.' 
         });
     }
 }
