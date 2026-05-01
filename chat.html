@@ -52,7 +52,8 @@
             historyDiv.scrollTop = historyDiv.scrollHeight;
 
             try {
-                const response = await fetch('https://universal-6r3cqdcsq-aleksandrs-projects-98e3f756.vercel.app/api/chat', { 
+                // ✅ ИСПРАВЛЕННЫЙ URL
+                const response = await fetch('https://universal-cnc.vercel.app/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: userMessage })
@@ -62,7 +63,8 @@
                 historyDiv.innerHTML += `<p><b>Консультант:</b> ${data.reply}</p>`;
                 historyDiv.scrollTop = historyDiv.scrollHeight;
             } catch (error) {
-                historyDiv.innerHTML += `<p><b>Консультант:</b> Извините, что-то пошло не так.</p>`;
+                console.error('Ошибка:', error); // Добавлено для отладки
+                historyDiv.innerHTML += `<p><b>Консультант:</b> Извините, сервер временно недоступен.</p>`;
             }
         }
     </script>
