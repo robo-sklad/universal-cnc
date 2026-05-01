@@ -10,22 +10,22 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Сообщение не может быть пустым' });
     }
 
-    const apiKey = process.env.GROK_API_KEY;   // ← Изменили название переменной
+    const apiKey = process.env.MISTRAL_API_KEY;
 
     const systemPrompt = `Ты — дружелюбный и опытный технический консультант магазина "ЧПУ-Склад".
-Ты хорошо разбираешься в Mach3, программе "Универсал — система ЧПУ", настройке станков, фрезах и типичных проблемах.
+Ты отлично разбираешься в Mach3, программе "Универсал — система ЧПУ", настройке станков ЧПУ, фрезах и типичных проблемах.
 Отвечай простым, понятным русским языком, как мастер с большим опытом.
-Если не уверен в ответе — честно говори и предлагай написать специалисту.`;
+Если вопрос сложный или ты не уверен — честно говори и предлагай связаться с живым специалистом.`;
 
     try {
-        const response = await fetch('https://api.x.ai/v1/chat/completions', {
+        const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "grok-4.20-reasoning",   // или grok-3 если нужно
+                model: "mistral-large-latest",
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: message }
@@ -36,8 +36,8 @@ export default async function handler(req, res) {
         });
 
         if (!response.ok) {
-            const errorData = await response.text();
-            console.error('Grok API error:', errorData);
+            const errorText = await response.text();
+            console.error('Mistral API error:', errorText);
             throw new Error(`API Error: ${response.status}`);
         }
 
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ reply });
 
     } catch (error) {
-        console.error('Ошибка Grok API:', error);
+        console.error('Ошибка Mistral:', error);
         return res.status(500).json({ 
             reply: 'Извините, сейчас возникла техническая проблема. Попробуйте чуть позже или напишите нам напрямую.' 
         });
