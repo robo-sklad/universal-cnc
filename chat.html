@@ -6,7 +6,6 @@
     <title>Консультант ЧПУ-Склад</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Простые стили для чата, чтобы выглядело опрятно */
         #chat-container {
             max-width: 700px;
             margin: 30px auto;
@@ -34,8 +33,6 @@
     </style>
 </head>
 <body>
-    <!-- Скопируй сюда шапку сайта из index.html, чтобы страница была в едином стиле -->
-
     <div id="chat-container">
         <h2>Задайте вопрос консультанту</h2>
         <div id="chat-history"></div>
@@ -43,12 +40,30 @@
         <button onclick="askQuestion()">Отправить</button>
     </div>
 
-    <!-- Скопируй сюда подвал сайта из index.html -->
-
     <script>
-        // Здесь позже будет код для общения с DeepSeek
-        function askQuestion() {
-            alert("Пока я не подключен к ИИ. Это произойдет на следующих шагах!");
+        async function askQuestion() {
+            const inputField = document.getElementById('user-input');
+            const historyDiv = document.getElementById('chat-history');
+            const userMessage = inputField.value.trim();
+            if (!userMessage) return;
+
+            historyDiv.innerHTML += `<p><b>Вы:</b> ${userMessage}</p>`;
+            inputField.value = '';
+            historyDiv.scrollTop = historyDiv.scrollHeight;
+
+            try {
+                const response = await fetch('https://universal-6r3cqdcsq-aleksandrs-projects-98e3f756.vercel.app/api/chat', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userMessage })
+                });
+
+                const data = await response.json();
+                historyDiv.innerHTML += `<p><b>Консультант:</b> ${data.reply}</p>`;
+                historyDiv.scrollTop = historyDiv.scrollHeight;
+            } catch (error) {
+                historyDiv.innerHTML += `<p><b>Консультант:</b> Извините, что-то пошло не так.</p>`;
+            }
         }
     </script>
 </body>
