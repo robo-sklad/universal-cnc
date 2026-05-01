@@ -4,19 +4,28 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Только POST запросы' });
     }
 
-    const userMessage = req.body.message;
-    const apiKey = '3pLEERg3a0eKfrnjSuxSRvP0Isr7slPQ';
+    const { message } = req.body;
 
-    const systemPrompt = `Ты — виртуальный консультант магазина "ЧПУ-Склад". 
-Ты опытный инженер с 10-летним стажем. Твоя задача — помогать клиентам 
-подбирать станки ЧПУ и настраивать программы, особенно Mach3 и нашу 
-программу "Универсал — система ЧПУ". Отвечай простым, понятным языком, 
-как опытный мастер.
+    if (!message || message.trim() === '') {
+        return res.status(400).json({ error: 'Сообщение не может быть пустым' });
+    }
 
-База знаний:
-[ВСТАВЬ СЮДА СВОЙ ТЕКСТ ИЗ baza-znaniy.txt]
+    const apiKey = process.env.MISTRAL_API_KEY;
 
-Если не знаешь точного ответа на вопрос, предложи связаться с живым специалистом.`;
+    // ←←← Здесь вся база знаний про твой магазин
+    const systemPrompt = `Ты — дружелюбный и опытный технический консультант магазина "ЧПУ-Склад" (чпу-склад.рф).
+Ты отлично знаешь:
+- Программу "Универсал — система ЧПУ" (собственная разработка автора Рудакова А.А., замена Mach3)
+- Станки ЧПУ моделей 2030, 3040, 4060, 6090 с шпинделем 1.5 кВт (водяное охлаждение, ER11)
+- Настройку Mach3 и программы "Универсал"
+- Подключение по COM/USB, генерацию G-кода, 3D-визуализацию, симуляцию
+- Выбор фрез, безопасность, типичные ошибки и их решение
+
+Отвечай простым, понятным русским языком, как мастер с 10-летним опытом.
+Будь максимально полезным, дружелюбным и честным.
+Если не знаешь точного ответа — говори об этом и предлагай написать на stepmotoren@yandex.ru или позвонить +7 961 991 01 76.
+
+Магазин занимается продажей станков ЧПУ, расходников и программного обеспечения по всей России.`;
 
     try {
         const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
@@ -26,20 +35,29 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'mistral-small-latest',
+                model: "mistral-large-latest",
                 messages: [
                     { role: 'system', content: systemPrompt },
-                    { role: 'user', content: userMessage }
+                    { role: 'user', content: message }
                 ],
-                temperature: 0.7
+                temperature: 0.75,
+                max_tokens: 1500
             })
         });
 
+        if (!response.ok) {
+            throw new Error(`Mistral API error: ${response.status}`);
+        }
+
         const data = await response.json();
-        res.status(200).json({ reply: data.choices[0].message.content });
+        const reply = data.choices[0].message.content;
+
+        return res.status(200).json({ reply });
 
     } catch (error) {
         console.error('Ошибка:', error);
-        res.status(500).json({ reply: 'Извините, произошла ошибка. Попробуйте позже.' });
+        return res.status(500).json({ 
+            reply: 'Извините, сейчас небольшая техническая проблема. Попробуйте через минуту или напишите нам напрямую на stepmotoren@yandex.ru' 
+        });
     }
 }
