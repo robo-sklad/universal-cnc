@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Консультант ЧПУ-Склад</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Простые стили для чата, чтобы выглядело опрятно */
+        #chat-container {
+            max-width: 700px;
+            margin: 30px auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+        #chat-history {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+            background: white;
+        }
+        #user-input {
+            width: calc(100% - 80px);
+            padding: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Скопируй сюда шапку сайта из index.html, чтобы страница была в едином стиле -->
+
+    <div id="chat-container">
+        <h2>Задайте вопрос консультанту</h2>
+        <div id="chat-history"></div>
+        <input type="text" id="user-input" placeholder="Введите ваш вопрос о ЧПУ станках...">
+        <button onclick="askQuestion()">Отправить</button>
+    </div>
+
+    <!-- Скопируй сюда подвал сайта из index.html -->
+
+    <script>
+        // Здесь позже будет код для общения с DeepSeek
+        function askQuestion() {
+            alert("Пока я не подключен к ИИ. Это произойдет на следующих шагах!");
+        }
+    </script>
+</body>
+</html>
