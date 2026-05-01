@@ -4,20 +4,22 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Только POST запросы' });
     }
 
-    const { message } = req.body;
+    const userMessage = req.body.message;
+    const apiKey = 'ТВОЙ_КЛЮЧ_MISTRAL'; // <-- Вставь сюда свой Mistral API ключ
 
-    if (!message || message.trim() === '') {
-        return res.status(400).json({ error: 'Сообщение не может быть пустым' });
-    }
+    const systemPrompt = `Ты — виртуальный консультант магазина "ЧПУ-Склад". 
+Ты опытный инженер с 10-летним стажем. Твоя задача — помогать клиентам 
+подбирать станки ЧПУ и настраивать программы, особенно Mach3 и нашу 
+программу "Универсал — система ЧПУ". Отвечай простым, понятным языком, 
+как опытный мастер.
 
-    const apiKey = process.env.MISTRAL_API_KEY;
+База знаний:
+[ВСТАВЬ СЮДА СВОЙ ТЕКСТ ИЗ baza-znaniy.txt]
 
-    const systemPrompt = `Ты — дружелюбный и опытный технический консультант магазина "ЧПУ-Склад".
-Ты отлично разбираешься в Mach3, программе "Универсал — система ЧПУ", настройке станков ЧПУ, фрезах и типичных проблемах.
-Отвечай простым, понятным русским языком, как мастер с большим опытом.
-Если вопрос сложный или ты не уверен — честно говори и предлагай связаться с живым специалистом.`;
+Если не знаешь точного ответа на вопрос, предложи связаться с живым специалистом.`;
 
     try {
+        // Адрес API у Mistral другой!
         const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -25,31 +27,21 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "mistral-large-latest",
+                model: 'mistral-small-latest', // или 'mistral-medium-latest' для более умных ответов
                 messages: [
                     { role: 'system', content: systemPrompt },
-                    { role: 'user', content: message }
+                    { role: 'user', content: userMessage }
                 ],
-                temperature: 0.7,
-                max_tokens: 1200
+                temperature: 0.7
             })
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Mistral API error:', errorText);
-            throw new Error(`API Error: ${response.status}`);
-        }
-
         const data = await response.json();
-        const reply = data.choices[0].message.content;
-
-        return res.status(200).json({ reply });
+        // Ответ Mistral приходит в том же формате, что и у DeepSeek
+        res.status(200).json({ reply: data.choices[0].message.content });
 
     } catch (error) {
-        console.error('Ошибка Mistral:', error);
-        return res.status(500).json({ 
-            reply: 'Извините, сейчас возникла техническая проблема. Попробуйте чуть позже или напишите нам напрямую.' 
-        });
+        console.error('Ошибка:', error);
+        res.status(500).json({ reply: 'Извините, произошла ошибка. Попробуйте позже.' });
     }
 }
