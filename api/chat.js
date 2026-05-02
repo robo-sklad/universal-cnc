@@ -6,9 +6,6 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
-
     const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -19,45 +16,24 @@ export default async function handler(req, res) {
         model: "mistral-medium-latest",
         messages: [
           {
-  role: "system",
-  content: `Ты — эксперт и дружелюбный помощник по программе «Универсал — система ЧПУ» (CNC-система).
-
-Ты хорошо знаешь:
-- 3D-печать, фрезеровку, лазерную гравировку
-- Управление станками с ЧПУ
-- Генерацию G-кода
-- Настройку оборудования, подключение по COM/USB
-- Устранение типичных ошибок
-- Работа с STL-файлами, моделями и т.д.
-
-Отвечай на русском языке, дружелюбно, но по делу. 
-Если вопрос сложный — спрашивай уточнения.
-Помни весь контекст предыдущего разговора.`
-},
+            role: "system",
+            content: `Ты — эксперт по программе «Универсал — система ЧПУ».
+Ты можешь анализировать прикреплённые файлы (G-code, текст, описания).
+Отвечай на русском, по делу.`
+          },
           ...messages
         ],
         temperature: 0.7,
-        max_tokens: 1000
-      }),
-      signal: controller.signal
+        max_tokens: 1200
+      })
     });
-
-    clearTimeout(timeout);
-
-    if (!response.ok) throw new Error(`Mistral error: ${response.status}`);
 
     const data = await response.json();
 
-    return res.json({ 
-      reply: data.choices[0].message.content 
-    });
+    return res.json({ reply: data.choices[0].message.content });
 
   } catch (error) {
     console.error(error);
-    return res.json({ 
-      reply: error.name === 'AbortError' 
-        ? "Ответ слишком длинный. Попробуй вопрос короче." 
-        : "Извини, сейчас не могу ответить. Попробуй ещё раз." 
-    });
+    return res.json({ reply: "Ошибка при обработке. Попробуй ещё раз." });
   }
 }
