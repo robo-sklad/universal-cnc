@@ -1,39 +1,59 @@
+// api/chat.js
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ reply: "Метод не разрешён" });
-  }
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Только POST запросы' });
+    }
 
-  try {
-    const { messages } = req.body;
+    const { message } = req.body;
 
-    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": Bearer ${process.env.MISTRAL_API_KEY}
-      },
-      body: JSON.stringify({
-        model: "pixtral-large-latest",   // ← модель с поддержкой изображений
-        messages: [
-          { 
-            role: "system",
-            content: `Ты — эксперт по работе с ЧПУ оборудованием. 
-Ты можешь анализировать изображения (фото станка, скриншоты, G-code в виде текста).
-Всегда внимательно смотри на прикреплённые файлы и изображения.`
-          },
-          ...messages
-        ],
-        temperature: 0.7,
-        max_tokens: 1500
-      })
-    });
+    if (!message || message.trim() === '') {
+        return res.status(400).json({ error: 'Сообщение не может быть пустым' });
+    }
 
-    const data = await response.json();
+    const apiKey = process.env.MISTRAL_API_KEY;
 
-    return res.json({ reply: data.choices[0].message.content });
+    const systemPrompt = `Ты — дружелюбный и очень опытный технический консультант магазина "ЧПУ-Склад" (чпу-склад.рф).
+Автор и владелец — Рудаков Александр Александрович.
+Ты отлично знаешь:
+• Собственную программу "Универсал — система ЧПУ" (полная замена Mach3)
+• Станки ЧПУ 2030, 3040, 4060, 6090 со шпинделем 1.5 кВт (вода, ER11)
+• Настройку Mach3 и программы "Универсал"
+• Подключение станка, генерацию G-кода, 3D-визуализацию, симуляцию
+• Выбор фрез, безопасность, типичные ошибки и их решение
 
-  } catch (error) {
-    console.error(error);
-    return res.json({ reply: "Ошибка при обработке. Попробуй ещё раз." });
-  }
+Отвечай простым, понятным русским языком, как мастер с большим опытом.
+Будь полезным, дружелюбным и честным.
+Если вопрос сложный — говори прямо и предлагай написать на stepmotoren@yandex.ru или позвонить +7 961 991 01 76.`;
+
+    try {
+        const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "mistral-large-latest",
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: message }
+                ],
+                temperature: 0.75,
+                max_tokens: 1500
+            })
+        });
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const data = await response.json();
+        const reply = data.choices[0].message.content;
+
+        return res.status(200).json({ reply });
+
+    } catch (error) {
+        console.error('Ошибка Mistral:', error);
+        return res.status(500).json({ 
+            reply: 'Извините, сейчас небольшая техническая проблема. Попробуйте через минуту или напишите нам напрямую.' 
+        });
+    }
 }
