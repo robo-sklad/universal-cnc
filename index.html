@@ -114,16 +114,16 @@
   <div onclick="toggleChat()" style="background:#0d6efd; color:white; padding:16px; cursor:pointer; font-weight:bold;">
     💬 Помощник по Универсал ЧПУ
   </div>
-  
+
   <div id="chat-body" style="display:none; height:520px; display:flex; flex-direction:column;">
     <div id="chat-messages" style="flex:1; overflow-y:auto; padding:15px; background:#252525; color:white; display:flex; flex-direction:column; gap:10px;"></div>
-    
+
     <div style="padding:12px; background:#1e1e1e; border-top:1px solid #333;">
-      <input type="file" id="file-input" style="display:none;" accept=".txt,.pdf,.gcode,.stl">
+      <input type="file" id="file-input" style="display:none;" accept=".txt,.pdf,.gcode,.stl,.jpg,.jpeg,.png,.gif">
       <button onclick="document.getElementById('file-input').click()" style="margin-bottom:8px; padding:6px 12px;">📎 Прикрепить файл</button>
-      
+
       <div style="display:flex; gap:8px;">
-        <input id="chat-input" placeholder="Напишите вопрос..." 
+        <input id="chat-input" placeholder="Напишите вопрос..."
                style="flex:1; padding:14px; border-radius:12px; border:none; background:#333; color:white;">
         <button onclick="sendMessage()" style="padding:0 28px; background:#0d6efd; color:white; border:none; border-radius:12px; cursor:pointer;">→</button>
       </div>
@@ -134,22 +134,12 @@
 <script>
 let conversation = [];
 
+// Переменная для API-ключа (замените на свой ключ)
+const API_KEY = "YOUR_MISTRAL_API_KEY"; // 👈 ВСТАВЬТЕ СЮДА ВАШ КЛЮЧ
+
 function toggleChat() {
   const body = document.getElementById('chat-body');
   body.style.display = body.style.display === 'none' ? 'flex' : 'none';
-}
-
-async function sendMessage() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-
-  addMessage(text, 'user');
-  input.value = '';
-
-  conversation.push({ role: "user", content: text });
-
-  await sendToAI();
 }
 
 function addMessage(text, sender) {
@@ -161,45 +151,68 @@ function addMessage(text, sender) {
   msg.style.background = sender === 'user' ? '#0d6efd' : '#383838';
   msg.style.alignSelf = sender === 'user' ? 'flex-end' : 'flex-start';
   msg.style.color = 'white';
+  msg.style.wordBreak = 'break-word';
   msg.innerHTML = text;
   container.appendChild(msg);
   container.scrollTop = container.scrollHeight;
 }
 
-// Основная функция отправки
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, 'user');
+  input.value = '';
+
+  conversation.push({ role: "user", content: text });
+  await sendToAI();
+}
+
+// Основная функция отправки в API Mistral AI
 async function sendToAI() {
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch('https://api.mistral.ai/v1/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: conversation })
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'mistral-tiny',
+        messages: conversation
+      })
     });
 
-    if (!res.ok) throw new Error('Server error');
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'Server error');
+    }
 
     const data = await res.json();
-    addMessage(data.reply, 'bot');
-    conversation.push({ role: "assistant", content: data.reply });
+    const reply = data.choices[0].message.content;
+    addMessage(reply, 'bot');
+    conversation.push({ role: "assistant", content: reply });
 
   } catch (e) {
     console.error(e);
-    addMessage("❌ Ошибка соединения с сервером. Попробуй ещё раз.", 'bot');
+    addMessage("❌ Ошибка: " + e.message, 'bot');
   }
 }
 
-// ==================== ОБРАБОТКА ФАЙЛОВ ====================
+// Обработка загрузки файлов
 document.getElementById('file-input').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  addMessage(`📎 \( {file.name} ( \){(file.size/1024).toFixed(1)} КБ)`, 'user');
+  addMessage(`📎 ${file.name} (${(file.size/1024).toFixed(1)} КБ)`, 'user');
 
   try {
     const fileExt = file.name.toLowerCase();
     let userMessage;
 
-    if (fileExt.match(/\.(jpg|jpeg|png)$/)) {
-      // Изображение → base64
+    if (fileExt.match(/\.(jpg|jpeg|png|gif)$/)) {
+      // Обработка изображений
       const base64 = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
@@ -208,23 +221,19 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
 
       userMessage = {
         role: "user",
-        content: [
-          { type: "text", text: `Проанализируй изображение: ${file.name}` },
+        content: `Проанализируй это изображение: ${file.name}`,
+        files: [
           { type: "image_url", image_url: { url: base64 } }
         ]
       };
     } else {
-      // Текстовые файлы
-      let textContent = `Файл: ${file.name}\n\n`;
+      // Обработка текстовых файлов
       const text = await file.text();
-      
-      if (fileExt.endsWith('.pdf') || fileExt.endsWith('.stl')) {
-        textContent += `[\( {fileExt.toUpperCase()} файл]\n \){text.substring(0, 6000)}...`;
-      } else {
-        textContent += text.length > 14000 ? text.substring(0, 14000) + "..." : text;
-      }
-      
-      userMessage = { role: "user", content: textContent };
+      const textContent = text.length > 14000 ? text.substring(0, 14000) + "..." : text;
+      userMessage = {
+        role: "user",
+        content: `Файл: ${file.name}\n\n${textContent}`
+      };
     }
 
     conversation.push(userMessage);
@@ -232,8 +241,10 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
 
   } catch (err) {
     console.error(err);
-    addMessage("❌ Не удалось обработать файл", 'bot');
+    addMessage("❌ Не удалось обработать файл: " + err.message, 'bot');
   }
+  // Очищаем input, чтобы можно было загрузить тот же файл снова
+  e.target.value = '';
 });
 </script>
 </body>
