@@ -6,25 +6,26 @@
     <title>ЧПУ-Склад — Главная</title>
     <link rel="stylesheet" href="style.css">
     
+    <!-- CSP для работы чат-бота -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self' https:; 
                    script-src 'self' 'unsafe-inline' https:; 
                    style-src 'self' 'unsafe-inline' https:; 
-                   connect-src 'self' https: *.vercel.app https://api.mistral.ai;">
+                   connect-src 'self' https: *.vercel.app https://api.mistral.ai https://*.vercel.app;">
 </head>
 <body>
 
 <header>
     <div class="nav-container">
         <div class="logo">
-            <img src="logo.jpg" alt="ЧПУ-Склад">
-            ЧПУ склад 
+            <img src="../logo.jpg" alt="ЧПУ-Склад">
+ЧПУ склад 
         </div>
         <nav>
             <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="program.html">Программы</a></li>
-                <li><a href="equipment.html">Оборудование</a></li>
+                <li><a href="../index.html">Главная</a></li>
+                <li><a href="../program.html">Программы</a></li>
+                <li><a href="../equipment.html">Оборудование</a></li>
             </ul>
         </nav>
     </div>
@@ -42,20 +43,30 @@
         <h2>Быстрый переход</h2>
         <ul>
             <li><a href="program.html">→ Программа «Универсал — система ЧПУ»</a></li>
+             </div>
             <li><a href="equipment.html">→ Оборудование и станки</a></li>
         </ul>
     </section>
+</main>
 
+<footer>
+    <p>© 2026 ЧПУ-Склад • Все права защищены</p>
+  </footer>
+
+<main>
     <h1 style="text-align: center; color: #0d6efd; margin: 40px 0 30px;">Универсал — система ЧПУ</h1>
-    
-    <div class="product-info">
-        <img src="screenshot-main.png" alt="программа Универсал-система ЧПУ" style="width: 100%; max-width: 620px; height: auto; border-radius: 12px; margin: 20px auto; display: block;">
-    </div>
+            <div class="product-info">
+<img src="../screenshot-main.png"  
+     alt="программа Универсал-система ЧПУ" 
+     style="width: 100%; max-width: 620px; height: auto; border-radius: 12px; margin: 20px auto; display: block;">
+           
+            <div class="specs">
 
     <section>
         <h2>О программе</h2>
         <p><strong>Автор и правообладатель:</strong> Рудаков Александр Александрович</p>
-        <p>Программа разработана в Российской Федерации.</p>
+        <p>Программа разработана в Российской Федерации. Правообладатель — гражданин РФ.</p>
+        <p>Программа предназначена для автоматизации управления станками с ЧПУ: 3D-печать, фрезеровка и лазерная гравировка.</p>
     </section>
 
     <section>
@@ -63,50 +74,64 @@
         <ul>
             <li>Управление станками с ЧПУ (3D-печать, фрезеровка, лазерная гравировка)</li>
             <li>Генерация G-кода из STL-файлов</li>
-            <li>Ручное управление осями</li>
-            <li>3D-визуализация</li>
-            <li>Подключение через COM/USB</li>
+            <li>Ручное управление осями: X, Y, Z, E, A, B, C</li>
+            <li>3D-визуализация моделей и траекторий</li>
+            <li>Режим симуляции</li>
+            <li>Подключение через COM/USB порты</li>
         </ul>
     </section>
 
     <section>
-        <h2>Скачать программу</h2>
-        <p><a href="universal_cnc.exe" download>Скачать universal_cnc.exe</a></p>
+    <h2>Скачать программу</h2>
+    <p>Версия от 03 февраля 2026 г.</p>
+    
+    <p><strong>
+        <a href="../universal_cnc.exe" download>Скачать universal_cnc.exe (63.6 МБ)</a>
+    </strong></p>
+    
+    <p><strong>
+        <a href="../referat.pdf" download>Скачать реферат (PDF)</a>
+    </strong></p>
+    
+    <p><strong>
+        <a href="../dokumentaciya.pdf" download>Скачать полную документацию (PDF)</a>
+    </strong></p>
+</section>
+ 
+    <section>
+        <h2>Контакты</h2>
+        <p><strong>Email:</strong> stepmotoren@yandex.ru</p>
+        <p><strong>Телефон:</strong> +7 961 991 01 76</p>
     </section>
 </main>
 
 <footer>
-    <p>© 2026 ЧПУ-Склад • Все права защищены</p>
+    <p>© 2026 ЧПУ-склад • Все права защищены</p>
+    <p>Программа разработана Рудаковым Александром Александровичем</p>
 </footer>
-
 <!-- === ЧАТ-БОТ === -->
-<div id="cnc-chat" style="position:fixed; bottom:20px; right:20px; width:420px; background:#1e1e1e; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.7); z-index:9999; font-family:Arial,sans-serif;">
-  <div onclick="toggleChat()" style="background:#0d6efd; color:white; padding:16px; cursor:pointer; font-weight:bold;">
+<div id="cnc-chat" style="position:fixed; bottom:20px; right:20px; width:380px; background:#1e1e1e; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.6); z-index:9999; overflow:hidden; font-family:Arial,sans-serif;">
+  
+  <div onclick="toggleChat()" style="background:#0d6efd; color:white; padding:14px; cursor:pointer; font-weight:bold; text-align:center;">
     💬 Помощник по Универсал ЧПУ
   </div>
   
-  <div id="chat-body" style="display:none; height:520px; display:flex; flex-direction:column;">
-    <div id="chat-messages" style="flex:1; overflow-y:auto; padding:15px; background:#252525; color:white; display:flex; flex-direction:column; gap:10px;"></div>
+  <div id="chat-body" style="display:none;">
+    <div id="chat-messages" style="height:420px; overflow-y:auto; padding:15px; background:#252525; color:white;"></div>
     
-    <div style="padding:12px; background:#1e1e1e; border-top:1px solid #333;">
-      <input type="file" id="file-input" style="display:none;" accept=".txt,.pdf,.gcode,.jpg,.jpeg,.png,.stl">
-      <button onclick="document.getElementById('file-input').click()" style="margin-bottom:8px; padding:6px 12px;">📎 Прикрепить файл</button>
-      
-      <div style="display:flex; gap:8px;">
-        <input id="chat-input" placeholder="Напишите вопрос..." 
-               style="flex:1; padding:14px; border-radius:12px; border:none; background:#333; color:white;">
-        <button onclick="sendMessage()" style="padding:0 28px; background:#0d6efd; color:white; border:none; border-radius:12px; cursor:pointer;">→</button>
-      </div>
+    <div style="padding:12px; display:flex; gap:8px; border-top:1px solid #333;">
+      <input id="chat-input" placeholder="Напишите вопрос..." 
+             style="flex:1; padding:12px; border-radius:8px; border:none; background:#333; color:white;">
+      <button onclick="sendMessage()" 
+              style="padding:0 24px; background:#0d6efd; color:white; border:none; border-radius:8px; cursor:pointer;">→</button>
     </div>
   </div>
 </div>
 
 <script>
-let conversation = [];
-
 function toggleChat() {
   const body = document.getElementById('chat-body');
-  body.style.display = body.style.display === 'none' ? 'flex' : 'none';
+  body.style.display = body.style.display === 'none' ? 'block' : 'none';
 }
 
 async function sendMessage() {
@@ -117,68 +142,33 @@ async function sendMessage() {
   addMessage(text, 'user');
   input.value = '';
 
-  conversation.push({ role: "user", content: text });
-  await sendToBot();
-}
-
-async function sendToBot() {
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: conversation })
+      body: JSON.stringify({ messages: [{ role: "user", content: text }] })
     });
 
     const data = await res.json();
     addMessage(data.reply, 'bot');
-    conversation.push({ role: "assistant", content: data.reply });
   } catch(e) {
-    addMessage("Ошибка соединения", 'bot');
+    addMessage("Не удалось подключиться", 'bot');
   }
 }
 
 function addMessage(text, sender) {
   const container = document.getElementById('chat-messages');
   const msg = document.createElement('div');
+  msg.style.margin = '8px 0';
   msg.style.padding = '12px';
-  msg.style.borderRadius = '12px';
-  msg.style.maxWidth = '85%';
+  msg.style.borderRadius = '10px';
   msg.style.background = sender === 'user' ? '#0d6efd' : '#383838';
-  msg.style.alignSelf = sender === 'user' ? 'flex-end' : 'flex-start';
   msg.style.color = 'white';
   msg.innerHTML = text;
   container.appendChild(msg);
   container.scrollTop = container.scrollHeight;
 }
-
-// === ОБРАБОТКА ФАЙЛОВ ===
-document.getElementById('file-input').addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  addMessage(`📎 \( {file.name} ( \){file.type})`, 'user');
-
-  const reader = new FileReader();
-  
-  reader.onload = async () => {
-    let content = reader.result;
-
-    if (file.type.startsWith('image/')) {
-      content = `[Изображение: ${file.name}]\nBase64: ${content.substring(0, 800)}...`;
-    } else {
-      content = reader.result.substring(0, 8000);
-    }
-
-    conversation.push({ role: "user", content: `Файл "\( {file.name}" ( \){file.type}):\n${content}` });
-    await sendToBot();
-  };
-
-  if (file.type.startsWith('image/')) {
-    reader.readAsDataURL(file);
-  } else {
-    reader.readAsText(file);
-  }
-});
 </script>
+<!-- === КОНЕЦ ЧАТ-БОТА === -->   
 </body>
 </html>
