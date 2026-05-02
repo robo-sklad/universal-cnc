@@ -172,27 +172,20 @@ async function sendMessage() {
 // Основная функция отправки в API Mistral AI
 async function sendToAI() {
   try {
-    const res = await fetch('https://api.mistral.ai/v1/chat', {
+    const res = await fetch('/api/chat', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'mistral-tiny',
-        messages: conversation
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conversation })
     });
 
     if (!res.ok) {
       const errorData = await res.json();
-      throw new Error(errorData.message || 'Server error');
+      throw new Error(errorData.error || 'Server error');
     }
 
     const data = await res.json();
-    const reply = data.choices[0].message.content;
-    addMessage(reply, 'bot');
-    conversation.push({ role: "assistant", content: reply });
+    addMessage(data.reply, 'bot');
+    conversation.push({ role: "assistant", content: data.reply });
 
   } catch (e) {
     console.error(e);
