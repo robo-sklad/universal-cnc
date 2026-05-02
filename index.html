@@ -179,32 +179,47 @@ function addMessage(text, sender) {
   container.scrollTop = container.scrollHeight;
 }
 
-// Обработка файлов
+<!-- Обработка файлов (новая версия) -->
 document.getElementById('file-input').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  addMessage(`📎 ${file.name}`, 'user');
+  addMessage(`📎 \( {file.name} ( \){(file.size/1024).toFixed(1)} КБ)`, 'user');
 
-  const reader = new FileReader();
-  reader.onload = async () => {
-    const content = reader.result.substring(0, 6000);
-    conversation.push({ role: "user", content: `Файл \( {file.name}:\n \){content}` });
+  try {
+    let userContent = `Файл: ${file.name}\n\n`;
 
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: conversation })
-      });
-      const data = await res.json();
-      addMessage(data.reply, 'bot');
-      conversation.push({ role: "assistant", content: data.reply });
-    } catch(e) {
-      addMessage("Не удалось обработать файл", 'bot');
+    if (file.name.toLowerCase().endsWith('.pdf')) {
+      userContent += `[PDF файл "\( {file.name}" загружен ( \){(file.size/1024).toFixed(0)} КБ). Проанализируй его содержимое.]`;
+    } 
+    else if (file.name.toLowerCase().endsWith('.stl')) {
+      const text = await file.text();
+      userContent += `[STL файл "\( {file.name}"]\nПервые 4000 символов:\n \){text.substring(0, 4000)}...`;
+    } 
+    else {
+      // txt, gcode и другие текстовые
+      const text = await file.text();
+      userContent += text.length > 12000 
+        ? text.substring(0, 12000) + `\n\n... (файл большой, всего ${text.length} символов)` 
+        : text;
     }
-  };
-  reader.readAsText(file);
+
+    conversation.push({ role: "user", content: userContent });
+
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conversation })
+    });
+
+    const data = await res.json();
+    addMessage(data.reply, 'bot');
+    conversation.push({ role: "assistant", content: data.reply });
+
+  } catch (err) {
+    console.error(err);
+    addMessage("❌ Ошибка при обработке файла", 'bot');
+  }
 });
 </script>  
 </body>
