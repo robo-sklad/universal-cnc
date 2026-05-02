@@ -8,6 +8,10 @@ export default async function handler(req, res) {
     const { messages } = req.body;
     const apiKey = process.env.MISTRAL_API_KEY;
 
+    if (!apiKey) {
+      return res.status(500).json({ error: 'MISTRAL_API_KEY is not set' });
+    }
+
     const response = await fetch('https://api.mistral.ai/v1/chat', {
       method: 'POST',
       headers: {
@@ -22,14 +26,15 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Server error');
+      console.error('Mistral API error:', errorData);
+      return res.status(response.status).json({ error: errorData.message || 'Mistral API error' });
     }
 
     const data = await response.json();
     res.status(200).json({ reply: data.choices[0].message.content });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error in /api/chat:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
   }
 }
