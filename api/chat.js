@@ -1,39 +1,35 @@
+// api/chat.js
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ reply: "Метод не разрешён" });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     const { messages } = req.body;
+    const apiKey = process.env.MISTRAL_API_KEY; // Ключ из переменных окружения Vercel
 
-    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
-      method: "POST",
+    const response = await fetch('https://api.mistral.ai/v1/chat', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.MISTRAL_API_KEY}`
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: "pixtral-large-latest",   // ← модель с поддержкой изображений
-        messages: [
-          {
-            role: "system",
-            content: `Ты — эксперт по ЧПУ "Универсал". 
-Ты можешь анализировать изображения (фото станка, скриншоты, G-code в виде текста).
-Всегда внимательно смотри на прикреплённые файлы и изображения.`
-          },
-          ...messages
-        ],
-        temperature: 0.7,
-        max_tokens: 1500
+        model: 'mistral-tiny',
+        messages: messages
       })
     });
 
-    const data = await response.json();
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Server error');
+    }
 
-    return res.json({ reply: data.choices[0].message.content });
+    const data = await response.json();
+    res.status(200).json({ reply: data.choices[0].message.content });
 
   } catch (error) {
     console.error(error);
-    return res.json({ reply: "Ошибка при обработке. Попробуй ещё раз." });
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
