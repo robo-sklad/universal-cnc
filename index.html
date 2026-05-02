@@ -149,20 +149,7 @@ async function sendMessage() {
 
   conversation.push({ role: "user", content: text });
 
-  try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: conversation })
-    });
-
-    const data = await res.json();
-    addMessage(data.reply, 'bot');
-    conversation.push({ role: "assistant", content: data.reply });
-
-  } catch(e) {
-    addMessage("Ошибка соединения с сервером", 'bot');
-  }
+  await sendToAI();
 }
 
 function addMessage(text, sender) {
@@ -179,7 +166,28 @@ function addMessage(text, sender) {
   container.scrollTop = container.scrollHeight;
 }
 
-// ==================== ОБРАБОТКА ФАЙЛОВ (с поддержкой изображений) ====================
+// Основная функция отправки
+async function sendToAI() {
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conversation })
+    });
+
+    if (!res.ok) throw new Error('Server error');
+
+    const data = await res.json();
+    addMessage(data.reply, 'bot');
+    conversation.push({ role: "assistant", content: data.reply });
+
+  } catch (e) {
+    console.error(e);
+    addMessage("❌ Ошибка соединения с сервером. Попробуй ещё раз.", 'bot');
+  }
+}
+
+// ==================== ОБРАБОТКА ФАЙЛОВ ====================
 document.getElementById('file-input').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -188,56 +196,45 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
 
   try {
     const fileExt = file.name.toLowerCase();
-    let userMessage = { role: "user", content: [] };
+    let userMessage;
 
-    // Если это изображение
-    if (fileExt.endsWith('.jpg') || fileExt.endsWith('.jpeg') || fileExt.endsWith('.png')) {
+    if (fileExt.match(/\.(jpg|jpeg|png)$/)) {
+      // Изображение → base64
       const base64 = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.readAsDataURL(file);
       });
 
-      userMessage.content = [
-        { type: "text", text: `Проанализируй это изображение: ${file.name}` },
-        { type: "image_url", image_url: { url: base64 } }
-      ];
-    } 
-    // Для остальных файлов (txt, gcode, stl, pdf)
-    else {
+      userMessage = {
+        role: "user",
+        content: [
+          { type: "text", text: `Проанализируй изображение: ${file.name}` },
+          { type: "image_url", image_url: { url: base64 } }
+        ]
+      };
+    } else {
+      // Текстовые файлы
       let textContent = `Файл: ${file.name}\n\n`;
+      const text = await file.text();
       
-      if (fileExt.endsWith('.pdf')) {
-        textContent += `[PDF файл "${file.name}" загружен. Размер: ${(file.size/1024).toFixed(0)} КБ. Проанализируй его.]`;
-      } else if (fileExt.endsWith('.stl')) {
-        const text = await file.text();
-        textContent += `[STL файл]\n${text.substring(0, 5000)}...`;
+      if (fileExt.endsWith('.pdf') || fileExt.endsWith('.stl')) {
+        textContent += `[\( {fileExt.toUpperCase()} файл]\n \){text.substring(0, 6000)}...`;
       } else {
-        const text = await file.text();
         textContent += text.length > 14000 ? text.substring(0, 14000) + "..." : text;
       }
       
-      userMessage.content = textContent;
+      userMessage = { role: "user", content: textContent };
     }
 
     conversation.push(userMessage);
-
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: conversation })
-    });
-
-    const data = await res.json();
-    addMessage(data.reply, 'bot');
-    conversation.push({ role: "assistant", content: data.reply });
+    await sendToAI();
 
   } catch (err) {
     console.error(err);
-    addMessage("❌ Ошибка при обработке файла", 'bot');
+    addMessage("❌ Не удалось обработать файл", 'bot');
   }
 });
-// =======================================================
-</script>  
+</script>
 </body>
 </html>
