@@ -6,26 +6,25 @@
     <title>ЧПУ-Склад — Главная</title>
     <link rel="stylesheet" href="style.css">
     
-    <!-- CSP для работы чат-бота -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self' https:; 
                    script-src 'self' 'unsafe-inline' https:; 
                    style-src 'self' 'unsafe-inline' https:; 
-                   connect-src 'self' https: *.vercel.app https://api.mistral.ai https://*.vercel.app;">
+                   connect-src 'self' https: *.vercel.app https://api.mistral.ai;">
 </head>
 <body>
 
 <header>
     <div class="nav-container">
         <div class="logo">
-            <img src="../logo.jpg" alt="ЧПУ-Склад">
-ЧПУ склад 
+            <img src="logo.jpg" alt="ЧПУ-Склад">
+            ЧПУ склад 
         </div>
         <nav>
             <ul>
-                <li><a href="../index.html">Главная</a></li>
-                <li><a href="../program.html">Программы</a></li>
-                <li><a href="../equipment.html">Оборудование</a></li>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="program.html">Программы</a></li>
+                <li><a href="equipment.html">Оборудование</a></li>
             </ul>
         </nav>
     </div>
@@ -43,30 +42,21 @@
         <h2>Быстрый переход</h2>
         <ul>
             <li><a href="program.html">→ Программа «Универсал — система ЧПУ»</a></li>
-             </div>
             <li><a href="equipment.html">→ Оборудование и станки</a></li>
         </ul>
     </section>
-</main>
 
-<footer>
-    <p>© 2026 ЧПУ-Склад • Все права защищены</p>
-  </footer>
-
-<main>
     <h1 style="text-align: center; color: #0d6efd; margin: 40px 0 30px;">Универсал — система ЧПУ</h1>
-            <div class="product-info">
-<img src="../screenshot-main.png"  
-     alt="программа Универсал-система ЧПУ" 
-     style="width: 100%; max-width: 620px; height: auto; border-radius: 12px; margin: 20px auto; display: block;">
-           
-            <div class="specs">
+    
+    <div class="product-info">
+        <img src="screenshot-main.png" alt="программа Универсал-система ЧПУ" style="width: 100%; max-width: 620px; height: auto; border-radius: 12px; margin: 20px auto; display: block;">
+    </div>
 
+    <!-- Основной контент -->
     <section>
         <h2>О программе</h2>
         <p><strong>Автор и правообладатель:</strong> Рудаков Александр Александрович</p>
-        <p>Программа разработана в Российской Федерации. Правообладатель — гражданин РФ.</p>
-        <p>Программа предназначена для автоматизации управления станками с ЧПУ: 3D-печать, фрезеровка и лазерная гравировка.</p>
+        <p>Программа разработана в Российской Федерации.</p>
     </section>
 
     <section>
@@ -74,42 +64,23 @@
         <ul>
             <li>Управление станками с ЧПУ (3D-печать, фрезеровка, лазерная гравировка)</li>
             <li>Генерация G-кода из STL-файлов</li>
-            <li>Ручное управление осями: X, Y, Z, E, A, B, C</li>
-            <li>3D-визуализация моделей и траекторий</li>
-            <li>Режим симуляции</li>
-            <li>Подключение через COM/USB порты</li>
+            <li>Ручное управление осями</li>
+            <li>3D-визуализация</li>
+            <li>Подключение через COM/USB</li>
         </ul>
     </section>
 
     <section>
-    <h2>Скачать программу</h2>
-    <p>Версия от 03 февраля 2026 г.</p>
-    
-    <p><strong>
-        <a href="../universal_cnc.exe" download>Скачать universal_cnc.exe (63.6 МБ)</a>
-    </strong></p>
-    
-    <p><strong>
-        <a href="../referat.pdf" download>Скачать реферат (PDF)</a>
-    </strong></p>
-    
-    <p><strong>
-        <a href="../dokumentaciya.pdf" download>Скачать полную документацию (PDF)</a>
-    </strong></p>
-</section>
- 
-    <section>
-        <h2>Контакты</h2>
-        <p><strong>Email:</strong> stepmotoren@yandex.ru</p>
-        <p><strong>Телефон:</strong> +7 961 991 01 76</p>
+        <h2>Скачать программу</h2>
+        <p><a href="universal_cnc.exe" download>Скачать universal_cnc.exe</a></p>
     </section>
 </main>
 
 <footer>
-    <p>© 2026 ЧПУ-склад • Все права защищены</p>
-    <p>Программа разработана Рудаковым Александром Александровичем</p>
+    <p>© 2026 ЧПУ-Склад • Все права защищены</p>
 </footer>
-<!-- Улучшенный чат с файлами -->
+
+<!-- === ЧАТ-БОТ === -->
 <div id="cnc-chat" style="position:fixed; bottom:20px; right:20px; width:420px; background:#1e1e1e; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.7); z-index:9999; font-family:Arial,sans-serif;">
   <div onclick="toggleChat()" style="background:#0d6efd; color:white; padding:16px; cursor:pointer; font-weight:bold;">
     💬 Помощник по Универсал ЧПУ
@@ -186,7 +157,7 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  addMessage(`📎 ${file.name}`, 'user');
+  addMessage(`📎 \( {file.name} ( \){file.type})`, 'user');
 
   const reader = new FileReader();
   
@@ -199,7 +170,7 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
       content = reader.result.substring(0, 8000);
     }
 
-    conversation.push({ role: "user", content: `Файл "\( {file.name}":\n \){content}` });
+    conversation.push({ role: "user", content: `Файл "\( {file.name}" ( \){file.type}):\n${content}` });
     await sendToBot();
   };
 
