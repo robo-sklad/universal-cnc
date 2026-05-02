@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
   try {
     const { messages } = req.body;
-    const apiKey = process.env.MISTRAL_API_KEY; // Ключ из переменных окружения Vercel
+    const apiKey = process.env.MISTRAL_API_KEY;
 
     const response = await fetch('https://api.mistral.ai/v1/chat', {
       method: 'POST',
