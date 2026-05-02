@@ -1,3 +1,11 @@
 {
-  "version": 2
+  "version": 2,
+  "functions": {
+    "api/chat.js": {
+      "runtime": "nodejs22.x"
+    },
+    "api/advanced-chat.js": {
+      "runtime": "nodejs22.x"
+    }
+  }
 }
