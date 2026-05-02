@@ -1,95 +1,96 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Form
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 import os
-from typing import Optional
+from mistralai.client import MistralClient
+from mistralai.models.chat_completion import ChatMessage
+from langchain.vectorstores import FAISS
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.document_loaders import PyPDFLoader, TextLoader
 import tempfile
-from pydantic import BaseModel
 
 app = FastAPI()
 
 # Настройка CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # В продакшене укажите только ваш домен, например: ["https://robo-sklad.vercel.app"]
-    allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Получаем API-ключ из переменных окружения Vercel
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "iN2MxrUmzvjSJkuuVaML6X2kf2xsFzbU")
+# Инициализация клиента Mistral API
+client = MistralClient(api_key=os.getenv("MISTRAL_API_KEY"))
 
-# Модель для запроса чата
-class ChatRequest(BaseModel):
-    message: str
-    context: Optional[str] = None
+# Инициализация векторизатора и базы знаний
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+knowledge_base = None
 
-# Функция для отправки запроса к Mistral API
-async def send_to_mistral(message: str, context: Optional[str] = None) -> str:
-    import httpx
+# Загрузка документа в базу знаний
+def load_document_to_knowledge_base(file_path: str):
+    global knowledge_base
+    if file_path.endswith(".pdf"):
+        loader = PyPDFLoader(file_path)
+    else:
+        loader = TextLoader(file_path)
+    documents = loader.load()
+    texts = text_splitter.split_documents(documents)
+    knowledge_base = FAISS.from_documents(texts, embeddings)
 
-    prompt = message
-    if context:
-        prompt = f"Контекст из базы знаний:\n{context}\n\nВопрос пользователя: {message}"
+# Поиск в базе знаний
+def search_knowledge_base(query: str, k: int = 3):
+    if knowledge_base is None:
+        return ""
+    docs = knowledge_base.similarity_search(query, k=k)
+    return "\n".join([doc.page_content for doc in docs])
 
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            "https://api.mistral.ai/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {MISTRAL_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": "mistral-tiny",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "Ты — полезный ассистент на русском языке. Отвечай подробно и по делу."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                "temperature": 0.7,
-            },
-        )
-        if response.status_code != 200:
-            raise HTTPException(status_code=500, detail=f"Mistral API error: {response.text}")
-        data = response.json()
-        return data["choices"][0]["message"]["content"]
+# Запрос к Mistral API с контекстом
+def get_mistral_response(user_message: str, context: str = ""):
+    messages = [
+        ChatMessage(role="system", content="Ты — полезный ассистент. Отвечай на русском языке. Используй контекст, если он предоставлен."),
+        ChatMessage(role="user", content=f"Контекст: {context}\n\nВопрос: {user_message}")
+    ]
+    response = client.chat(
+        model="mistral-tiny",
+        messages=messages,
+        temperature=0.7
+    )
+    return response.choices[0].message.content
 
 # Эндпоинт для чата
 @app.post("/chat")
-async def chat(request: ChatRequest):
-    try:
-        response = await send_to_mistral(request.message, request.context)
-        return JSONResponse(content={"response": response})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+async def chat(user_message: str):
+    context = search_knowledge_base(user_message)
+    response = get_mistral_response(user_message, context)
+    return {"response": response}
 
-# Эндпоинт для загрузки файлов
+# Эндпоинт для загрузки файлов в базу знаний
+@app.post("/upload-knowledge")
+async def upload_knowledge(file: UploadFile = File(...)):
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+        tmp_file.write(await file.read())
+        tmp_file_path = tmp_file.name
+    load_document_to_knowledge_base(tmp_file_path)
+    os.unlink(tmp_file_path)
+    return {"status": "File uploaded and added to knowledge base"}
+
+# Эндпоинт для загрузки файлов пользователями (временное хранение)
 @app.post("/upload-file")
 async def upload_file(file: UploadFile = File(...)):
-    try:
-        temp_dir = tempfile.mkdtemp()
-        file_path = os.path.join(temp_dir, file.filename)
+    # Сохраните файл временно и извлеките текст для контекста
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+        tmp_file.write(await file.read())
+        tmp_file_path = tmp_file.name
+    text = extract_text_from_file(tmp_file_path)  # Реализуйте эту функцию
+    os.unlink(tmp_file_path)
+    return {"context": text}
 
-        with open(file_path, "wb") as f:
-            f.write(await file.read())
-
-        return JSONResponse(
-            content={
-                "status": "success",
-                "filename": file.filename,
-                "message": "Файл временно сохранён."
-            }
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-# Эндпоинт для проверки работы сервера
-@app.get("/")
-async def root():
-    return {"message": "Mistral Advanced Bot Backend is running on Vercel!"}
+def extract_text_from_file(file_path: str) -> str:
+    # Реализуйте извлечение текста из PDF, DOCX, TXT и т.д.
+    if file_path.endswith(".pdf"):
+        loader = PyPDFLoader(file_path)
+    else:
+        loader = TextLoader(file_path)
+    docs = loader.load()
+    return "\n".join([doc.page_content for doc in docs])
