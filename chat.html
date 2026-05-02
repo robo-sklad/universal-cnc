@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="chat-container">
-        <div class="header">💬 Чат с консультантом ЧПУ-Склад</div>
+        <div class="header">💬 Чат со специалистом </div>
         <div class="messages" id="messages"></div>
         <div class="input-area">
             <input type="text" id="userInput" placeholder="Напишите ваш вопрос..." autocomplete="off">
@@ -35,7 +35,7 @@
         function addMessage(text, isUser) {
             const div = document.createElement('div');
             div.className = `message ${isUser ? 'user' : 'bot'}`;
-            div.innerHTML = `${text}<small>${isUser ? 'Вы' : 'Консультант'}</small>`;
+            div.innerHTML = `${text}<small>${isUser ? 'Вы' : 'учитель'}</small>`;
             messagesDiv.appendChild(div);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
