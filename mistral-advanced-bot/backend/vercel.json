@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "pythonVersion": "3.12",
   "builds": [
     {
       "src": "main.py",
