@@ -179,7 +179,7 @@ function addMessage(text, sender) {
   container.scrollTop = container.scrollHeight;
 }
 
-// ==================== ОБРАБОТКА ФАЙЛОВ ====================
+// ==================== ОБРАБОТКА ФАЙЛОВ (с поддержкой изображений) ====================
 document.getElementById('file-input').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -187,26 +187,40 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
   addMessage(`📎 \( {file.name} ( \){(file.size/1024).toFixed(1)} КБ)`, 'user');
 
   try {
-    let userContent = `Файл: ${file.name}\n\n`;
-
     const fileExt = file.name.toLowerCase();
+    let userMessage = { role: "user", content: [] };
 
-    if (fileExt.endsWith('.pdf')) {
-      userContent += `[PDF файл "${file.name}" загружен. Размер: ${(file.size/1024).toFixed(0)} КБ.\nПроанализируй содержимое файла.]`;
+    // Если это изображение
+    if (fileExt.endsWith('.jpg') || fileExt.endsWith('.jpeg') || fileExt.endsWith('.png')) {
+      const base64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+
+      userMessage.content = [
+        { type: "text", text: `Проанализируй это изображение: ${file.name}` },
+        { type: "image_url", image_url: { url: base64 } }
+      ];
     } 
-    else if (fileExt.endsWith('.stl')) {
-      const text = await file.text();
-      userContent += `[STL файл "\( {file.name}"]\nПервые 5000 символов:\n \){text.substring(0, 5000)}\n...`;
-    } 
+    // Для остальных файлов (txt, gcode, stl, pdf)
     else {
-      // .txt, .gcode и другие текстовые файлы
-      const text = await file.text();
-      userContent += text.length > 14000 
-        ? text.substring(0, 14000) + `\n\n... (файл большой — ${text.length} символов)` 
-        : text;
+      let textContent = `Файл: ${file.name}\n\n`;
+      
+      if (fileExt.endsWith('.pdf')) {
+        textContent += `[PDF файл "${file.name}" загружен. Размер: ${(file.size/1024).toFixed(0)} КБ. Проанализируй его.]`;
+      } else if (fileExt.endsWith('.stl')) {
+        const text = await file.text();
+        textContent += `[STL файл]\n${text.substring(0, 5000)}...`;
+      } else {
+        const text = await file.text();
+        textContent += text.length > 14000 ? text.substring(0, 14000) + "..." : text;
+      }
+      
+      userMessage.content = textContent;
     }
 
-    conversation.push({ role: "user", content: userContent });
+    conversation.push(userMessage);
 
     const res = await fetch('/api/chat', {
       method: 'POST',
@@ -220,7 +234,7 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
 
   } catch (err) {
     console.error(err);
-    addMessage("❌ Не удалось прочитать файл. Попробуй .txt или .gcode", 'bot');
+    addMessage("❌ Ошибка при обработке файла", 'bot');
   }
 });
 // =======================================================
