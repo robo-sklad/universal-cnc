@@ -12,18 +12,40 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.MISTRAL_API_KEY;
 
-    const systemPrompt = `Ты — дружелюбный и очень опытный технический консультант магазина "ЧПУ-Склад" (чпу-склад.рф).
-Автор и владелец — Рудаков Александр Александрович.
-Ты отлично знаешь:
-• Собственную программу "Универсал — система ЧПУ"
-• Станки ЧПУ 2030, 3040, 4060, 6090 со шпинделем 1.5 кВт (вода, ER11)
-• Настройку Mach3
-• Подключение станка, генерацию G-кода, 3D-визуализацию, симуляцию, подготовку УП в artcam и других аналогичных программах
-• Выбор фрез, безопасность, типичные ошибки и их решение
+    // === НОВЫЙ КОД ДЛЯ ЧТЕНИЯ ДОКУМЕНТОВ ===
+    let knowledgeContext = "";
 
-Отвечай простым, понятным русским языком, а если просят на другом языке то соглашайся и подтягивай знания со всех ресурсов, как мастер с большим опытом.
-Будь полезным, дружелюбным и честным.
-Если вопрос сложный — говори прямо и предлагай написать на stepmotoren@yandex.ru или позвонить +7 961 991 01 76.`;
+    try {
+        // Список файлов из папки knowledge (можно расширять)
+        const knowledgeFiles = [
+            'knowledge/mach3-instruction.txt',
+            'knowledge/universal-manual.txt',
+            // Добавляй сюда новые файлы по мере загрузки
+        ];
+
+        for (const file of knowledgeFiles) {
+            try {
+                const rawUrl = `https://raw.githubusercontent.com/robo-sklad/universal-cnc/main/${file}`;
+                const response = await fetch(rawUrl);
+                if (response.ok) {
+                    const text = await response.text();
+                    knowledgeContext += `\n\n=== Из файла \( {file} ===\n \){text}\n`;
+                }
+            } catch (e) {
+                console.log(`Не удалось загрузить ${file}`);
+            }
+        }
+    } catch (err) {
+        console.error("Ошибка загрузки knowledge:", err);
+    }
+
+    const systemPrompt = `Ты — дружелюбный и очень опытный технический консультант магазина "ЧПУ-Склад".
+
+\( {knowledgeContext ? `Вот важная информация из моих документов:\n \){knowledgeContext}\n` : ''}
+
+Отвечай простым русским языком, как мастер с большим опытом. 
+Будь полезным, честным и терпеливым.
+Если не знаешь точного ответа — говори прямо и предлагай написать на stepmotoren@yandex.ru или позвонить +7 961 991 01 76.`;
 
     try {
         const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
@@ -38,8 +60,8 @@ export default async function handler(req, res) {
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: message }
                 ],
-                temperature: 0.75,
-                max_tokens: 1500
+                temperature: 0.7,
+                max_tokens: 2000
             })
         });
 
@@ -53,7 +75,7 @@ export default async function handler(req, res) {
     } catch (error) {
         console.error('Ошибка Mistral:', error);
         return res.status(500).json({ 
-            reply: 'Извините, сейчас небольшая техническая проблема. Попробуйте через минуту или напишите нам напрямую.' 
+            reply: 'Извините, сейчас небольшая техническая проблема. Попробуйте чуть позже.' 
         });
     }
 }
