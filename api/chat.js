@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
     // Здесь указывай файлы, которые бот должен использовать
     const knowledgeFiles = [
-        "knowledge/mach3-instruction.txt",
+        "knowledge/Автор.txt",
         // "knowledge/universal-manual.txt",     // раскомментируй, когда добавишь
         // "knowledge/stanki-3040-4060.txt",     // раскомментируй, когда добавишь
     ];
