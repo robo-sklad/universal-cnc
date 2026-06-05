@@ -12,70 +12,47 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.MISTRAL_API_KEY;
 
-    // ============================================
-    // АВТОМАТИЧЕСКАЯ ЗАГРУЗКА ВСЕХ .txt ФАЙЛОВ ИЗ knowledge/
-    // ============================================
     let knowledgeContext = "";
+    let loadedFiles = [];
 
     try {
-        // Получаем список файлов в папке knowledge/
         const listUrl = `https://api.github.com/repos/robo-sklad/universal-cnc/contents/knowledge`;
-        const listResponse = await fetch(listUrl);
-        
+        const listResponse = await fetch(listUrl, { 
+            headers: { 'User-Agent': 'Vercel-Chatbot' } 
+        });
+
         if (listResponse.ok) {
             const files = await listResponse.json();
+            const txtFiles = files.filter(f => f.type === 'file' && f.name.endsWith('.txt'));
 
-            // Берём только .txt файлы
-            const txtFiles = files.filter(file => 
-                file.type === 'file' && file.name.endsWith('.txt')
-            );
-
-            // Читаем содержимое каждого .txt файла
             for (const file of txtFiles) {
-                try {
-                    const rawUrl = file.download_url;
-                    const contentResponse = await fetch(rawUrl);
-                    
-                    if (contentResponse.ok) {
-                        const text = await contentResponse.text();
-                        knowledgeContext += `\n\n=== Документ: \( {file.name} ===\n \){text}\n`;
-                    }
-                } catch (e) {
-                    console.log(`Не удалось прочитать файл: ${file.name}`);
+                const contentRes = await fetch(file.download_url);
+                if (contentRes.ok) {
+                    const text = await contentRes.text();
+                    knowledgeContext += `\n\n=== ДОКУМЕНТ: \( {file.name} ===\n \){text}\n`;
+                    loadedFiles.push(file.name);
                 }
             }
         }
     } catch (err) {
-        console.error("Ошибка при загрузке документов из knowledge/:", err);
+        console.error("Ошибка загрузки документов:", err);
     }
 
-    // ============================================
-    // СИСТЕМНЫЙ ПРОМПТ
-    // ============================================
-    const systemPrompt = `Ты — опытный технический специалист магазина "ЧПУ-Склад" (чпу-склад.рф).
-Владелец — Рудаков Александр Александрович.
+    const systemPrompt = `Ты — технический специалист магазина "ЧПУ-Склад".
 
-Ты отлично знаешь:
-- Программу "Универсал — система ЧПУ"
-- Станки ЧПУ 2030, 3040, 4060, 6090
-- Настройку и работу в Mach3
-- Подключение оборудования, генерацию G-кода, безопасность
+Загруженные документы: ${loadedFiles.join(', ') || 'нет'}
 
-${knowledgeContext ? 
-`ВАЖНО: Ниже приведена информация из официальных документов и инструкций. 
-Используй её в первую очередь при ответах:
+${knowledgeContext}
 
-${knowledgeContext}` : ''}
-
-Отвечай простым, понятным русским языком, как мастер с большим практическим опытом.
-Будь честным. Если информации нет в документах — так и говори.`;
+ПРАВИЛО: Если вопрос касается любого из загруженных документов — ВСЕГДА используй информацию из них. 
+Не говори, что не знаешь файл, если он есть в списке выше.`;
 
     try {
         const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
             method: 'POST',
-            headers: {
+            headers: { 
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Authorization': `Bearer ${apiKey}` 
             },
             body: JSON.stringify({
                 model: "mistral-large-latest",
@@ -83,22 +60,16 @@ ${knowledgeContext}` : ''}
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: message }
                 ],
-                temperature: 0.7,
+                temperature: 0.5,
                 max_tokens: 2000
             })
         });
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
         const data = await response.json();
-        const reply = data.choices[0].message.content;
-
-        return res.status(200).json({ reply });
+        return res.status(200).json({ reply: data.choices[0].message.content });
 
     } catch (error) {
-        console.error('Ошибка Mistral:', error);
-        return res.status(500).json({ 
-            reply: 'Извините, произошла техническая ошибка. Попробуйте чуть позже.' 
-        });
+        console.error('Ошибка:', error);
+        return res.status(500).json({ reply: 'Ошибка соединения. Попробуй позже.' });
     }
 }
