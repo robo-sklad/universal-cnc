@@ -23,8 +23,16 @@
         <div class="header">💬 Чат со специалистом </div>
         <div class="messages" id="messages"></div>
         <div class="input-area">
-            <input type="text" id="userInput" placeholder="Напишите ваш вопрос..." autocomplete="off">
-            <button onclick="sendMessage()">Отправить</button>
+    <input type="text" id="userInput" placeholder="Напишите ваш вопрос..." autocomplete="off">
+    
+    <!-- НОВЫЕ КНОПКИ -->
+    <label for="text-upload" style="cursor: pointer; padding: 0 10px; background: #334155; border-radius: 20px; margin-right: 5px;">📄 Текст</label>
+    <input type="file" id="text-upload" accept=".txt,.csv,.gcode,.nc" style="display: none;" />
+    
+    <label for="image-upload" style="cursor: pointer; padding: 0 10px; background: #334155; border-radius: 20px; margin-right: 5px;">📎 Изображение</label>
+    <input type="file" id="image-upload" accept="image/*" capture="environment" style="display: none;" />
+    
+    <button onclick="sendMessage()">Отправить</button>
         </div>
     </div>
 
