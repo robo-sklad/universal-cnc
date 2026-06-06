@@ -24,11 +24,6 @@
         <div class="messages" id="messages"></div>
         <div class="input-area">
             <input type="text" id="userInput" placeholder="Напишите ваш вопрос..." autocomplete="off">
-            
-            <!-- ОДНА КНОПКА ДЛЯ ВСЕХ ФАЙЛОВ -->
-            <label for="file-upload" style="cursor: pointer; padding: 0 10px; background: #334155; border-radius: 20px; margin-right: 5px;">📎 Прикрепить файл</label>
-            <input type="file" id="file-upload" accept="image/*,.txt,.csv,.gcode,.nc" style="display: none;" />
-            
             <button onclick="sendMessage()">Отправить</button>
         </div>
     </div>
@@ -36,42 +31,6 @@
     <script>
         const messagesDiv = document.getElementById('messages');
         const input = document.getElementById('userInput');
-
-        // Переменные для хранения загруженного файла
-        let currentFile = null;
-        let currentFileName = null;
-        let currentFileType = null;
-
-        // Обработчик загрузки файла (текст или изображение)
-        document.getElementById('file-upload').addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            // Лимит 10 MB
-            if (file.size > 10 * 1024 * 1024) {
-                alert("Файл слишком большой! Максимум 10 MB.");
-                return;
-            }
-
-            const reader = new FileReader();
-            // Определяем тип файла по расширению
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            const isImage = ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(fileExtension);
-
-            reader.onload = () => {
-                currentFile = reader.result;
-                currentFileName = file.name;
-                currentFileType = isImage ? 'image' : 'text';
-                alert(`Файл "${file.name}" загружен! Теперь отправьте сообщение.`);
-            };
-
-            // Для изображений читаем как DataURL, для текста — как текст
-            if (isImage) {
-                reader.readAsDataURL(file);
-            } else {
-                reader.readAsText(file);
-            }
-        });
 
         function addMessage(text, isUser) {
             const div = document.createElement('div');
@@ -83,35 +42,19 @@
 
         async function sendMessage() {
             const text = input.value.trim();
-            if (!text && !currentFile) {
-                alert("Введите сообщение или загрузите файл!");
-                return;
-            }
+            if (!text) return;
 
-            addMessage(text || `[${currentFileType === 'image' ? 'Изображение' : 'Файл'}: ${currentFileName}]`, true);
+            addMessage(text, true);
             input.value = '';
-
-            const payload = { message: text };
-            if (currentFile) {
-                payload.file = currentFile;
-                payload.fileName = currentFileName;
-                payload.fileType = currentFileType;
-            }
 
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ message: text })
             });
 
             const data = await response.json();
             addMessage(data.reply || 'Ошибка соединения', false);
-
-            // Очищаем загруженный файл после отправки
-            currentFile = null;
-            currentFileName = null;
-            currentFileType = null;
-            document.getElementById('file-upload').value = '';
         }
 
         // Enter для отправки
