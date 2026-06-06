@@ -1,18 +1,16 @@
 // api/chat.js
 let cachedKnowledge = { context: "", files: [], timestamp: 0 };
 const CACHE_TTL = 10 * 60 * 1000; // 10 минут
+const MAX_CONTEXT_TOKENS = 25000; // Ограничение Mistral API
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Только POST запросы' });
     }
 
-    // Принимаем сообщение и файл от пользователя
-    const { message, file, fileType, fileName } = req.body;
-
-    // Проверяем, что есть хотя бы сообщение или файл
-    if (!message && !file) {
-        return res.status(400).json({ error: 'Сообщение или файл обязательны' });
+    const { message } = req.body;
+    if (!message || message.trim() === '') {
+        return res.status(400).json({ error: 'Сообщение не может быть пустым' });
     }
 
     const apiKey = process.env.MISTRAL_API_KEY;
@@ -20,19 +18,7 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'API ключ не настроен' });
     }
 
-    // Обработка загруженного файла от пользователя
-    let fileContext = "";
-    if (file) {
-        if (fileType === 'text') {
-            // Текстовый файл: добавляем содержимое в контекст
-            fileContext = `\n\n=== ПОЛЬЗОВАТЕЛЬСКИЙ ФАЙЛ: ${fileName} ===\n${file}\n`;
-        } else if (fileType === 'image') {
-            // Изображение: просто упоминаем в промпте
-            fileContext = `\n\n[Пользователь прикрепил изображение: ${fileName}]`;
-        }
-    }
-
-    // Загрузка документов из GitHub (ваш существующий код)
+    // Кэширование: проверяем актуальность
     const now = Date.now();
     if (now - cachedKnowledge.timestamp > CACHE_TTL) {
         try {
@@ -47,55 +33,36 @@ export default async function handler(req, res) {
 
                 let newContext = "";
                 let newFiles = [];
+                let estimatedTokens = 0;
 
                 for (const file of txtFiles) {
                     const contentRes = await fetch(file.download_url);
                     if (contentRes.ok) {
                         const text = await contentRes.text();
+                        const fileTokens = Math.ceil(text.length / 4); // Примерная оценка
+                        if (estimatedTokens + fileTokens > MAX_CONTEXT_TOKENS) break;
+
                         newContext += `\n\n=== ДОКУМЕНТ: ${file.name} ===\n\n${text}\n`;
                         newFiles.push(file.name);
+                        estimatedTokens += fileTokens;
                     }
                 }
 
-                cachedKnowledge = {
-                    context: newContext,
-                    files: newFiles,
-                    timestamp: now
-                };
+                cachedKnowledge = { context: newContext, files: newFiles, timestamp: now };
             }
         } catch (err) {
             console.error("Ошибка загрузки документов:", err);
         }
     }
 
-    // Формируем системный промпт с учетом файла пользователя
     const systemPrompt = `Ты — технический специалист магазина "ЧПУ-Склад".
 Загруженные документы: ${cachedKnowledge.files.join(', ') || 'нет документов'}
 
-${cachedKnowledge.context}${fileContext}
+${cachedKnowledge.context}
 
-ВАЖНОЕ ПРАВИЛО:
-Если пользователь спрашивает про любой загруженный документ (например avtor.txt или mach3-instruction.txt) — ВСЕГДА используй информацию из него.
-Не говори, что не знаешь файл, если он есть в списке выше.`;
+ВАЖНОЕ ПРАВИЛО: Если пользователь спрашивает про любой документ (например avtor.txt), ВСЕГДА используй информацию из него. Не говори, что файла нет, если он загружен.`;
 
     try {
-        // Выбираем модель в зависимости от типа файла
-        const model = fileType === 'image' ? "mistral-large-vision" : "mistral-large-latest";
-
-        // Формируем messages в зависимости от типа файла
-        const messages = [
-            { role: 'system', content: systemPrompt },
-            {
-                role: 'user',
-                content: fileType === 'image'
-                    ? [
-                        { type: 'text', text: message || "Опиши, что на этом изображении?" },
-                        { type: 'image_url', image_url: file }
-                      ]
-                    : message
-            }
-        ];
-
         const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -103,18 +70,26 @@ ${cachedKnowledge.context}${fileContext}
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: model,
-                messages: messages,
+                model: "mistral-large-latest",
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: message }
+                ],
                 temperature: 0.5,
                 max_tokens: 2000
             })
         });
 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Ошибка API Mistral');
+        }
+
         const data = await response.json();
         return res.status(200).json({ reply: data.choices[0].message.content });
 
     } catch (error) {
-        console.error('Ошибка Mistral:', error);
+        console.error('Ошибка:', error);
         return res.status(500).json({ reply: 'Ошибка соединения. Попробуйте позже.' });
     }
 }
