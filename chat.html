@@ -23,61 +23,56 @@
         <div class="header">💬 Чат со специалистом </div>
         <div class="messages" id="messages"></div>
         <div class="input-area">
-    <input type="text" id="userInput" placeholder="Напишите ваш вопрос..." autocomplete="off">
-    
-    <!-- НОВЫЕ КНОПКИ -->
-    <label for="text-upload" style="cursor: pointer; padding: 0 10px; background: #334155; border-radius: 20px; margin-right: 5px;">📄 Текст</label>
-    <input type="file" id="text-upload" accept=".txt,.csv,.gcode,.nc" style="display: none;" />
-    
-    <label for="image-upload" style="cursor: pointer; padding: 0 10px; background: #334155; border-radius: 20px; margin-right: 5px;">📎 Изображение</label>
-    <input type="file" id="image-upload" accept="image/*" capture="environment" style="display: none;" />
-    
-    <button onclick="sendMessage()">Отправить</button>
+            <input type="text" id="userInput" placeholder="Напишите ваш вопрос..." autocomplete="off">
+            
+            <!-- ОДНА КНОПКА ДЛЯ ВСЕХ ФАЙЛОВ -->
+            <label for="file-upload" style="cursor: pointer; padding: 0 10px; background: #334155; border-radius: 20px; margin-right: 5px;">📎 Прикрепить файл</label>
+            <input type="file" id="file-upload" accept="image/*,.txt,.csv,.gcode,.nc" style="display: none;" />
+            
+            <button onclick="sendMessage()">Отправить</button>
         </div>
     </div>
 
     <script>
         const messagesDiv = document.getElementById('messages');
         const input = document.getElementById('userInput');
-// ДОБАВЬ ЭТИ ПЕРЕМЕННЫЕ ПЕРЕД function addMessage()
-let currentFile = null;
-let currentFileName = null;
-let currentFileType = null;
 
-// ДОБАВЬ ЭТИ ОБРАБОТЧИКИ ПЕРЕД function sendMessage()
-document.getElementById('text-upload').addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    if (file.size > 100 * 1024) { // Ограничение 100 KB
-        alert("Файл слишком большой! Максимум 100 KB.");
-        return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-        currentFile = reader.result;
-        currentFileName = file.name;
-        currentFileType = 'text';
-        alert(`Файл "${file.name}" загружен! Теперь отправьте сообщение.`);
-    };
-    reader.readAsText(file);
-});
+        // Переменные для хранения загруженного файла
+        let currentFile = null;
+        let currentFileName = null;
+        let currentFileType = null;
 
-document.getElementById('image-upload').addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { // Ограничение 5 MB
-        alert("Изображение слишком большое! Максимум 5 MB.");
-        return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-        currentFile = reader.result;
-        currentFileName = file.name;
-        currentFileType = 'image';
-        alert(`Изображение "${file.name}" загружено! Теперь отправьте сообщение.`);
-    };
-    reader.readAsDataURL(file);
-});
+        // Обработчик загрузки файла (текст или изображение)
+        document.getElementById('file-upload').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Лимит 10 MB
+            if (file.size > 10 * 1024 * 1024) {
+                alert("Файл слишком большой! Максимум 10 MB.");
+                return;
+            }
+
+            const reader = new FileReader();
+            // Определяем тип файла по расширению
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            const isImage = ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(fileExtension);
+
+            reader.onload = () => {
+                currentFile = reader.result;
+                currentFileName = file.name;
+                currentFileType = isImage ? 'image' : 'text';
+                alert(`Файл "${file.name}" загружен! Теперь отправьте сообщение.`);
+            };
+
+            // Для изображений читаем как DataURL, для текста — как текст
+            if (isImage) {
+                reader.readAsDataURL(file);
+            } else {
+                reader.readAsText(file);
+            }
+        });
+
         function addMessage(text, isUser) {
             const div = document.createElement('div');
             div.className = `message ${isUser ? 'user' : 'bot'}`;
@@ -87,38 +82,38 @@ document.getElementById('image-upload').addEventListener('change', (event) => {
         }
 
         async function sendMessage() {
-    const text = input.value.trim();
-    if (!text && !currentFile) {
-        alert("Введите сообщение или загрузите файл!");
-        return;
-    }
+            const text = input.value.trim();
+            if (!text && !currentFile) {
+                alert("Введите сообщение или загрузите файл!");
+                return;
+            }
 
-    addMessage(text || `[${currentFileType === 'image' ? 'Изображение' : 'Файл'}: ${currentFileName}]`, true);
-    input.value = '';
+            addMessage(text || `[${currentFileType === 'image' ? 'Изображение' : 'Файл'}: ${currentFileName}]`, true);
+            input.value = '';
 
-    const payload = { message: text };
-    if (currentFile) {
-        payload.file = currentFile;
-        payload.fileName = currentFileName;
-        payload.fileType = currentFileType;
-    }
+            const payload = { message: text };
+            if (currentFile) {
+                payload.file = currentFile;
+                payload.fileName = currentFileName;
+                payload.fileType = currentFileType;
+            }
 
-    const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-    const data = await response.json();
-    addMessage(data.reply || 'Ошибка соединения', false);
+            const data = await response.json();
+            addMessage(data.reply || 'Ошибка соединения', false);
 
-    // Очищаем загруженный файл после отправки
-    currentFile = null;
-    currentFileName = null;
-    currentFileType = null;
-    document.getElementById('text-upload').value = '';
-    document.getElementById('image-upload').value = '';
+            // Очищаем загруженный файл после отправки
+            currentFile = null;
+            currentFileName = null;
+            currentFileType = null;
+            document.getElementById('file-upload').value = '';
         }
+
         // Enter для отправки
         input.addEventListener('keypress', e => {
             if (e.key === 'Enter') sendMessage();
