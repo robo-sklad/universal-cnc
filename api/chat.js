@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
             if (listResponse.ok) {
                 const files = await listResponse.json();
-                const txtFiles = files.filter(f => f.type === 'file' && (f.name.endsWith('.txt') || f.name.endsWith('.html') || f.name.endsWith('.pdf')));
+                const txtFiles = files.filter(f => f.type === 'file' && (f.name.endsWith('.txt') || f.name.endsWith('.html')));
 
                 let newContext = "";
                 let newFiles = [];
