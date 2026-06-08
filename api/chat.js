@@ -1,7 +1,11 @@
 // api/chat.js
 let cachedKnowledge = { context: "", files: [], timestamp: 0 };
 const CACHE_TTL = 10 * 60 * 1000; // 10 минут
-const MAX_CONTEXT_TOKENS = 25000; // Ограничение Mistral API
+const MAX_CONTEXT_TOKENS = 25000;
+
+const ALLOWED_EXTENSIONS = [
+  '.txt', '.xml', '.html', '.md', '.json', '.yaml', '.yml', '.csv', '.cfg', '.ini', '.conf'
+];
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -18,38 +22,64 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'API ключ не настроен' });
     }
 
-    // Кэширование: проверяем актуальность
     const now = Date.now();
     if (now - cachedKnowledge.timestamp > CACHE_TTL) {
         try {
-            const listUrl = "https://api.github.com/repos/robo-sklad/universal-cnc/contents/knowledge";
-            const listResponse = await fetch(listUrl, {
-                headers: { 'User-Agent': 'Vibe-Chatbot' }
-            });
+            let allFiles = [];
+            let pageUrl = "https://api.github.com/repos/robo-sklad/universal-cnc/contents/knowledge";
 
-            if (listResponse.ok) {
+            // Пагинация: загружаем ВСЕ файлы
+            while (pageUrl) {
+                const listResponse = await fetch(pageUrl, {
+                    headers: { 'User-Agent': 'Vibe-Chatbot' }
+                });
+
+                if (!listResponse.ok) break;
+
                 const files = await listResponse.json();
-                const txtFiles = files.filter(f => f.type === 'file' && (f.name.endsWith('.xml') || f.name.endsWith('.html') || f.name.endsWith('.md') || f.name.endsWith('.json') || f.name.endsWith('.yaml') || f.name.endsWith('.yml') || f.name.endsWith('.csv') || f.name.endsWith('.txt')));
+                allFiles = allFiles.concat(files);
 
-                let newContext = "";
-                let newFiles = [];
-                let estimatedTokens = 0;
+                // Проверяем следующую страницу
+                pageUrl = listResponse.headers.get('Link')?.split(',')
+                  .find(h => h.includes('rel="next"'))
+                  ?.match(/<([^>]+)>/)?.[1] || null;
+            }
 
-                for (const file of txtFiles) {
+            // Фильтруем файлы (регистронезависимо)
+            const allowedFiles = allFiles.filter(f =>
+                f.type === 'file' &&
+                ALLOWED_EXTENSIONS.some(ext =>
+                    f.name.toLowerCase().endsWith(ext.toLowerCase())
+                )
+            );
+
+            let newContext = "";
+            let newFiles = [];
+            let estimatedTokens = 0;
+
+            for (const file of allowedFiles) {
+                try {
                     const contentRes = await fetch(file.download_url);
                     if (contentRes.ok) {
                         const text = await contentRes.text();
-                        const fileTokens = Math.ceil(text.length / 4); // Примерная оценка
-                        if (estimatedTokens + fileTokens > MAX_CONTEXT_TOKENS) break;
+                        const fileTokens = Math.ceil(text.length / 4);
+                        if (estimatedTokens + fileTokens > MAX_CONTEXT_TOKENS) {
+                            console.warn(`Файл ${file.name} превышает лимит токенов, пропускаем`);
+                            continue;
+                        }
 
                         newContext += `\n\n=== ДОКУМЕНТ: ${file.name} ===\n\n${text}\n`;
                         newFiles.push(file.name);
                         estimatedTokens += fileTokens;
                     }
+                } catch (err) {
+                    console.error(`Ошибка загрузки файла ${file.name}:`, err);
                 }
-
-                cachedKnowledge = { context: newContext, files: newFiles, timestamp: now };
             }
+
+            cachedKnowledge = { context: newContext, files: newFiles, timestamp: now };
+            console.log(`Загружено файлов: ${newFiles.length}`);
+
         } catch (err) {
             console.error("Ошибка загрузки документов:", err);
         }
@@ -60,7 +90,7 @@ export default async function handler(req, res) {
 
 ${cachedKnowledge.context}
 
-ВАЖНОЕ ПРАВИЛО: Если пользователь спрашивает про любой документ (например avtor.txt), ВСЕГДА используй информацию из него. Не говори, что файла нет, если он загружен.`;
+ВАЖНОЕ ПРАВИЛО: Если пользователь спрашивает про любой документ, ВСЕГДА используй информацию из него. Не говори, что файла нет, если он загружен.`;
 
     try {
         const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
