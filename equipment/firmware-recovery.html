@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Восстановление настроек и прошивки контроллера — ЧПУ 3040</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { color: #1a1a1a; }
+        h2 { color: #0066cc; margin-top: 2em; }
+        .warning { background: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; border-radius: 6px; margin: 20px 0; }
+        .danger { background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; border-radius: 6px; margin: 20px 0; }
+        .step { background: #f8f9fa; padding: 12px 16px; border-radius: 6px; margin: 10px 0; }
+        code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+        a.btn { display: inline-block; margin: 8px 8px 8px 0; padding: 10px 16px; background: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; }
+        a.btn.blue { background: #0066cc; }
+        a.btn.orange { background: #fd7e14; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="../logo.jpg" alt="ЧПУ-склад" style="height:40px;vertical-align:middle;">
+                ЧПУ-склад
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1>Восстановление настроек и прошивки контроллера ЧПУ 3040</h1>
+        <p>Если станок перестал нормально работать после сбоя настроек или контроллер «окирпичился» — используйте один из двух способов ниже.</p>
+
+        <div class="warning">
+            <strong>Сначала определите проблему:</strong><br>
+            • Станок подключается, но ведёт себя странно (не те скорости, не те шаги, ошибки) → <strong>Способ 1</strong> (восстановление параметров).<br>
+            • Контроллер вообще не отвечает, порт не открывается, «мёртвый» → <strong>Способ 2</strong> (полная прошивка).
+        </div>
+
+        <h2>Способ 1. Восстановление параметров (самый частый случай)</h2>
+        <p>Используется, когда прошивка жива, но сбились настройки GRBL ($ параметры).</p>
+
+        <div class="step">
+            <strong>1.</strong> Скачайте и распакуйте:<br>
+            <a class="btn" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/sscom5.13.1.exe" target="_blank">SSCOM (терминал)</a>
+            <a class="btn blue" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/3040setting.txt" target="_blank">3040setting.txt</a>
+        </div>
+
+        <div class="step">
+            <strong>2.</strong> Подключите станок к компьютеру по USB. Определите номер COM-порта (Диспетчер устройств → Порты COM и LPT → USB-SERIAL CH340).
+        </div>
+
+        <div class="step">
+            <strong>3.</strong> Запустите SSCOM. Выберите порт, скорость <code>115200</code>, нажмите «Открыть порт».
+        </div>
+
+        <div class="step">
+            <strong>4.</strong> Нажмите «Открыть файл», выберите <code>3040setting.txt</code>, затем «Отправить файл».
+        </div>
+
+        <div class="step">
+            <strong>5.</strong> Дождитесь окончания отправки. Закройте порт. Перезапустите CNCV4 и проверьте работу.
+        </div>
+
+        <p><strong>Что делает файл:</strong> отправляет в контроллер заводские параметры станка 3040 (шаги, ускорения, максимальные скорости, лимиты).</p>
+
+        <h2>Способ 2. Полная прошивка контроллера</h2>
+        <div class="danger">
+            <strong>Внимание!</strong> Этот способ стирает всё, что было в контроллере. Используйте только если Способ 1 не помог или контроллер не отвечает.
+        </div>
+
+        <div class="step">
+            <strong>1.</strong> Скачайте:<br>
+            <a class="btn orange" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/flash_download_tool_3.9.2.exe" target="_blank">Flash Download Tool</a>
+            <a class="btn" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/grbl.bin" target="_blank">grbl.bin</a>
+            <a class="btn" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/bootloader.bin" target="_blank">bootloader.bin</a>
+            <a class="btn" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/partition-table.bin" target="_blank">partition-table.bin</a>
+        </div>
+
+        <div class="step">
+            <strong>2.</strong> Запустите Flash Download Tool. Выберите чип <strong>ESP32</strong>.
+        </div>
+
+        <div class="step">
+            <strong>3.</strong> Укажите файлы и адреса:<br>
+            • <code>bootloader.bin</code> → <code>0x1000</code><br>
+            • <code>partition-table.bin</code> → <code>0x8000</code><br>
+            • <code>grbl.bin</code> → <code>0x10000</code>
+        </div>
+
+        <div class="step">
+            <strong>4.</strong> Выберите COM-порт, скорость 460800 (или 115200), нажмите START.
+        </div>
+
+        <div class="step">
+            <strong>5.</strong> После успешной прошивки перезагрузите контроллер и выполните <strong>Способ 1</strong> (отправьте 3040setting.txt), чтобы восстановить заводские параметры.
+        </div>
+
+        <h2>После восстановления</h2>
+        <ul>
+            <li>Подключитесь через CNCV4.</li>
+            <li>Проверьте движение осей на малых скоростях.</li>
+            <li>При необходимости подкорректируйте параметры в CNCV4 (максимальные скорости, ускорения).</li>
+        </ul>
+
+        <p style="margin-top:40px;"><a href="cnc-3040.html">← Вернуться на страницу станка</a></p>
+    </main>
+
+    <footer>
+        <p>© 2026 ЧПУ-склад • Поддержка: +7 961 991 01 76 | stepmotoren@yandex.ru</p>
+    </footer>
+</body>
+</html>
