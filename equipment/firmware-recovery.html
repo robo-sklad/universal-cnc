@@ -71,7 +71,7 @@
         </div>
 
         <div class="step">
-            <strong>1.</strong> Скачайте:<br>
+            <strong>1.</strong> Скачайте файлы:<br>
             <a class="btn orange" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/flash_download_tool_3.9.2.exe" target="_blank">Flash Download Tool</a>
             <a class="btn" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/grbl.bin" target="_blank">grbl.bin</a>
             <a class="btn" href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/bootloader.bin" target="_blank">bootloader.bin</a>
@@ -79,22 +79,29 @@
         </div>
 
         <div class="step">
-            <strong>2.</strong> Запустите Flash Download Tool. Выберите чип <strong>ESP32</strong>.
+            <strong>2.</strong> Запустите <code>flash_download_tool_3.9.2.exe</code>.<br>
+            В окне выбора укажите:<br>
+            • <strong>chipType</strong> → ESP32<br>
+            • <strong>workMode</strong> → develop<br>
+            • <strong>loadMode</strong> → uart<br>
+            Нажмите <strong>OK</strong>.
         </div>
 
         <div class="step">
-            <strong>3.</strong> Укажите файлы и адреса:<br>
+            <strong>3.</strong> В главном окне нажмите кнопки <code>...</code> и выберите файлы с адресами:<br>
             • <code>bootloader.bin</code> → <code>0x1000</code><br>
             • <code>partition-table.bin</code> → <code>0x8000</code><br>
             • <code>grbl.bin</code> → <code>0x10000</code>
         </div>
 
         <div class="step">
-            <strong>4.</strong> Выберите COM-порт, скорость 460800 (или 115200), нажмите START.
+            <strong>4.</strong> Выберите COM-порт станка.<br>
+            Скорость (<strong>BAUD</strong>) поставьте <code>115200</code>.
         </div>
 
         <div class="step">
-            <strong>5.</strong> После успешной прошивки перезагрузите контроллер и выполните <strong>Способ 1</strong> (отправьте 3040setting.txt), чтобы восстановить заводские параметры.
+            <strong>5.</strong> Нажмите <strong>START</strong> и дождитесь завершения прошивки.<br>
+            После этого обязательно выполните <strong>Способ 1</strong> (отправьте файл 3040setting.txt), чтобы восстановить заводские параметры станка.
         </div>
 
         <h2>После восстановления</h2>
