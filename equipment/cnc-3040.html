@@ -24,6 +24,7 @@
             cursor: pointer;
             border: none;
             font-size: 1em;
+            position: relative;
         }
         .download-btn:hover {
             transform: translateY(-3px);
@@ -44,6 +45,75 @@
         .video-item { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
         .video-item h3 { margin: 0 0 10px 0; font-size: 1.1em; }
         .video-item video { width: 100%; max-width: 800px; border-radius: 8px; background: #000; }
+
+        /* Красивый hover-превью для OpenBuilds */
+        .openbuilds-wrapper {
+            position: relative;
+            display: block;
+        }
+        .openbuilds-preview {
+            position: absolute;
+            left: 50%;
+            bottom: 110%;
+            transform: translateX(-50%) scale(0.9);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+            z-index: 100;
+            pointer-events: none;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+            padding: 12px;
+            width: 220px;
+            text-align: center;
+        }
+        .openbuilds-wrapper:hover .openbuilds-preview,
+        .openbuilds-wrapper:focus-within .openbuilds-preview {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+        }
+        .openbuilds-preview img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+        .openbuilds-preview .caption {
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #333;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        .openbuilds-preview::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-top-color: white;
+        }
+
+        /* Подсветка кнопки OpenBuilds */
+        .openbuilds-btn {
+            background: linear-gradient(135deg, #6f42c1, #8a63d2) !important;
+            position: relative;
+            overflow: hidden;
+        }
+        .openbuilds-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        .openbuilds-btn:hover::before {
+            left: 100%;
+        }
     </style>
 </head>
 <body>
@@ -98,7 +168,15 @@
             <a href="../equipment-data/cnc-3040/CNCV4_pamyatka.html" class="download-btn" style="background:#17a2b8;" target="_blank">📖 Памятка по CNCV4 (русский)</a>
             <button class="download-btn" style="background:#6f42c1;" onclick="openVideoModal()">🎥 Видеоуроки по CNCV4 (русский)</button>
             <a href="firmware-recovery.html" class="download-btn" style="background:#dc3545;" target="_blank">🔧 Восстановление настроек / прошивки</a>
-            <a href="../program/openbuilds.html" class="download-btn" style="background:#6f42c1;" target="_blank">⚙️ OpenBuilds CONTROL (для продвинутых)</a>
+
+            <!-- OpenBuilds с красивым hover-превью -->
+            <div class="openbuilds-wrapper">
+                <a href="../program/openbuilds.html" class="download-btn openbuilds-btn" target="_blank">⚙️ OpenBuilds CONTROL<br><small style="font-weight:500; opacity:0.9;">(для продвинутых • управление с телефона)</small></a>
+                <div class="openbuilds-preview">
+                    <img src="https://raw.githubusercontent.com/OpenBuilds/OpenBuilds-CONTROL/master/app/img/jog-widget.png" alt="Управление станком с телефона в OpenBuilds CONTROL">
+                    <div class="caption">Управление осями<br>прямо с телефона</div>
+                </div>
+            </div>
         </div>
 
         <div class="note">
