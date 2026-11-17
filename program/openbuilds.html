@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenBuilds CONTROL — ЧПУ-склад</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; }
+        h1 { color: #1a1a1a; }
+        h2 { color: #0066cc; margin-top: 2em; }
+        .warning { background: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; border-radius: 6px; margin: 20px 0; }
+        .danger { background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; border-radius: 6px; margin: 20px 0; }
+        .step { background: #f8f9fa; padding: 12px 16px; border-radius: 6px; margin: 10px 0; }
+        code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+        a.btn { display: inline-block; margin: 8px 8px 8px 0; padding: 12px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; }
+        a.btn.blue { background: #0066cc; }
+        a.btn.orange { background: #fd7e14; }
+        a.btn.purple { background: #6f42c1; }
+        .note { background: #e7f3ff; padding: 15px; border-radius: 6px; margin: 15px 0; border-left: 5px solid #0066cc; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="../logo.jpg" alt="ЧПУ-склад" style="height:40px;vertical-align:middle;">
+                ЧПУ-склад
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1>OpenBuilds CONTROL</h1>
+        <p><strong>Для продвинутых пользователей</strong></p>
+
+        <div class="warning">
+            <strong>Важно!</strong><br>
+            Эта программа мощнее CNCV4, но требует понимания. В ней можно менять прошивку и настройки контроллера.<br>
+            Один из новичков случайно снёс прошивку, когда начал экспериментировать с OpenBuilds.<br>
+            <strong>Если вы только начинаете — лучше используйте CNCV4.</strong><br>
+            Если что-то пошло не так — есть <a href="../equipment/firmware-recovery.html">инструкция по восстановлению прошивки и настроек</a>.
+        </div>
+
+        <h2>Скачать программу</h2>
+        <p>Актуальная версия: <strong>1.0.390</strong> (для Windows)</p>
+        <a class="btn" href="https://github.com/OpenBuilds/OpenBuilds-CONTROL/releases/download/v1.0.390/OpenBuildsCONTROL-Setup-1.0.390.exe" target="_blank">💾 Скачать OpenBuilds CONTROL (Windows, ~228 МБ)</a><br>
+        <a class="btn blue" href="https://software.openbuilds.com/" target="_blank">Официальный сайт (другие версии / Mac / Linux)</a>
+
+        <div class="note">
+            Программа бесплатная и работает с контроллерами на базе GRBL / grblHAL (как на станке ЧПУ 3040).
+        </div>
+
+        <h2>Как подключиться к станку</h2>
+        <div class="step">
+            <strong>1.</strong> Установите программу и запустите её.
+        </div>
+        <div class="step">
+            <strong>2.</strong> Подключите станок по USB. В программе выберите порт (USB-SERIAL CH340).
+        </div>
+        <div class="step">
+            <strong>3.</strong> Нажмите подключение. Скорость обычно 115200.
+        </div>
+        <div class="step">
+            <strong>4.</strong> Проверьте движение осей кнопками Jog на малой скорости.
+        </div>
+
+        <h2>Управление с телефона (Mobile Jog)</h2>
+        <p>В OpenBuilds CONTROL есть удобная функция: можно управлять движением осей со смартфона, пока компьютер подключён к станку.</p>
+
+        <div class="step">
+            <strong>1.</strong> В программе на компьютере откройте <strong>Wizards & Tools</strong> → <strong>Mobile Jog</strong> (или похожий пункт).
+        </div>
+        <div class="step">
+            <strong>2.</strong> На экране появится QR-код и ссылка (обычно что-то вроде <code>http://IP-адрес:3000/jog</code>).
+        </div>
+        <div class="step">
+            <strong>3.</strong> Откройте камеру на телефоне и отсканируйте QR-код. Или введите ссылку в браузере телефона.
+        </div>
+        <div class="step">
+            <strong>4.</strong> На телефоне появятся кнопки движения осей. Теперь можно подходить к станку и управлять им дистанционно.
+        </div>
+
+        <div class="note">
+            Телефон и компьютер должны быть в одной сети Wi-Fi. Компьютер должен оставаться включённым и подключённым к станку.
+        </div>
+
+        <h2>Основные возможности</h2>
+        <ul>
+            <li>Ручное движение осей (Jog) с настраиваемым шагом</li>
+            <li>Загрузка и запуск G-кода</li>
+            <li>Установка нулевой точки</li>
+            <li>Просмотр и изменение настроек GRBL</li>
+            <li>Мастера для калибровки и выравнивания стола</li>
+            <li>Управление с телефона (см. выше)</li>
+        </ul>
+
+        <h2>Рекомендация</h2>
+        <p>Для большинства пользователей станка ЧПУ 3040 достаточно программы <a href="CNCV4.html">CNCV4</a> — она проще и меньше шансов что-то сломать.</p>
+        <p>OpenBuilds CONTROL имеет смысл, если вы хотите удалённое управление с телефона, более удобные мастера или уже хорошо понимаете, что делаете с настройками контроллера.</p>
+
+        <p style="margin-top:40px;">
+            <a href="../program.html">← К списку программ</a><br>
+            <a href="../equipment/cnc-3040.html">← На страницу станка ЧПУ 3040</a>
+        </p>
+    </main>
+
+    <footer>
+        <p>© 2026 ЧПУ-склад • Поддержка: +7 961 991 01 76 | stepmotoren@yandex.ru</p>
+    </footer>
+</body>
+</html>
