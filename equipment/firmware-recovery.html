@@ -17,6 +17,7 @@
         a.btn.blue { background: #0066cc; }
         a.btn.orange { background: #fd7e14; }
         video { width: 100%; max-width: 800px; border-radius: 8px; background: #000; margin: 15px 0; }
+        .step img { max-width: 100%; border-radius: 6px; margin: 10px 0; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
@@ -91,23 +92,29 @@
             • <strong>chipType</strong> → ESP32<br>
             • <strong>workMode</strong> → develop<br>
             • <strong>loadMode</strong> → uart<br>
-            Нажмите <strong>OK</strong>.
+            Нажмите <strong>OK</strong>.<br>
+            <img src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/recovery_chip.png" alt="Выбор ESP32">
         </div>
 
         <div class="step">
             <strong>3.</strong> В главном окне нажмите кнопки <code>...</code> и выберите файлы с адресами:<br>
             • <code>bootloader.bin</code> → <code>0x1000</code><br>
             • <code>partition-table.bin</code> → <code>0x8000</code><br>
-            • <code>grbl.bin</code> → <code>0x10000</code>
+            • <code>grbl.bin</code> → <code>0x10000</code><br>
+            <img src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/recovery_tool.png" alt="Кнопки выбора файлов"><br>
+            <img src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/recovery_select_file.png" alt="Выбор bootloader.bin"><br>
+            <img src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/recovery_addresses.png" alt="Файлы с адресами">
         </div>
 
         <div class="step">
             <strong>4.</strong> Выберите COM-порт станка.<br>
-            Скорость (<strong>BAUD</strong>) поставьте <code>115200</code>.
+            Скорость (<strong>BAUD</strong>) поставьте <code>115200</code>.<br>
+            <img src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/recovery_com.png" alt="Выбор COM-порта">
         </div>
 
         <div class="step">
             <strong>5.</strong> Нажмите <strong>START</strong> и дождитесь завершения прошивки.<br>
+            <img src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/recovery_start.png" alt="Кнопка START"><br>
             После этого обязательно выполните <strong>Способ 1</strong> (отправьте файл 3040setting.txt), чтобы восстановить заводские параметры станка.
         </div>
 
