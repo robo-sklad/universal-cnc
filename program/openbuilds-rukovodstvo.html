@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Руководство по OpenBuilds CONTROL — ЧПУ-склад</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.65; max-width: 960px; margin: 0 auto; padding: 20px; color: #222; }
+        h1 { color: #1a1a1a; margin-bottom: 0.3em; }
+        h2 { color: #6f42c1; margin-top: 2em; border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
+        h3 { color: #333; margin-top: 1.5em; }
+        .warning { background: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; border-radius: 6px; margin: 20px 0; }
+        .note { background: #e7f3ff; padding: 15px; border-radius: 6px; margin: 15px 0; border-left: 5px solid #0066cc; }
+        .success { background: #d4edda; border-left: 5px solid #28a745; padding: 15px; border-radius: 6px; margin: 20px 0; }
+        .step { background: #f8f9fa; padding: 12px 16px; border-radius: 6px; margin: 10px 0; }
+        img.interface { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; }
+        th { background: #f1f3f5; }
+        a.btn { display: inline-block; margin: 8px 8px 8px 0; padding: 12px 20px; background: #6f42c1; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; }
+        a.btn.green { background: #28a745; }
+        code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+        ul li { margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="../logo.jpg" alt="ЧПУ-склад" style="height:40px;vertical-align:middle;">
+                ЧПУ-склад
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1>Руководство по OpenBuilds CONTROL</h1>
+        <p><strong>Краткий обзор и описание интерфейса для станка ЧПУ 3040 / 4060</strong></p>
+
+        <div class="warning">
+            <strong>Для продвинутых пользователей.</strong><br>
+            Программа мощнее CNCV4 и даёт больше возможностей, но в ней можно менять настройки прошивки GRBL. Один неосторожный эксперимент может сбить настройки. Если вы только начинаете — лучше оставайтесь на CNCV4. Есть <a href="../equipment/firmware-recovery.html">инструкция по восстановлению прошивки</a>.
+        </div>
+
+        <div class="success">
+            <strong>Почему OpenBuilds CONTROL?</strong><br>
+            Ваш станок на базе GRBL полностью совместим с этой бесплатной профессиональной программой. Она даёт удобные мастера, 3D-просмотр, управление с телефона, макросы и возможность работы не только с фрезером, но и с лазерным модулем, плазмой или другими инструментами.
+        </div>
+
+        <p>
+            <a class="btn green" href="https://github.com/OpenBuilds/OpenBuilds-CONTROL/releases/download/v1.0.390/OpenBuildsCONTROL-Setup-1.0.390.exe" target="_blank">💾 Скачать OpenBuilds CONTROL 1.0.390 (Windows)</a>
+            <a class="btn" href="https://software.openbuilds.com/" target="_blank">Официальный сайт (Mac / Linux)</a>
+        </p>
+
+        <h2>1. Подключение к станку</h2>
+        <div class="step"><strong>1.</strong> Установите программу и запустите её.</div>
+        <div class="step"><strong>2.</strong> Подключите станок по USB. В верхней панели выберите порт (обычно USB-SERIAL CH340 или похожий).</div>
+        <div class="step"><strong>3.</strong> Нажмите Connect. Скорость по умолчанию 115200.</div>
+        <div class="step"><strong>4.</strong> Проверьте движение осей кнопками Jog на маленькой скорости. Z+ должен поднимать шпиндель вверх.</div>
+
+        <h2>2. Интерфейс программы</h2>
+        <p>Основные вкладки сверху: <strong>Machine Control</strong>, <strong>Grbl Settings</strong>, <strong>Troubleshooting</strong>.</p>
+
+        <img class="interface" src="openbuilds-interface.png" alt="Интерфейс OpenBuilds CONTROL">
+
+        <h3>Верхняя панель (Machine Control)</h3>
+        <table>
+            <tr><th>Кнопка / элемент</th><th>Что делает</th></tr>
+            <tr><td>Connect / Disconnect</td><td>Подключение / отключение от контроллера</td></tr>
+            <tr><td>Open GCODE</td><td>Открыть файл G-кода</td></tr>
+            <tr><td>Run Job / Stop Job</td><td>Запустить / остановить задание</td></tr>
+            <tr><td>Tool On / Tool Off</td><td>Включить / выключить шпиндель (или лазер в соответствующем режиме)</td></tr>
+            <tr><td>Probe</td><td>Мастера щупа (установка нуля по X/Y/Z)</td></tr>
+            <tr><td>Check Size</td><td>Проверить габариты задания (траектория без реза)</td></tr>
+            <tr><td>Home All</td><td>Домой по всем осям (если настроены концевики)</td></tr>
+            <tr><td>Wizards & Tools</td><td>Мастера: выравнивание стола, калибровка шагов, Mobile Jog и др.</td></tr>
+            <tr><td>Unlock Alarm</td><td>Снять аварийную блокировку</td></tr>
+            <tr><td>Abort</td><td>Экстренная остановка</td></tr>
+        </table>
+
+        <h3>Панель Jog и координаты</h3>
+        <p>Слева — текущие координаты (рабочие и машинные), кнопки Set Zero и Goto Zero. Справа — джойстик для ручного перемещения (шаговый или непрерывный режим), ползунки скорости подачи и оборотов.</p>
+
+        <h3>Нижняя часть</h3>
+        <ul>
+            <li><strong>3D View</strong> — трёхмерный предпросмотр траектории</li>
+            <li><strong>Log / Serial Console</strong> — журнал команд и ответов контроллера</li>
+            <li><strong>Macros</strong> — пользовательские кнопки-макросы</li>
+            <li><strong>GCODE Editor</strong> — простой редактор кода</li>
+        </ul>
+
+        <h2>3. Управление с телефона (Mobile Jog)</h2>
+        <p>Одна из самых удобных функций. Пока компьютер подключён к станку, можно управлять осями со смартфона.</p>
+        <div class="step">В программе: <strong>Wizards & Tools → Mobile Jog</strong>. Появится QR-код и ссылка (обычно <code>http://IP:3000/jog</code>).</div>
+        <div class="step">Сканируйте QR камерой телефона или введите адрес в браузере. Телефон и компьютер должны быть в одной Wi-Fi сети.</div>
+        <img class="interface" src="openbuilds-jog.png" alt="Mobile Jog на телефоне">
+        <p>На телефоне появляются кнопки движения осей — удобно подходить к станку и точно позиционировать инструмент.</p>
+
+        <h2>4. Основные возможности</h2>
+        <ul>
+            <li>Ручное движение (Jog) с точным шагом или непрерывное</li>
+            <li>Загрузка, предпросмотр и запуск G-кода</li>
+            <li>Установка рабочей нулевой точки (Set Zero) и возврат к ней</li>
+            <li>Мастера щупа (Probe) для точной установки нуля по углам и по Z</li>
+            <li>Мастер выравнивания стола (Surfacing Wizard)</li>
+            <li>Калибровка шагов/мм (Steps/mm) для каждой оси</li>
+            <li>Просмотр и изменение всех настроек GRBL (с базовым и расширенным видом)</li>
+            <li>Макросы — свои кнопки для частых команд</li>
+            <li>Поддержка 4-й оси (A)</li>
+            <li>Режим лазера ($32=1) — для работы с лазерным модулем</li>
+        </ul>
+
+        <div class="note">
+            <strong>Лазер и другие инструменты</strong><br>
+            OpenBuilds CONTROL официально поддерживает не только фрезеры, но и лазерные станки, плазменные резаки и drag-knife. Если вы захотите расширить функционал своего станка 3040/4060 (например, добавить лазерный модуль на портал), эта программа уже умеет с ним работать. В настройках GRBL есть режим Laser Mode ($32). Подробности по подключению лазера лучше смотреть в документации OpenBuilds и вашего модуля.
+        </div>
+
+        <h2>5. Рекомендации</h2>
+        <p>Для большинства владельцев станка ЧПУ 3040/4060 достаточно простой программы CNCV4. OpenBuilds CONTROL имеет смысл, если вы:</p>
+        <ul>
+            <li>хотите удобное управление с телефона;</li>
+            <li>нужны мастера калибровки и выравнивания стола;</li>
+            <li>планируете работать с прошивкой или добавлять другие инструменты;</li>
+            <li>уже уверенно чувствуете себя с GRBL.</li>
+        </ul>
+
+        <p style="margin-top:40px;">
+            <a href="openbuilds.html">← Краткое описание OpenBuilds</a><br>
+            <a href="../equipment/cnc-3040.html">← На страницу станка ЧПУ 3040</a>
+        </p>
+    </main>
+
+    <footer>
+        <p>© 2026 ЧПУ-склад • Поддержка: +7 961 991 01 76 | stepmotoren@yandex.ru</p>
+    </footer>
+</body>
+</html>
