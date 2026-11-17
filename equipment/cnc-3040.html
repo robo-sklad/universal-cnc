@@ -37,56 +37,13 @@
             font-size: 0.95em;
             border-left: 5px solid #28a745;
         }
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.7);
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: 3% auto;
-            padding: 20px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-        .close:hover,
-        .close:focus {
-            color: #000;
-        }
-        .video-item {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        .video-item h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.1em;
-        }
-        .video-item video {
-            width: 100%;
-            max-width: 800px;
-            border-radius: 8px;
-            background: #000;
-        }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7); }
+        .modal-content { background-color: #fff; margin: 3% auto; padding: 20px; border-radius: 12px; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 1; }
+        .close:hover, .close:focus { color: #000; }
+        .video-item { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .video-item h3 { margin: 0 0 10px 0; font-size: 1.1em; }
+        .video-item video { width: 100%; max-width: 800px; border-radius: 8px; background: #000; }
     </style>
 </head>
 <body>
@@ -100,13 +57,10 @@
     </header>
 
     <main class="product-page">
-               
         <h1>Фрезерно-гравировальный станок ЧПУ 3040(4060) (1500 Вт) - раздел технической информации</h1>
        
         <div class="product-info">
-<img src="../equipment-data/cnc-3040/main.jpg"  
-     alt="Фрезерно-гравировальный станок ЧПУ 3040(4060)" 
-     style="width: 100%; max-width: 620px; height: auto; border-radius: 12px; margin: 20px auto; display: block;">
+<img src="../equipment-data/cnc-3040/main.jpg" alt="Фрезерно-гравировальный станок ЧПУ 3040(4060)" style="width: 100%; max-width: 620px; height: auto; border-radius: 12px; margin: 20px auto; display: block;">
            
             <div class="specs">
                 <h2>Технические характеристики</h2>
@@ -137,34 +91,13 @@
 
         <h2>📥 Файлы для скачивания</h2>
         <div class="download-grid">
-            <a href="../equipment-data/cnc-3040/passport.html" 
-               class="download-btn" style="background:#0066cc;" target="_blank">
-                📄 Технический паспорт станка
-            </a>
-            
-            <a href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/CNC.zip" 
-               class="download-btn" style="background:#28a745;" target="_blank">
-                💾 Скачать программу CNCV4 (полный комплект ~28.5 МБ)
-            </a>
-            
-            <a href="../equipment-data/cnc-3040/instrukciya.html" 
-               class="download-btn" style="background:#0066cc;" target="_blank">
-                🔧 Инструкция по сборке и подключению
-            </a>
-            
-            <a href="../equipment-data/cnc-3040/troubleshooting.html" 
-               class="download-btn" style="background:#ffc107; color:#000;" target="_blank">
-                ⚠️ Устранение неисправностей
-            </a>
-
-            <a href="../equipment-data/cnc-3040/CNCV4_pamyatka.html" 
-               class="download-btn" style="background:#17a2b8;" target="_blank">
-                📖 Памятка по CNCV4 (русский)
-            </a>
-
-            <button class="download-btn" style="background:#6f42c1;" onclick="openVideoModal()">
-                🎥 Видеоуроки по CNCV4 (русский)
-            </button>
+            <a href="../equipment-data/cnc-3040/passport.html" class="download-btn" style="background:#0066cc;" target="_blank">📄 Технический паспорт станка</a>
+            <a href="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/CNC.zip" class="download-btn" style="background:#28a745;" target="_blank">💾 Скачать программу CNCV4 (полный комплект ~28.5 МБ)</a>
+            <a href="../equipment-data/cnc-3040/instrukciya.html" class="download-btn" style="background:#0066cc;" target="_blank">🔧 Инструкция по сборке и подключению</a>
+            <a href="../equipment-data/cnc-3040/troubleshooting.html" class="download-btn" style="background:#ffc107; color:#000;" target="_blank">⚠️ Устранение неисправностей</a>
+            <a href="../equipment-data/cnc-3040/CNCV4_pamyatka.html" class="download-btn" style="background:#17a2b8;" target="_blank">📖 Памятка по CNCV4 (русский)</a>
+            <button class="download-btn" style="background:#6f42c1;" onclick="openVideoModal()">🎥 Видеоуроки по CNCV4 (русский)</button>
+            <a href="firmware-recovery.html" class="download-btn" style="background:#dc3545;" target="_blank">🔧 Восстановление настроек / прошивки</a>
         </div>
 
         <div class="note">
@@ -184,102 +117,18 @@
             <span class="close" onclick="closeVideoModal()">&times;</span>
             <h2>Видеоуроки по программе CNCV4</h2>
             <p>Короткие уроки с русской озвучкой. Смотрите по порядку или выберите нужный.</p>
-
-            <div class="video-item">
-                <h3>1. Установка драйвера</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/1_Installation_driver_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>2. Установка программы управления</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/2_Control_software_installation_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>3. Подключение программы к станку</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/3_Software_Connection_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>4. Загрузка задания (G-кода)</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/4_Load_the_task_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>5. Базовые операции с окном предпросмотра</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/5_Preview_window_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>6. Настройка станка в рабочее положение и установка нулевой точки</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/6_Set_zero_point_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>7. Включение и выключение шпинделя</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/7_Spindle_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>8. Запуск задания</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/8_Run_task_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>9. Изменение задания</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/9_Change_task_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>10. Изменение максимальной скорости</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/10_Modify_maximum_speed_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>11. Изменение ускорения</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/11_Modified_acceleration_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
-
-            <div class="video-item">
-                <h3>12. Проверка номера порта устройства</h3>
-                <video controls preload="metadata">
-                    <source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/12_Check_device_port_RU.mp4" type="video/mp4">
-                    Ваш браузер не поддерживает видео.
-                </video>
-            </div>
+            <div class="video-item"><h3>1. Установка драйвера</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/1_Installation_driver_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>2. Установка программы управления</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/2_Control_software_installation_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>3. Подключение программы к станку</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/3_Software_Connection_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>4. Загрузка задания (G-кода)</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/4_Load_the_task_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>5. Базовые операции с окном предпросмотра</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/5_Preview_window_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>6. Настройка станка в рабочее положение и установка нулевой точки</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/6_Set_zero_point_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>7. Включение и выключение шпинделя</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/7_Spindle_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>8. Запуск задания</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/8_Run_task_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>9. Изменение задания</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/9_Change_task_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>10. Изменение максимальной скорости</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/10_Modify_maximum_speed_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>11. Изменение ускорения</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/11_Modified_acceleration_RU.mp4" type="video/mp4"></video></div>
+            <div class="video-item"><h3>12. Проверка номера порта устройства</h3><video controls preload="metadata"><source src="https://github.com/robo-sklad/universal-cnc/releases/download/cnc-3040-software/12_Check_device_port_RU.mp4" type="video/mp4"></video></div>
         </div>
     </div>
 
@@ -289,20 +138,14 @@
     </footer>
 
     <script>
-        function openVideoModal() {
-            document.getElementById('videoModal').style.display = 'block';
-        }
+        function openVideoModal() { document.getElementById('videoModal').style.display = 'block'; }
         function closeVideoModal() {
             document.getElementById('videoModal').style.display = 'none';
-            // Pause all videos when closing
             document.querySelectorAll('#videoModal video').forEach(v => v.pause());
         }
-        // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('videoModal');
-            if (event.target == modal) {
-                closeVideoModal();
-            }
+            if (event.target == modal) closeVideoModal();
         }
     </script>
 </body>
