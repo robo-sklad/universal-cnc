@@ -103,17 +103,11 @@
     <p>Marketplace — виртуальный склад товаров для станков ЧПУ</p>
 </footer>
 
+<script src="data/spindles.js"></script>
 <script>
 const products = [
-    { id: 'changsheng-series', title: 'Шпиндели для ЧПУ — все модели (Changsheng, Tongsheng и др.)', price: 18500, cat: 'spindle', desc: 'Все шпиндели в одном разделе: Changsheng GDZ 0.8–5.5 кВт, Tongsheng THD-80 и другие; водяное/воздушное охлаждение, ER11–ER25. Подробнее см. раздел', img: '', link: 'spindle-changsheng.html' },
-    { id: 'changsheng-2.2', title: 'Шпиндель Changsheng (CS) GDZ-80-2.2B 2.2 кВт', price: 19500, cat: 'spindle', desc: '220В, 400 Гц, 24000 об/мин, ER20, Ø80×213 мм, водяное охлаждение, 3 подшипника P4, 5.1 кг', img: 'images/changsheng-gdz80-2.2kw-ru.jpg', link: 'spindle-changsheng.html' },
-    { id: 'changsheng-3kw', title: 'Шпиндель Changsheng (CS) GDZ-100-3.0 3 кВт', price: 28500, cat: 'spindle', desc: '220В, 12 А, 400 Гц, 24000 об/мин, ER20, Ø100×220 мм, водяное охлаждение, 3 подшипника P4, 8.9 кг', img: 'images/changsheng-gdz100-3kw-ru.jpg', link: 'spindle-changsheng.html' },
-    { id: 'spindle-2.2', title: 'Шпиндель для ЧПУ 2.2 кВт GDZ', price: 18500, cat: 'spindle', desc: 'Водяное охлаждение, 24000 об/мин, ER20, диаметр 80 мм', img: '', link: 'spindle-changsheng.html' },
-    { id: 'spindle-1.5', title: 'Шпиндель 1.5 кВт с водяным охлаждением', price: 14900, cat: 'spindle', desc: 'Для станков 3040/4060, надёжный', img: '', link: 'spindle-changsheng.html' },
-    { id: 'spindle-800', title: 'Шпиндель 0.8 кВт воздушное охлаждение', price: 8900, cat: 'spindle', desc: 'Компактный, для небольших станков', img: '', link: 'spindle-changsheng.html' },
-    { id: 'changsheng-5.5', title: 'Шпиндель Changsheng (CS) GDZ-125-5.5 5.5 кВт', price: 89000, cat: 'spindle', desc: '380В, 8 А, 400 Гц, 24000 об/мин, ER25, Ø125×298 мм, водяное охлаждение, 4 подшипника P4, 22 кг', img: 'images/changsheng-gdz125-5.5kw-ru.jpg', link: 'spindle-changsheng.html' },
-    { id: 'tongsheng-65-0.8', title: 'Шпиндель Tongsheng THD-65-800C 0.8 кВт', price: 0, priceOnRequest: true, cat: 'spindle', desc: '220В, 5 А, 400 Гц, 24000 об/мин, ER11, Ø65×195 мм, водяное охлаждение, 4 подшипника, 3.0 кг', img: 'images/tongsheng-thd65-800c-ru.jpg', link: 'spindle-changsheng.html' },
-    { id: 'tongsheng-80-2.2-12k', title: 'Шпиндель Tongsheng THD-80-2.2C 2.2 кВт, 12000 об/мин', price: 0, priceOnRequest: true, cat: 'spindle', desc: '220В, 8 А, 400 Гц, 12000 об/мин (высокий момент, для металла и твёрдых пород), ER20, Ø80×213 мм, водяное охлаждение', img: 'images/tongsheng-thd80-2.2c-ru.jpg', link: 'spindle-changsheng.html' },
+    { id: 'changsheng-series', title: 'Шпиндели для ЧПУ — все модели (Changsheng, Tongsheng и др.)', price: 18500, cat: 'spindle', desc: 'Все шпиндели в одном разделе: Changsheng GDZ 0.8–5.5 кВт, Tongsheng THD-65/THD-80 и другие; водяное/воздушное охлаждение, ER11–ER25. Подробнее см. раздел', img: '', link: 'spindle-changsheng.html' },
+    // Отдельные шпиндели подставляются из data/spindles.js (единый источник), у каждого своя страница spindles/<slug>.html
     { id: 'frezy-set', title: 'Комплект фрез для ЧПУ (10 шт)', price: 4200, cat: 'tools', desc: 'По дереву, акрилу, пластику' },
     { id: 'freza-6mm', title: 'Фреза спиральная 6 мм однозаходная', price: 890, cat: 'tools', desc: 'Для дерева и акрила' },
     { id: 'guides-hgr15', title: 'Линейные направляющие HGR15 комплект', price: 9200, cat: 'mechanics', desc: 'Для осей X/Y, высокая точность' },
@@ -124,6 +118,16 @@ const products = [
     { id: 'coolant-5l', title: 'СОЖ для ЧПУ (5 л)', price: 1200, cat: 'consumables', desc: 'Смазочно-охлаждающая жидкость' },
     { id: 'cncv4', title: 'Программа CNCV4 (расширенная)', price: 0, cat: 'software', desc: 'Управление станками ЧПУ' }
 ];
+// Шпиндели из data/spindles.js — вставляем сразу после карточки «все модели»
+(function () {
+    if (typeof SPINDLES === 'undefined') return;
+    const items = SPINDLES.map(s => ({
+        id: s.id, title: spindleTitle(s), price: s.price, priceOnRequest: !!s.priceOnRequest,
+        cat: 'spindle', desc: s.short, img: s.img, link: 'spindles/' + s.slug + '.html'
+    }));
+    const at = products.findIndex(p => p.id === 'changsheng-series') + 1;
+    products.splice(at, 0, ...items);
+})();
 
 let currentCat = 'all';
 let cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
@@ -202,6 +206,13 @@ document.querySelectorAll('.categories button').forEach(btn => {
 });
 
 document.getElementById('searchInput').addEventListener('input', filterProducts);
+
+// Прямая ссылка на категорию: marketplace.html?cat=spindle или marketplace.html#spindle
+(function () {
+    const want = new URLSearchParams(location.search).get('cat') || location.hash.replace('#', '');
+    const btn = want && document.querySelector('.categories button[data-cat="' + want + '"]');
+    if (btn) { document.querySelectorAll('.categories button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentCat = want; }
+})();
 
 updateCartBadge();
 renderProducts();

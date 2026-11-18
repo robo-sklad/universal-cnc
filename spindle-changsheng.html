@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Шпиндели для ЧПУ — все модели и производители — Маркетплейс ЧПУ-склад</title>
+    <meta name="description" content="Шпиндели для станков ЧПУ: Changsheng GDZ, Tongsheng THD и другие, 0,8–5,5 кВт, водяное и воздушное охлаждение, цанги ER11–ER25. Характеристики, фото и цены — ЧПУ-склад.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://чпу-склад.рф/spindle-changsheng.html">
     <link rel="stylesheet" href="style.css">
     <style>
         .variant-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 20px 0; }
@@ -15,7 +18,18 @@
         .specs-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.85rem; }
         .brand-title { margin: 28px 0 0; font-size: 1.3rem; }
         .brand-note { color: #666; margin: 4px 0 0; }
-        .specs-table td { padding: 4px 0; border-bottom: 1px solid #eee; }
+        .specs-table th, .specs-table td { padding: 4px 0; border-bottom: 1px solid #eee; text-align: left; font-weight: normal; }
+        .specs-table th { color: #555; width: 45%; }
+        .tbd { color: #b26a00; }
+        .variant-title a { color: inherit; text-decoration: none; }
+        .variant-title a:hover { color: #0d6efd; }
+        .no-photo { height:160px;display:flex;align-items:center;justify-content:center;background:#f8f9fa;border-radius:8px;color:#999; }
+        .variant-actions { display: flex; gap: 8px; }
+        .variant-actions .btn { flex: 1; padding: 8px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; text-decoration: none; }
+        .btn-primary { background: #0d6efd; color: white; }
+        .btn-secondary { background: #f0f2f5; color: #333; }
+        .breadcrumbs { font-size: 0.85rem; color: #666; margin: 0 0 12px; }
+        .breadcrumbs a { color: #0d6efd; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -26,82 +40,333 @@
             <ul>
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="marketplace.html">Marketplace</a></li>
-                <li><a href="cart.html">Корзина</a></li>
+                <li><a href="cart.html">Корзина <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
             </ul>
         </nav>
     </div>
 </header>
 <main style="max-width:1100px;margin:20px auto;padding:0 16px;">
+    <nav class="breadcrumbs" aria-label="Навигация"><a href="index.html">Главная</a> › <a href="marketplace.html">Marketplace</a> › Шпиндели</nav>
     <h1>Шпиндели для ЧПУ — все модели</h1>
-    <p>Все шпиндели в одном разделе, независимо от производителя и модели: Changsheng (Чаншэн) серии GDZ, Tongsheng и другие. Цены и наличие уточняйте у менеджера.</p>
+    <p>Все шпиндели в одном разделе, независимо от производителя и модели: Changsheng (Чаншэн) серии GDZ, Tongsheng и другие. Нажмите «Подробнее», чтобы открыть страницу модели с полными характеристиками. Цены и наличие уточняйте у менеджера.</p>
 
-    <div class="variant-list" id="variants"></div>
+    <div id="variants">
+    <!-- SPINDLES:START (генерируется scripts/build-spindles.js) -->
+    <h2 class="brand-title">Changsheng (Чаншэн)</h2>
+    <div class="variant-list">
+        <div class="variant-card" id="cs-80-1.5-skf">
+          <a href="spindles/changsheng-80-1-5kw-skf.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/changsheng-80-1-5kw-skf.html">Чаншэн 80×213 / 1.5 кВт / 3 подшипника SKF</a></div>
+          <div class="variant-price">18 500 ₽ <span class="price-usd">/ 195 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng 80×213 1,5 кВт</td></tr>
+            <tr><th>Мощность</th><td>1.5 кВт</td></tr>
+            <tr><th>Напряжение</th><td>220В</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER16/ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Подшипники</th><td>3 шт., SKF</td></tr>
+            <tr><th>Размер</th><td>80×213 мм</td></tr>
+            <tr><th>Вес</th><td>~4 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-80-1-5kw-skf.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-80-1.5-skf')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="cs-80-2.2-7">
+          <a href="spindles/changsheng-gdz-80-2-2b.html"><img src="images/changsheng-gdz80-2.2kw-ru.jpg" alt="Шпиндель Changsheng GDZ-80-2.2B" loading="lazy"></a>
+          <div class="variant-title"><a href="spindles/changsheng-gdz-80-2-2b.html">Чаншэн GDZ-80-2.2B 80×213 / 2.2 кВт / ER20 / 220В / 3 подшипника P4</a></div>
+          <div class="variant-price">19 500 ₽ <span class="price-usd">/ 205 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng GDZ-80-2.2B</td></tr>
+            <tr><th>Мощность</th><td>2.2 кВт</td></tr>
+            <tr><th>Напряжение</th><td>220В</td></tr>
+            <tr><th>Частота</th><td>400 Гц</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Подшипники</th><td>3 шт., класс P4</td></tr>
+            <tr><th>Размер</th><td>80×213 мм</td></tr>
+            <tr><th>Вес</th><td>5.1 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-gdz-80-2-2b.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-80-2.2-7')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="cs-100-3kw-220">
+          <a href="spindles/changsheng-gdz-100-3-0-220v.html"><img src="images/changsheng-gdz100-3kw-ru.jpg" alt="Шпиндель Changsheng GDZ-100-3.0 (220 В)" loading="lazy"></a>
+          <div class="variant-title"><a href="spindles/changsheng-gdz-100-3-0-220v.html">Чаншэн GDZ-100-3.0 100×220 / 3 кВт / ER20 / 220В / 3 подшипника P4</a></div>
+          <div class="variant-price">28 500 ₽ <span class="price-usd">/ 300 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng GDZ-100-3.0 (220 В)</td></tr>
+            <tr><th>Мощность</th><td>3.0 кВт</td></tr>
+            <tr><th>Напряжение</th><td>220В</td></tr>
+            <tr><th>Ток</th><td>12А</td></tr>
+            <tr><th>Частота</th><td>400 Гц</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Подшипники</th><td>3 шт., класс P4</td></tr>
+            <tr><th>Размер</th><td>100×220 мм</td></tr>
+            <tr><th>Вес</th><td>8.9 кг</td></tr>
+            <tr><th>Гарантия</th><td>1 год (включая подшипники и обмотку)</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-gdz-100-3-0-220v.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-100-3kw-220')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="cs-100-3kw-380">
+          <a href="spindles/changsheng-100-3kw-380v.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/changsheng-100-3kw-380v.html">Чаншэн 100×220 / 3 кВт / 380В / P4</a></div>
+          <div class="variant-price">28 500 ₽ <span class="price-usd">/ 300 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng 100×220 3 кВт (380 В)</td></tr>
+            <tr><th>Мощность</th><td>3.0 кВт</td></tr>
+            <tr><th>Напряжение</th><td>380В</td></tr>
+            <tr><th>Ток</th><td>7А</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Подшипники</th><td>класс P4</td></tr>
+            <tr><th>Размер</th><td>100×220 мм</td></tr>
+            <tr><th>Вес</th><td>8.9 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-100-3kw-380v.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-100-3kw-380')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="cs-100-4.5-220">
+          <a href="spindles/changsheng-100-4-5kw-220v.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/changsheng-100-4-5kw-220v.html">Чаншэн 100×260 / 4.5 кВт / 220В / P4</a></div>
+          <div class="variant-price">34 500 ₽ <span class="price-usd">/ 365 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng 100×260 4,5 кВт (220 В)</td></tr>
+            <tr><th>Мощность</th><td>4.5 кВт</td></tr>
+            <tr><th>Напряжение</th><td>220В</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Подшипники</th><td>класс P4</td></tr>
+            <tr><th>Размер</th><td>100×260 мм</td></tr>
+            <tr><th>Вес</th><td>~11 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-100-4-5kw-220v.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-100-4.5-220')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="cs-100-4.5-380">
+          <a href="spindles/changsheng-100-4-5kw-380v.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/changsheng-100-4-5kw-380v.html">Чаншэн 100×260 / 4.5 кВт / 380В / P4</a></div>
+          <div class="variant-price">34 500 ₽ <span class="price-usd">/ 365 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng 100×260 4,5 кВт (380 В)</td></tr>
+            <tr><th>Мощность</th><td>4.5 кВт</td></tr>
+            <tr><th>Напряжение</th><td>380В</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Подшипники</th><td>класс P4</td></tr>
+            <tr><th>Размер</th><td>100×260 мм</td></tr>
+            <tr><th>Вес</th><td>~11 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-100-4-5kw-380v.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-100-4.5-380')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="cs-65-800-air">
+          <a href="spindles/changsheng-65-0-8kw-air.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/changsheng-65-0-8kw-air.html">Чаншэн 65×188 / 0.8 кВт / 4 подшипника / воздушное</a></div>
+          <div class="variant-price">12 500 ₽ <span class="price-usd">/ 132 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng 65×188 0,8 кВт (воздушное)</td></tr>
+            <tr><th>Мощность</th><td>0.8 кВт</td></tr>
+            <tr><th>Напряжение</th><td>220В</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER11</td></tr>
+            <tr><th>Охлаждение</th><td>Воздушное</td></tr>
+            <tr><th>Подшипники</th><td>4 шт.</td></tr>
+            <tr><th>Размер</th><td>65×188 мм</td></tr>
+            <tr><th>Вес</th><td>2.8 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-65-0-8kw-air.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-65-800-air')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="cs-80-2.2-air">
+          <a href="spindles/changsheng-80-2-2kw-air.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/changsheng-80-2-2kw-air.html">Чаншэн 80×195 / 2.2 кВт / 4 подшипника / воздушное</a></div>
+          <div class="variant-price">21 500 ₽ <span class="price-usd">/ 226 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng 80×195 2,2 кВт (воздушное)</td></tr>
+            <tr><th>Мощность</th><td>2.2 кВт</td></tr>
+            <tr><th>Напряжение</th><td>220В</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Воздушное</td></tr>
+            <tr><th>Подшипники</th><td>4 шт.</td></tr>
+            <tr><th>Размер</th><td>80×195 мм</td></tr>
+            <tr><th>Вес</th><td>4.5 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-80-2-2kw-air.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-80-2.2-air')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="cs-125-5.5">
+          <a href="spindles/changsheng-gdz-125-5-5.html"><img src="images/changsheng-gdz125-5.5kw-ru.jpg" alt="Шпиндель Changsheng GDZ-125-5.5" loading="lazy"></a>
+          <div class="variant-title"><a href="spindles/changsheng-gdz-125-5-5.html">Чаншэн GDZ-125-5.5 125×298 / 5.5 кВт / ER25 / 380В / 4 подшипника P4</a></div>
+          <div class="variant-price">89 000 ₽ <span class="price-usd">/ 935 $</span></div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Changsheng GDZ-125-5.5</td></tr>
+            <tr><th>Мощность</th><td>5.5 кВт</td></tr>
+            <tr><th>Напряжение</th><td>380В</td></tr>
+            <tr><th>Ток</th><td>8А</td></tr>
+            <tr><th>Частота</th><td>400 Гц</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER25</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Подшипники</th><td>4 шт., класс P4</td></tr>
+            <tr><th>Размер</th><td>125×298 мм</td></tr>
+            <tr><th>Вес</th><td>22 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/changsheng-gdz-125-5-5.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('cs-125-5.5')">В корзину</button>
+          </div>
+        </div>
+    </div>
+    <h2 class="brand-title">Tongsheng</h2>
+    <div class="variant-list">
+        <div class="variant-card" id="tongsheng-65-0.8">
+          <a href="spindles/tongsheng-thd-65-800c.html"><img src="images/tongsheng-thd65-800c-ru.jpg" alt="Шпиндель Tongsheng THD-65-800C" loading="lazy"></a>
+          <div class="variant-title"><a href="spindles/tongsheng-thd-65-800c.html">Tongsheng THD-65-800C 65×195 / 0.8 кВт / ER11 / 220В / 4 подшипника</a></div>
+          <div class="variant-price">Цена по запросу</div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Tongsheng THD-65-800C</td></tr>
+            <tr><th>Мощность</th><td>0.8 кВт</td></tr>
+            <tr><th>Напряжение</th><td>220В</td></tr>
+            <tr><th>Ток</th><td>5А</td></tr>
+            <tr><th>Частота</th><td>400 Гц</td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER11</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Подшипники</th><td>4 шт.</td></tr>
+            <tr><th>Размер</th><td>65×195 мм</td></tr>
+            <tr><th>Вес</th><td>3.0 кг</td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/tongsheng-thd-65-800c.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('tongsheng-65-0.8')">Запросить цену</button>
+          </div>
+        </div>
+        <div class="variant-card" id="tongsheng-80-2.2-12k">
+          <a href="spindles/tongsheng-thd-80-2-2c.html"><img src="images/tongsheng-thd80-2.2c-ru.jpg" alt="Шпиндель Tongsheng THD-80-2.2C" loading="lazy"></a>
+          <div class="variant-title"><a href="spindles/tongsheng-thd-80-2-2c.html">Tongsheng THD-80-2.2C 80×213 / 2.2 кВт / ER20 / 220В / 12000 об/мин (высокий момент)</a></div>
+          <div class="variant-price">Цена по запросу</div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Tongsheng THD-80-2.2C</td></tr>
+            <tr><th>Мощность</th><td>2.2 кВт</td></tr>
+            <tr><th>Напряжение</th><td>220В</td></tr>
+            <tr><th>Ток</th><td>8А</td></tr>
+            <tr><th>Частота</th><td>400 Гц</td></tr>
+            <tr><th>Обороты</th><td>12 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное <span class="tbd">(уточняется)</span></td></tr>
+            <tr><th>Подшипники</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Размер</th><td>80×213 мм</td></tr>
+            <tr><th>Вес</th><td><span class="tbd">уточняется</span></td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/tongsheng-thd-80-2-2c.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('tongsheng-80-2.2-12k')">Запросить цену</button>
+          </div>
+        </div>
+    </div>
+    <h2 class="brand-title">Другие модели (производитель уточняется)</h2>
+    <div class="variant-list">
+        <div class="variant-card" id="spindle-2.2">
+          <a href="spindles/shpindel-2-2kw-gdz.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/shpindel-2-2kw-gdz.html">Шпиндель для ЧПУ 2.2 кВт GDZ</a></div>
+          <div class="variant-price">18 500 ₽</div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Шпиндель 2,2 кВт GDZ</td></tr>
+            <tr><th>Мощность</th><td>2.2 кВт</td></tr>
+            <tr><th>Напряжение</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Обороты</th><td>24 000 об/мин</td></tr>
+            <tr><th>Цанга</th><td>ER20</td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Размер</th><td>Ø80 мм</td></tr>
+            <tr><th>Вес</th><td><span class="tbd">уточняется</span></td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/shpindel-2-2kw-gdz.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('spindle-2.2')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="spindle-1.5">
+          <a href="spindles/shpindel-1-5kw-water.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/shpindel-1-5kw-water.html">Шпиндель 1.5 кВт с водяным охлаждением (для станков 3040/4060)</a></div>
+          <div class="variant-price">14 900 ₽</div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Шпиндель 1,5 кВт с водяным охлаждением</td></tr>
+            <tr><th>Мощность</th><td>1.5 кВт</td></tr>
+            <tr><th>Напряжение</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Обороты</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Цанга</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Охлаждение</th><td>Водяное</td></tr>
+            <tr><th>Размер</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Вес</th><td><span class="tbd">уточняется</span></td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/shpindel-1-5kw-water.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('spindle-1.5')">В корзину</button>
+          </div>
+        </div>
+        <div class="variant-card" id="spindle-800">
+          <a href="spindles/shpindel-0-8kw-air.html"><div class="no-photo">Фото уточняется</div></a>
+          <div class="variant-title"><a href="spindles/shpindel-0-8kw-air.html">Шпиндель 0.8 кВт воздушное охлаждение (компактный)</a></div>
+          <div class="variant-price">8 900 ₽</div>
+          <table class="specs-table">
+            <tr><th>Модель</th><td>Шпиндель 0,8 кВт с воздушным охлаждением</td></tr>
+            <tr><th>Мощность</th><td>0.8 кВт</td></tr>
+            <tr><th>Напряжение</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Обороты</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Цанга</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Охлаждение</th><td>Воздушное</td></tr>
+            <tr><th>Размер</th><td><span class="tbd">уточняется</span></td></tr>
+            <tr><th>Вес</th><td><span class="tbd">уточняется</span></td></tr>
+          </table>
+          <div class="variant-actions">
+            <a class="btn btn-secondary" href="spindles/shpindel-0-8kw-air.html">Подробнее</a>
+            <button class="btn btn-primary" onclick="addToCart('spindle-800')">В корзину</button>
+          </div>
+        </div>
+    </div>
+<!-- SPINDLES:END -->
+    </div>
 </main>
 <script>
-const variants = [
-  {brand:'Changsheng (Чаншэн)', id:'cs-80-1.5-skf', name:'Чаншэн 80×213 / 1.5 кВт / 3 подшипника SKF', price:18500, priceUsd:195, power:'1.5 кВт', voltage:'220В', rpm:'24000', collet:'ER16/ER20', cooling:'Водяное', size:'80×213 мм', weight:'~4 кг', img:'https://via.placeholder.com/400x200/f0f0f0/333?text=Шпиндель+1.5кВт'},
-  {brand:'Changsheng (Чаншэн)', id:'cs-80-2.2-7', name:'Чаншэн GDZ-80-2.2B 80×213 / 2.2 кВт / ER20 / 220В / 3 подшипника P4', price:19500, priceUsd:205, power:'2.2 кВт', voltage:'220В', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'80×213 мм', weight:'5.1 кг', img:'images/changsheng-gdz80-2.2kw-ru.jpg'},
-  {brand:'Changsheng (Чаншэн)', id:'cs-100-3kw-220', name:'Чаншэн GDZ-100-3.0 100×220 / 3 кВт / ER20 / 220В / 3 подшипника P4', price:28500, priceUsd:300, power:'3.0 кВт', voltage:'220В', current:'12А', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'100×220 мм', weight:'8.9 кг', img:'images/changsheng-gdz100-3kw-ru.jpg'},
-  {brand:'Changsheng (Чаншэн)', id:'cs-100-3kw-380', name:'Чаншэн 100×220 / 3 кВт / 380В / P4', price:28500, priceUsd:300, power:'3.0 кВт', voltage:'380В', current:'7А', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'100×220 мм', weight:'8.9 кг', img:'https://via.placeholder.com/400x200/f0f0f0/333?text=Шпиндель+3кВт+380В'},
-  {brand:'Changsheng (Чаншэн)', id:'cs-100-4.5-220', name:'Чаншэн 100×260 / 4.5 кВт / 220В / P4', price:34500, priceUsd:365, power:'4.5 кВт', voltage:'220В', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'100×260 мм', weight:'~11 кг', img:'https://via.placeholder.com/400x200/f0f0f0/333?text=Шпиндель+4.5кВт'},
-  {brand:'Changsheng (Чаншэн)', id:'cs-100-4.5-380', name:'Чаншэн 100×260 / 4.5 кВт / 380В / P4', price:34500, priceUsd:365, power:'4.5 кВт', voltage:'380В', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'100×260 мм', weight:'~11 кг', img:'https://via.placeholder.com/400x200/f0f0f0/333?text=Шпиндель+4.5кВт'},
-  {brand:'Changsheng (Чаншэн)', id:'cs-65-800-air', name:'Чаншэн 65×188 / 0.8 кВт / 4 подшипника / воздушное', price:12500, priceUsd:132, power:'0.8 кВт', voltage:'220В', rpm:'24000', collet:'ER11', cooling:'Воздушное', size:'65×188 мм', weight:'2.8 кг', img:'https://via.placeholder.com/400x200/f0f0f0/333?text=Шпиндель+0.8кВт'},
-  {brand:'Changsheng (Чаншэн)', id:'cs-80-2.2-air', name:'Чаншэн 80×195 / 2.2 кВт / 4 подшипника / воздушное', price:21500, priceUsd:226, power:'2.2 кВт', voltage:'220В', rpm:'24000', collet:'ER20', cooling:'Воздушное', size:'80×195 мм', weight:'4.5 кг', img:'https://via.placeholder.com/400x200/f0f0f0/333?text=Шпиндель+2.2кВт+воздушный'},
-  {brand:'Changsheng (Чаншэн)', id:'cs-125-5.5', name:'Чаншэн GDZ-125-5.5 125×298 / 5.5 кВт / ER25 / 380В / 4 подшипника P4', price:89000, priceUsd:935, power:'5.5 кВт', voltage:'380В', current:'8А', rpm:'24000', collet:'ER25', cooling:'Водяное', size:'125×298 мм', weight:'22 кг', img:'images/changsheng-gdz125-5.5kw-ru.jpg'},
-  {brand:'Tongsheng', id:'tongsheng-65-0.8', name:'Tongsheng THD-65-800C 65×195 / 0.8 кВт / ER11 / 220В / 4 подшипника', price:0, priceOnRequest:true, power:'0.8 кВт', voltage:'220В', current:'5А', rpm:'24000', collet:'ER11', cooling:'Водяное', size:'65×195 мм', weight:'3.0 кг', img:'images/tongsheng-thd65-800c-ru.jpg'},
-  {brand:'Tongsheng', id:'tongsheng-80-2.2-12k', name:'Tongsheng THD-80-2.2C 80×213 / 2.2 кВт / ER20 / 220В / 12000 об/мин (высокий момент)', price:0, priceOnRequest:true, power:'2.2 кВт', voltage:'220В', current:'8А', rpm:'12000', collet:'ER20', cooling:'Водяное (уточнить)', size:'80×213 мм', weight:'уточнить', img:'images/tongsheng-thd80-2.2c-ru.jpg'},
-  {brand:'Другие модели (производитель уточняется)', id:'spindle-2.2', name:'Шпиндель для ЧПУ 2.2 кВт GDZ', price:18500, power:'2.2 кВт', voltage:'уточнить', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'Ø80 мм', weight:'уточнить', img:''},
-  {brand:'Другие модели (производитель уточняется)', id:'spindle-1.5', name:'Шпиндель 1.5 кВт с водяным охлаждением (для станков 3040/4060)', price:14900, power:'1.5 кВт', voltage:'уточнить', rpm:'уточнить', collet:'уточнить', cooling:'Водяное', size:'уточнить', weight:'уточнить', img:''},
-  {brand:'Другие модели (производитель уточняется)', id:'spindle-800', name:'Шпиндель 0.8 кВт воздушное охлаждение (компактный)', price:8900, power:'0.8 кВт', voltage:'уточнить', rpm:'уточнить', collet:'уточнить', cooling:'Воздушное', size:'уточнить', weight:'уточнить', img:''}
-];
-
-const container = document.getElementById('variants');
-container.className = '';
-const brands = [...new Set(variants.map(v => v.brand))];
-brands.forEach(brand => {
-  const h = document.createElement('h2');
-  h.className = 'brand-title';
-  h.textContent = brand;
-  container.appendChild(h);
-  const list = document.createElement('div');
-  list.className = 'variant-list';
-  container.appendChild(list);
-  variants.filter(v => v.brand === brand).forEach(v => {
-    const card = document.createElement('div');
-    card.className = 'variant-card';
-    const priceHtml = v.price
-      ? `${v.price.toLocaleString('ru')} ₽` + (v.priceUsd ? ` <span class="price-usd">/ ${v.priceUsd} $</span>` : '')
-      : 'Цена по запросу';
-    const imgHtml = v.img
-      ? `<img src="${v.img}" alt="${v.name}">`
-      : `<div style="height:160px;display:flex;align-items:center;justify-content:center;background:#f8f9fa;border-radius:8px;color:#999;">Фото уточняется</div>`;
-    card.innerHTML = `
-      ${imgHtml}
-      <div class="variant-title">${v.name}</div>
-      <div class="variant-price">${priceHtml}</div>
-      <table class="specs-table">
-        <tr><td>Производитель</td><td>${v.brand}</td></tr>
-        <tr><td>Мощность</td><td>${v.power}</td></tr>
-        <tr><td>Напряжение</td><td>${v.voltage}</td></tr>
-        ${v.current ? `<tr><td>Ток</td><td>${v.current}</td></tr>` : ''}
-        <tr><td>Обороты</td><td>${v.rpm}${/^\d+$/.test(v.rpm) ? ' об/мин' : ''}</td></tr>
-        <tr><td>Цанга</td><td>${v.collet}</td></tr>
-        <tr><td>Охлаждение</td><td>${v.cooling}</td></tr>
-        <tr><td>Размер</td><td>${v.size}</td></tr>
-        <tr><td>Вес</td><td>${v.weight}</td></tr>
-      </table>
-      <button class="btn btn-primary" onclick="addToCart('${v.id}', ${v.price || 0})">${v.price ? 'В корзину' : 'Запросить цену (в корзину)'}</button>
-    `;
-    list.appendChild(card);
-  });
-});
-
-function addToCart(id, price) {
-  let cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
+function addToCart(id) {
+  var cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
   cart[id] = (cart[id] || 0) + 1;
   localStorage.setItem('cncCart', JSON.stringify(cart));
+  updateCartBadge();
   alert('Добавлено в корзину');
 }
+function updateCartBadge() {
+  var cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
+  var n = Object.values(cart).reduce(function (a, b) { return a + b; }, 0);
+  var el = document.getElementById('headerCartCount');
+  if (el) el.textContent = n;
+}
+updateCartBadge();
 </script>
 </body>
 </html>
