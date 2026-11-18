@@ -16,7 +16,10 @@
  *   model, name, short — модель, полное название, короткое описание для карточки;
  *   price (₽), priceUsd, priceOnRequest — цена; при price:0 + priceOnRequest показывается «Цена по запросу»;
  *   specs     — характеристики; значение 'уточнить' выводится как «уточняется»;
- *   img       — путь от корня сайта ('' — фото уточняется);
+ *   img       — главное фото (путь от корня сайта; '' — фото уточняется);
+ *                 оставлено для совместимости: главное фото = photos[0] || img;
+ *   photos    — все фото модели (массив путей; первое — главное). Если photos нет,
+ *                 используется img. Дополнительный ракурс — ещё один путь в photos;
  *   description — абзацы описания модели;
  *   applications — список «Применение»;
  *   notes     — дополнительная информация по модели (в т.ч. из писем): {date:'ГГГГ-ММ-ДД', text:'...'};
@@ -31,6 +34,7 @@ var SPINDLES = [
     price: 18500, priceUsd: 195,
     specs: { power: '1.5 кВт', voltage: '220В', rpm: '24000', collet: 'ER16/ER20', cooling: 'Водяное', bearings: '3 шт., SKF', size: '80×213 мм', weight: '~4 кг' },
     img: '',
+    photos: [],
     description: [], applications: [], notes: [], clarify: ['фото', 'ток', 'частота']
   },
   {
@@ -41,6 +45,7 @@ var SPINDLES = [
     price: 19500, priceUsd: 205,
     specs: { power: '2.2 кВт', voltage: '220В', frequency: '400 Гц', rpm: '24000', collet: 'ER20', cooling: 'Водяное', bearings: '3 шт., класс P4', size: '80×213 мм', weight: '5.1 кг' },
     img: 'images/changsheng-gdz80-2.2kw-ru.jpg',
+    photos: ['images/changsheng-gdz80-2.2kw-ru.jpg'],
     description: [], applications: [], notes: [], clarify: ['ток', 'модель подшипников']
   },
   {
@@ -51,6 +56,7 @@ var SPINDLES = [
     price: 28500, priceUsd: 300,
     specs: { power: '3.0 кВт', voltage: '220В', current: '12А', frequency: '400 Гц', rpm: '24000', collet: 'ER20', cooling: 'Водяное', bearings: '3 шт., класс P4', size: '100×220 мм', weight: '8.9 кг', warranty: '1 год (включая подшипники и обмотку)' },
     img: 'images/changsheng-gdz100-3kw-ru.jpg',
+    photos: ['images/changsheng-gdz100-3kw-ru.jpg'],
     description: [], applications: [], notes: [], clarify: ['модель подшипников', 'вес (8,9 или 9,1 кг)']
   },
   {
@@ -61,6 +67,7 @@ var SPINDLES = [
     price: 28500, priceUsd: 300,
     specs: { power: '3.0 кВт', voltage: '380В', current: '7А', rpm: '24000', collet: 'ER20', cooling: 'Водяное', bearings: 'класс P4', size: '100×220 мм', weight: '8.9 кг' },
     img: '',
+    photos: [],
     description: [], applications: [], notes: [], clarify: ['фото', 'частота', 'количество подшипников']
   },
   {
@@ -71,6 +78,7 @@ var SPINDLES = [
     price: 34500, priceUsd: 365,
     specs: { power: '4.5 кВт', voltage: '220В', rpm: '24000', collet: 'ER20', cooling: 'Водяное', bearings: 'класс P4', size: '100×260 мм', weight: '~11 кг' },
     img: '',
+    photos: [],
     description: [], applications: [], notes: [], clarify: ['фото', 'ток', 'частота']
   },
   {
@@ -81,6 +89,7 @@ var SPINDLES = [
     price: 34500, priceUsd: 365,
     specs: { power: '4.5 кВт', voltage: '380В', rpm: '24000', collet: 'ER20', cooling: 'Водяное', bearings: 'класс P4', size: '100×260 мм', weight: '~11 кг' },
     img: '',
+    photos: [],
     description: [], applications: [], notes: [], clarify: ['фото', 'ток', 'частота']
   },
   {
@@ -91,6 +100,7 @@ var SPINDLES = [
     price: 12500, priceUsd: 132,
     specs: { power: '0.8 кВт', voltage: '220В', rpm: '24000', collet: 'ER11', cooling: 'Воздушное', bearings: '4 шт.', size: '65×188 мм', weight: '2.8 кг' },
     img: '',
+    photos: [],
     description: [], applications: [], notes: [], clarify: ['фото', 'ток', 'частота']
   },
   {
@@ -101,6 +111,7 @@ var SPINDLES = [
     price: 21500, priceUsd: 226,
     specs: { power: '2.2 кВт', voltage: '220В', rpm: '24000', collet: 'ER20', cooling: 'Воздушное', bearings: '4 шт.', size: '80×195 мм', weight: '4.5 кг' },
     img: '',
+    photos: [],
     description: [], applications: [], notes: [], clarify: ['фото', 'ток', 'частота']
   },
   {
@@ -111,6 +122,7 @@ var SPINDLES = [
     price: 89000, priceUsd: 935,
     specs: { power: '5.5 кВт', voltage: '380В', current: '8А', frequency: '400 Гц', rpm: '24000', collet: 'ER25', cooling: 'Водяное', bearings: '4 шт., класс P4', size: '125×298 мм', weight: '22 кг' },
     img: 'images/changsheng-gdz125-5.5kw-ru.jpg',
+    photos: ['images/changsheng-gdz125-5.5kw-ru.jpg'],
     description: [], applications: [], notes: [], clarify: ['ток (8 А для 5,5 кВт при 380 В — проверить)', 'модель подшипников', 'гарантия']
   },
   {
@@ -121,6 +133,7 @@ var SPINDLES = [
     price: 0, priceOnRequest: true,
     specs: { power: '0.8 кВт', voltage: '220В', current: '5А', frequency: '400 Гц', rpm: '24000', collet: 'ER11', cooling: 'Водяное', bearings: '4 шт.', size: '65×195 мм', weight: '3.0 кг' },
     img: 'images/tongsheng-thd65-800c-ru.jpg',
+    photos: ['images/tongsheng-thd65-800c-ru.jpg'],
     description: [], applications: [], notes: [], clarify: ['цена', 'комплектность', 'производитель подшипников']
   },
   {
@@ -131,6 +144,7 @@ var SPINDLES = [
     price: 0, priceOnRequest: true,
     specs: { power: '2.2 кВт', voltage: '220В', current: '8А', frequency: '400 Гц', rpm: '12000', collet: 'ER20', cooling: 'Водяное (уточнить)', bearings: 'уточнить', size: '80×213 мм', weight: 'уточнить' },
     img: 'images/tongsheng-thd80-2.2c-ru.jpg',
+    photos: ['images/tongsheng-thd80-2.2c-ru.jpg'],
     description: ['Низкооборотный шпиндель (12 000 об/мин) с повышенным крутящим моментом — подходит для фрезерования металла и твёрдых пород дерева.'],
     applications: [], notes: [], clarify: ['цена', 'охлаждение', 'подшипники', 'вес']
   },
@@ -142,6 +156,7 @@ var SPINDLES = [
     price: 18500,
     specs: { power: '2.2 кВт', voltage: 'уточнить', rpm: '24000', collet: 'ER20', cooling: 'Водяное', size: 'Ø80 мм', weight: 'уточнить' },
     img: '',
+    photos: [],
     description: [], applications: [], notes: [], clarify: ['производитель (возможно, дублирует Changsheng GDZ-80-2.2B)', 'фото']
   },
   {
@@ -152,6 +167,7 @@ var SPINDLES = [
     price: 14900,
     specs: { power: '1.5 кВт', voltage: 'уточнить', rpm: 'уточнить', collet: 'уточнить', cooling: 'Водяное', size: 'уточнить', weight: 'уточнить' },
     img: '',
+    photos: [],
     description: [], applications: ['Фрезерно-гравировальные станки ЧПУ 3040 и 4060'], notes: [], clarify: ['производитель', 'фото']
   },
   {
@@ -162,6 +178,7 @@ var SPINDLES = [
     price: 8900,
     specs: { power: '0.8 кВт', voltage: 'уточнить', rpm: 'уточнить', collet: 'уточнить', cooling: 'Воздушное', size: 'уточнить', weight: 'уточнить' },
     img: '',
+    photos: [],
     description: [], applications: [], notes: [], clarify: ['производитель', 'фото']
   }
 ];
@@ -179,6 +196,28 @@ function spindleTitle(s) {
   return t;
 }
 
+
+// Главное фото и полный список (photos[0] либо старое поле img; без дублей, пустые пропускаются)
+function spindlePhotos(s) {
+  var list = [], seen = {};
+  function add(p) {
+    if (!p) return;
+    if (seen[p]) return;
+    seen[p] = true;
+    list.push(p);
+  }
+  if (s.photos && s.photos.length) {
+    for (var i = 0; i < s.photos.length; i++) add(s.photos[i]);
+  } else {
+    add(s.img);
+  }
+  return list;
+}
+function spindleMainPhoto(s) {
+  var p = spindlePhotos(s);
+  return p[0] || '';
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { SPINDLES: SPINDLES, SPINDLE_SPEC_LABELS: SPINDLE_SPEC_LABELS, spindleTitle: spindleTitle };
+  module.exports = { SPINDLES: SPINDLES, SPINDLE_SPEC_LABELS: SPINDLE_SPEC_LABELS, spindleTitle: spindleTitle, spindlePhotos: spindlePhotos, spindleMainPhoto: spindleMainPhoto };
 }

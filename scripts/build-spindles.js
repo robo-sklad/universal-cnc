@@ -14,7 +14,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://чпу-склад.рф';
-const { SPINDLES, SPINDLE_SPEC_LABELS, spindleTitle } = require(path.join(ROOT, 'data', 'spindles.js'));
+const { SPINDLES, SPINDLE_SPEC_LABELS, spindleTitle, spindlePhotos, spindleMainPhoto } = require(path.join(ROOT, 'data', 'spindles.js'));
 const today = new Date().toISOString().slice(0, 10);
 
 const esc = s => String(s == null ? '' : s)
@@ -31,6 +31,9 @@ const priceText = s => s.price
   ? s.price.toLocaleString('ru-RU').replace(/\u00a0/g, ' ') + ' ₽'
   : 'Цена по запросу';
 
+const photoSrc = (p, prefix) => !p ? '' : (/^https?:/.test(p) ? p : prefix + p);
+const photoAbs = p => !p ? '' : (/^https?:/.test(p) ? p : `${SITE}/${p}`);
+
 // --- проверки данных ---
 const HAN = /[\u3400-\u9fff\uf900-\ufaff]/;
 const ids = new Set(), slugs = new Set();
@@ -41,7 +44,16 @@ for (const s of SPINDLES) {
   if (slugs.has(s.slug)) throw new Error('Дубль slug: ' + s.slug);
   ids.add(s.id); slugs.add(s.slug);
   if (HAN.test(JSON.stringify(s))) throw new Error('Иероглифы в данных: ' + s.id);
-  if (s.img && !/^https?:/.test(s.img) && !fs.existsSync(path.join(ROOT, s.img))) throw new Error('Нет файла фото: ' + s.img);
+  const rawPhotos = Array.isArray(s.photos) ? s.photos.filter(Boolean) : [];
+  const seenPhotos = new Set();
+  for (const p of rawPhotos) {
+    if (seenPhotos.has(p)) throw new Error('Дубль фото у ' + s.id + ': ' + p);
+    seenPhotos.add(p);
+    if (!/^https?:/.test(p) && !fs.existsSync(path.join(ROOT, p))) throw new Error('Нет файла фото: ' + p + ' (' + s.id + ')');
+  }
+  if (s.img && !rawPhotos.includes(s.img) && !/^https?:/.test(s.img) && !fs.existsSync(path.join(ROOT, s.img))) {
+    throw new Error('Нет файла фото: ' + s.img + ' (' + s.id + ')');
+  }
 }
 
 function specsRows(s, withBrand) {
@@ -89,16 +101,174 @@ function updateCartBadge() {
 }
 updateCartBadge();`;
 
+const GALLERY_CSS = `
+        .spindle-photo.gallery { flex-direction: column; background: transparent; min-height: 0; align-items: stretch; }
+        .gallery-main { position: relative; background: #f8f9fa; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; }
+        .gallery-main-img { width: 100%; max-height: 460px; object-fit: contain; border-radius: 12px; cursor: zoom-in; }
+        .gallery-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 1.5rem; line-height: 1; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,0.15); z-index: 1; color: #222; }
+        .gallery-nav:hover { background: #fff; }
+        .gallery-prev { left: 8px; }
+        .gallery-next { right: 8px; }
+        .gallery-counter { position: absolute; right: 10px; bottom: 10px; background: rgba(0,0,0,0.6); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.85rem; }
+        .gallery-thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; width: 100%; }
+        .gallery-thumb { border: 2px solid transparent; border-radius: 8px; padding: 0; background: #f8f9fa; cursor: pointer; width: 72px; height: 72px; overflow: hidden; }
+        .gallery-thumb.is-active { border-color: #0d6efd; }
+        .gallery-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .gallery-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .gallery-lightbox[hidden] { display: none; }
+        .gallery-lightbox-img { max-width: 92vw; max-height: 88vh; object-fit: contain; }
+        .gallery-lightbox-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 2; }
+        .gallery-lightbox .gallery-nav { background: rgba(255,255,255,0.92); }
+        .gallery-lightbox .gallery-counter { right: 16px; bottom: 16px; }
+`;
+
+const GALLERY_JS = `function initSpindleGallery() {
+  var root = document.querySelector('[data-spindle-gallery]');
+  if (!root) return;
+  var srcs = JSON.parse(root.getAttribute('data-photos'));
+  var model = root.getAttribute('data-model') || '';
+  var i = 0;
+  var mainImg = root.querySelector('.gallery-main-img');
+  var mainCounter = root.querySelector('.gallery-counter');
+  var thumbs = root.querySelectorAll('.gallery-thumb');
+  var lb = document.querySelector('[data-gallery-lightbox]');
+  var lbImg = lb && lb.querySelector('.gallery-lightbox-img');
+  var lbCounter = lb && lb.querySelector('.gallery-counter');
+  var lbOpen = false;
+
+  function alt(k) {
+    return 'Шпиндель ' + model + ' — фото ' + (k + 1) + ' из ' + srcs.length;
+  }
+  function show(n) {
+    i = (n + srcs.length) % srcs.length;
+    mainImg.src = srcs[i];
+    mainImg.alt = alt(i);
+    mainCounter.textContent = (i + 1) + ' / ' + srcs.length;
+    for (var t = 0; t < thumbs.length; t++) {
+      thumbs[t].classList.toggle('is-active', t === i);
+      thumbs[t].setAttribute('aria-current', t === i ? 'true' : 'false');
+    }
+    if (lbImg) {
+      lbImg.src = srcs[i];
+      lbImg.alt = alt(i);
+    }
+    if (lbCounter) lbCounter.textContent = (i + 1) + ' / ' + srcs.length;
+  }
+  function prev() { show(i - 1); }
+  function next() { show(i + 1); }
+  function openLb() {
+    if (!lb) return;
+    lb.hidden = false;
+    lbOpen = true;
+    show(i);
+    var closeBtn = lb.querySelector('.gallery-lightbox-close');
+    if (closeBtn) closeBtn.focus();
+  }
+  function closeLb() {
+    if (!lb) return;
+    lb.hidden = true;
+    lbOpen = false;
+  }
+
+  root.querySelector('.gallery-prev').addEventListener('click', prev);
+  root.querySelector('.gallery-next').addEventListener('click', next);
+  mainImg.addEventListener('click', openLb);
+  for (var t = 0; t < thumbs.length; t++) {
+    (function (k) {
+      thumbs[k].addEventListener('click', function () { show(k); });
+    })(t);
+  }
+  if (lb) {
+    lb.querySelector('.gallery-prev').addEventListener('click', prev);
+    lb.querySelector('.gallery-next').addEventListener('click', next);
+    lb.querySelector('.gallery-lightbox-close').addEventListener('click', closeLb);
+    lb.addEventListener('click', function (e) {
+      if (e.target === lb) closeLb();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    var tag = e.target && e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.key === 'ArrowLeft') prev();
+    else if (e.key === 'ArrowRight') next();
+    else if (e.key === 'Escape' && lbOpen) closeLb();
+  });
+
+  var startX = null;
+  function onStart(e) {
+    startX = (e.touches ? e.touches[0].clientX : e.clientX);
+  }
+  function onEnd(e) {
+    if (startX == null) return;
+    var x = (e.changedTouches ? e.changedTouches[0].clientX : e.clientX);
+    var dx = x - startX;
+    startX = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0) next(); else prev();
+  }
+  var swipeEl = root.querySelector('.gallery-main');
+  swipeEl.addEventListener('touchstart', onStart, { passive: true });
+  swipeEl.addEventListener('touchend', onEnd);
+  if (lb) {
+    lb.addEventListener('touchstart', onStart, { passive: true });
+    lb.addEventListener('touchend', onEnd);
+  }
+}
+initSpindleGallery();`;
+
+function photoAlts(s, photos) {
+  return photos.map((_, i) => photos.length > 1
+    ? `Шпиндель ${s.model} — фото ${i + 1} из ${photos.length}`
+    : `Шпиндель ${s.model}`);
+}
+
+function photoBlock(s) {
+  const photos = spindlePhotos(s);
+  if (!photos.length) return `<div class="spindle-photo">Фото уточняется</div>`;
+  const srcs = photos.map(p => photoSrc(p, '../'));
+  const alts = photoAlts(s, photos);
+  if (photos.length === 1) {
+    return `<div class="spindle-photo"><img src="${esc(srcs[0])}" alt="${esc(alts[0])}"></div>`;
+  }
+  const thumbs = srcs.map((src, i) =>
+    `<button type="button" class="gallery-thumb${i === 0 ? ' is-active' : ''}" data-i="${i}" aria-label="${esc(alts[i])}" aria-current="${i === 0 ? 'true' : 'false'}"><img src="${esc(src)}" alt=""></button>`
+  ).join('\n        ');
+  return `<div class="spindle-photo gallery" data-spindle-gallery data-model="${esc(s.model)}" data-photos="${esc(JSON.stringify(srcs))}">
+        <div class="gallery-main">
+            <button type="button" class="gallery-nav gallery-prev" aria-label="Предыдущее фото">‹</button>
+            <img class="gallery-main-img" src="${esc(srcs[0])}" alt="${esc(alts[0])}">
+            <button type="button" class="gallery-nav gallery-next" aria-label="Следующее фото">›</button>
+            <span class="gallery-counter" aria-live="polite">1 / ${photos.length}</span>
+        </div>
+        <div class="gallery-thumbs">${thumbs}</div>
+    </div>`;
+}
+
+function lightboxHtml(s) {
+  const photos = spindlePhotos(s);
+  if (photos.length < 2) return '';
+  const srcs = photos.map(p => photoSrc(p, '../'));
+  const alts = photoAlts(s, photos);
+  return `<div class="gallery-lightbox" hidden data-gallery-lightbox>
+    <button type="button" class="gallery-lightbox-close" aria-label="Закрыть">×</button>
+    <button type="button" class="gallery-nav gallery-prev" aria-label="Предыдущее фото">‹</button>
+    <img class="gallery-lightbox-img" src="${esc(srcs[0])}" alt="${esc(alts[0])}">
+    <button type="button" class="gallery-nav gallery-next" aria-label="Следующее фото">›</button>
+    <span class="gallery-counter" aria-live="polite">1 / ${photos.length}</span>
+</div>`;
+}
+
 function detailPage(s) {
   const url = `${SITE}/spindles/${s.slug}.html`;
   const title = `${spindleTitle(s)} для ЧПУ — характеристики и цена | ЧПУ-склад`;
   const desc = metaDescription(s);
-  const img = s.img ? (/^https?:/.test(s.img) ? s.img : '../' + s.img) : '';
-  const imgAbs = s.img ? (/^https?:/.test(s.img) ? s.img : `${SITE}/${s.img}`) : '';
+  const photos = spindlePhotos(s);
+  const imgAbsList = photos.map(photoAbs);
+  const imgAbs = imgAbsList[0] || '';
   const ld = {
     '@context': 'https://schema.org', '@type': 'Product', name: s.model, description: s.short,
     brand: /другие/i.test(s.brand) ? undefined : { '@type': 'Brand', name: s.brand.replace(/\s*\(.*\)$/, '') },
-    image: imgAbs || undefined, sku: s.id, url,
+    image: imgAbsList.length > 1 ? imgAbsList : (imgAbs || undefined), sku: s.id, url,
     offers: s.price ? { '@type': 'Offer', price: s.price, priceCurrency: 'RUB', url, availability: 'https://schema.org/InStock' } : undefined
   };
   const crumbs = {
@@ -118,6 +288,7 @@ function detailPage(s) {
   const mailSubj = encodeURIComponent(`Вопрос по шпинделю ${s.model}`);
   const others = SPINDLES.filter(o => o.slug !== s.slug && o.brand === s.brand)
     .map(o => `<li><a href="${o.slug}.html">${esc(o.model)}</a> — ${esc(o.specs.power)}, ${priceText(o)}</li>`).join('\n          ');
+  const hasGallery = photos.length > 1;
 
   return `<!DOCTYPE html>
 <html lang="ru">
@@ -155,7 +326,7 @@ function detailPage(s) {
         .tbd { color: #b26a00; }
         .section { background: white; border-radius: 12px; padding: 16px 20px; margin: 16px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
         .note-date { color: #888; font-size: 0.85rem; }
-    </style>
+${hasGallery ? GALLERY_CSS : ''}    </style>
     <script type="application/ld+json">${JSON.stringify(ld)}</script>
     <script type="application/ld+json">${JSON.stringify(crumbs)}</script>
 <!-- Yandex.Metrika counter -->
@@ -178,7 +349,7 @@ ${NAV('../')}
     <nav class="breadcrumbs" aria-label="Навигация"><a href="../index.html">Главная</a> › <a href="../marketplace.html">Marketplace</a> › <a href="../spindle-changsheng.html">Шпиндели</a> › ${esc(s.model)}</nav>
     <h1>${esc(spindleTitle(s))}</h1>
     <div class="spindle-top">
-        <div class="spindle-photo">${img ? `<img src="${esc(img)}" alt="Шпиндель ${esc(s.model)}">` : 'Фото уточняется'}</div>
+        ${photoBlock(s)}
         <div class="spindle-buy">
             <p>${esc(s.name)}</p>
             <div class="spindle-price">${priceText(s)}${s.price && s.priceUsd ? ` <span class="price-usd">/ ${s.priceUsd} $</span>` : ''}</div>
@@ -234,8 +405,8 @@ ${notes ? `
 <footer>
     <p>© 2026 ЧПУ-Склад • Все права защищены</p>
 </footer>
-<script>
-${CART_JS}
+${hasGallery ? lightboxHtml(s) + '\n' : ''}<script>
+${CART_JS}${hasGallery ? '\n' + GALLERY_JS : ''}
 </script>
 </body>
 </html>
@@ -243,8 +414,9 @@ ${CART_JS}
 }
 
 function listCard(s) {
-  const img = s.img
-    ? `<img src="${esc(s.img)}" alt="Шпиндель ${esc(s.model)}" loading="lazy">`
+  const main = spindleMainPhoto(s);
+  const img = main
+    ? `<img src="${esc(main)}" alt="Шпиндель ${esc(s.model)}" loading="lazy">`
     : `<div class="no-photo">Фото уточняется</div>`;
   return `<div class="variant-card" id="${esc(s.id)}">
           <a href="spindles/${s.slug}.html">${img}</a>

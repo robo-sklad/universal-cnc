@@ -136,7 +136,7 @@ const products = [
     if (typeof SPINDLES === 'undefined') return;
     const items = SPINDLES.map(s => ({
         id: s.id, title: spindleTitle(s), price: s.price, priceOnRequest: !!s.priceOnRequest,
-        cat: 'spindle', desc: s.short, img: s.img, link: 'spindles/' + s.slug + '.html'
+        cat: 'spindle', desc: s.short, img: spindleMainPhoto(s), link: 'spindles/' + s.slug + '.html'
     }));
     const at = products.findIndex(p => p.id === 'changsheng-series') + 1;
     products.splice(at, 0, ...items);
