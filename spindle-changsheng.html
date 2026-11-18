@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шпиндели Changsheng (Чаншэн) — Маркетплейс ЧПУ-склад</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .variant-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 20px 0; }
+        .variant-card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .variant-card img { width: 100%; height: 160px; object-fit: contain; background: #f8f9fa; border-radius: 8px; }
+        .variant-title { font-weight: 600; margin: 8px 0 4px; }
+        .variant-price { font-size: 1.2rem; color: #0d6efd; font-weight: bold; }
+        .specs-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.85rem; }
+        .specs-table td { padding: 4px 0; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+<header>
+    <div class="nav-container">
+        <div class="logo"><img src="logo.jpg" alt="ЧПУ-Склад"> ЧПУ склад</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="cart.html">Корзина</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<main style="max-width:1100px;margin:20px auto;padding:0 16px;">
+    <h1>Шпиндели Changsheng (Чаншэн / 昌盛) для ЧПУ</h1>
+    <p>Оригинальные шпиндели серии GDZ. Высокая точность, подшипники P4, гарантия 1 год на двигатель и подшипники. Данные из карточки Taobao.</p>
+    <p><strong>Цены указаны символически (от цены в юанях + наценка). Будут скорректированы.</strong></p>
+
+    <div class="variant-list" id="variants"></div>
+</main>
+<script>
+const variants = [
+  {id:'cs-80-1.5-skf', name:'Чаншэн 80×213 / 1.5 кВт / 3 подшипника SKF', price:18500, power:'1.5 кВт', voltage:'220В', rpm:'24000', collet:'ER16/ER20', cooling:'Водяное', size:'80×213 мм', weight:'~4 кг'},
+  {id:'cs-80-2.2-7', name:'Чаншэн 80×213 / 2.2 кВт / 3 подшипника 7 серии', price:19500, power:'2.2 кВт', voltage:'220В', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'80×213 мм', weight:'~5 кг'},
+  {id:'cs-100-3kw-220', name:'Чаншэн 100×220 / 3 кВт / 220В / P4 (рекомендуемый)', price:28500, power:'3.0 кВт', voltage:'220В', current:'12А', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'100×220 мм', weight:'8.9 кг'},
+  {id:'cs-100-3kw-380', name:'Чаншэн 100×220 / 3 кВт / 380В / P4', price:28500, power:'3.0 кВт', voltage:'380В', current:'7А', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'100×220 мм', weight:'8.9 кг'},
+  {id:'cs-100-4.5-220', name:'Чаншэн 100×260 / 4.5 кВт / 220В / P4', price:34500, power:'4.5 кВт', voltage:'220В', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'100×260 мм', weight:'~11 кг'},
+  {id:'cs-100-4.5-380', name:'Чаншэн 100×260 / 4.5 кВт / 380В / P4', price:34500, power:'4.5 кВт', voltage:'380В', rpm:'24000', collet:'ER20', cooling:'Водяное', size:'100×260 мм', weight:'~11 кг'},
+  {id:'cs-65-800-air', name:'Чаншэн 65×188 / 0.8 кВт / 4 подшипника / воздушное', price:12500, power:'0.8 кВт', voltage:'220В', rpm:'24000', collet:'ER11', cooling:'Воздушное', size:'65×188 мм', weight:'2.8 кг'},
+  {id:'cs-80-2.2-air', name:'Чаншэн 80×195 / 2.2 кВт / 4 подшипника / воздушное', price:21500, power:'2.2 кВт', voltage:'220В', rpm:'24000', collet:'ER20', cooling:'Воздушное', size:'80×195 мм', weight:'4.5 кг'},
+  {id:'cs-125-5.5', name:'Чаншэн 125×298 / 5.5 кВт / 380В / стальные шарики', price:89000, power:'5.5 кВт', voltage:'380В', rpm:'24000', collet:'ER25', cooling:'Водяное', size:'125×298 мм', weight:'~20 кг'}
+];
+
+const container = document.getElementById('variants');
+variants.forEach(v => {
+  const card = document.createElement('div');
+  card.className = 'variant-card';
+  card.innerHTML = `
+    <img src="https://via.placeholder.com/300x160?text=${encodeURIComponent(v.name.split(' ')[1] || 'Шпиндель')}" alt="${v.name}">
+    <div class="variant-title">${v.name}</div>
+    <div class="variant-price">${v.price.toLocaleString('ru')} ₽</div>
+    <table class="specs-table">
+      <tr><td>Мощность</td><td>${v.power}</td></tr>
+      <tr><td>Напряжение</td><td>${v.voltage}</td></tr>
+      <tr><td>Обороты</td><td>${v.rpm} об/мин</td></tr>
+      <tr><td>Цанга</td><td>${v.collet}</td></tr>
+      <tr><td>Охлаждение</td><td>${v.cooling}</td></tr>
+      <tr><td>Размер</td><td>${v.size}</td></tr>
+      <tr><td>Вес</td><td>${v.weight}</td></tr>
+    </table>
+    <button class="btn btn-primary" onclick="addToCart('${v.id}', ${v.price})">В корзину</button>
+  `;
+  container.appendChild(card);
+});
+
+function addToCart(id, price) {
+  let cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
+  cart[id] = (cart[id] || 0) + 1;
+  localStorage.setItem('cncCart', JSON.stringify(cart));
+  alert('Добавлено в корзину');
+}
+</script>
+</body>
+</html>
