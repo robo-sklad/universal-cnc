@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Корзина — ЧПУ-склад Marketplace</title>
+    <title>Корзина и оформление заказа — ЧПУ-склад</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .cart-container { max-width: 800px; margin: 0 auto; }
+        .cart-container { max-width: 900px; margin: 0 auto; }
         .cart-item { display: flex; gap: 16px; background: white; padding: 16px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); align-items: center; }
-        .cart-item img, .item-placeholder { width: 80px; height: 80px; background: #f0f2f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 0.8rem; }
+        .item-placeholder { width: 80px; height: 80px; background: #f0f2f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 0.8rem; }
         .item-details { flex: 1; }
         .item-title { font-weight: 600; margin: 0 0 4px; }
         .item-price { color: #0d6efd; font-weight: bold; }
@@ -16,7 +16,12 @@
         .qty button { width: 28px; height: 28px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; }
         .remove { background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
         .total { text-align: right; font-size: 1.4rem; font-weight: bold; margin: 20px 0; }
-        .checkout-btn { background: #0d6efd; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
+        .checkout-form { background: white; padding: 24px; border-radius: 12px; margin-top: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .checkout-form h2 { margin-top: 0; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; margin-bottom: 4px; font-weight: 500; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .submit-btn { background: #0d6efd; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
         .empty-cart { text-align: center; padding: 60px; color: #666; }
     </style>
 </head>
@@ -34,6 +39,7 @@
                 <li><a href="equipment.html">Оборудование</a></li>
                 <li><a href="marketplace.html">Marketplace</a></li>
                 <li><a href="cart.html" class="active">Корзина <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
+                <li><a href="generate-card.html">Генератор карточек</a></li>
                 <li><a href="https://universal-cnc.vercel.app/chat.html" target="_blank" rel="noopener">Обучение</a></li>
             </ul>
         </nav>
@@ -50,7 +56,30 @@
         </div>
         <div id="cartFooter" style="display:none;">
             <div class="total">Итого: <span id="totalSum">0</span> ₽</div>
-            <button class="checkout-btn" onclick="checkout()">Оформить заказ</button>
+
+            <div class="checkout-form">
+                <h2>Оформление заказа</h2>
+                <form id="orderForm" onsubmit="submitOrder(event)">
+                    <div class="form-group">
+                        <label>Имя *</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон *</label>
+                        <input type="tel" id="phone" required placeholder="+7 ...">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Комментарий к заказу</label>
+                        <textarea id="comment" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Отправить заказ</button>
+                </form>
+                <p style="font-size:0.85rem; color:#666; margin-top:12px;">Заказ будет отправлен на email владельца. Мы свяжемся с вами для подтверждения.</p>
+            </div>
         </div>
     </div>
 </main>
@@ -63,14 +92,20 @@
 const products = [
     { id: 'spindle-2.2', title: 'Шпиндель для ЧПУ 2.2 кВт', price: 18500 },
     { id: 'spindle-1.5', title: 'Шпиндель 1.5 кВт с водяным охлаждением', price: 14900 },
+    { id: 'spindle-800', title: 'Шпиндель 0.8 кВт воздушное охлаждение', price: 8900 },
     { id: 'frezy-set', title: 'Комплект фрез для ЧПУ (10 шт)', price: 4200 },
-    { id: 'freza-6mm', title: 'Фреза спиральная 6 мм (однозаходная)', price: 890 },
-    { id: 'guides-hgr', title: 'Линейные направляющие HGR15 (комплект)', price: 9200 },
+    { id: 'freza-6mm', title: 'Фреза спиральная 6 мм', price: 890 },
+    { id: 'freza-3mm', title: 'Фреза концевая 3 мм', price: 450 },
+    { id: 'guides-hgr', title: 'Линейные направляющие HGR15', price: 9200 },
     { id: 'ballscrew', title: 'ШВП 1605 (500 мм) с гайкой', price: 6800 },
-    { id: 'driver-tb6600', title: 'Драйвер шагового двигателя TB6600', price: 2900 },
-    { id: 'stepper-nema23', title: 'Шаговый двигатель NEMA 23 (2.8 Нм)', price: 4500 },
+    { id: 'coupler', title: 'Муфта соединительная 8x8', price: 650 },
+    { id: 'driver-tb6600', title: 'Драйвер TB6600 4А', price: 2900 },
+    { id: 'stepper-nema23', title: 'Шаговый двигатель NEMA 23', price: 4500 },
+    { id: 'controller-grbl', title: 'Контроллер GRBL на Arduino', price: 3200 },
     { id: 'collet-set', title: 'Набор цанг ER11 (13 шт)', price: 1800 },
-    { id: 'coolant', title: 'СОЖ для ЧПУ (5 л)', price: 1200 }
+    { id: 'coolant', title: 'СОЖ для ЧПУ 5 л', price: 1200 },
+    { id: 'bit-set', title: 'Набор свёрел для ЧПУ', price: 980 },
+    { id: 'cncv4-license', title: 'Лицензия CNCV4 (расширенная)', price: 0 }
 ];
 
 function getProduct(id) { return products.find(p => p.id === id); }
@@ -89,7 +124,7 @@ function renderCart() {
         const p = getProduct(id);
         if (!p) continue;
         count += qty;
-        total += p.price * qty;
+        total += (p.price || 0) * qty;
 
         const item = document.createElement('div');
         item.className = 'cart-item';
@@ -97,7 +132,7 @@ function renderCart() {
             <div class="item-placeholder">Фото</div>
             <div class="item-details">
                 <div class="item-title">${p.title}</div>
-                <div class="item-price">${p.price.toLocaleString('ru')} ₽</div>
+                <div class="item-price">${p.price ? p.price.toLocaleString('ru') + ' ₽' : 'Бесплатно'}</div>
                 <div class="qty">
                     <button onclick="changeQty('${id}', -1)">−</button>
                     <span>${qty}</span>
@@ -136,8 +171,29 @@ function removeItem(id) {
     renderCart();
 }
 
-function checkout() {
-    alert('Спасибо за заказ! \n\nВ данный момент оформление заказа — демо. \nСвяжитесь с нами по телефону +7 (961) 991-01-76 или напишите на stepmotoren@yandex.ru');
+function submitOrder(e) {
+    e.preventDefault();
+    const cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
+    let orderText = 'Заказ с сайта ЧПУ-склад:\n\n';
+    let total = 0;
+    for (const [id, qty] of Object.entries(cart)) {
+        const p = getProduct(id);
+        if (p && qty > 0) {
+            orderText += `${p.title} × ${qty} = ${(p.price || 0) * qty} ₽\n`;
+            total += (p.price || 0) * qty;
+        }
+    }
+    orderText += `\nИтого: ${total} ₽\n\n`;
+    orderText += `Имя: ${document.getElementById('name').value}\n`;
+    orderText += `Телефон: ${document.getElementById('phone').value}\n`;
+    orderText += `Email: ${document.getElementById('email').value || 'не указан'}\n`;
+    orderText += `Комментарий: ${document.getElementById('comment').value || 'нет'}\n`;
+
+    const subject = encodeURIComponent('Заказ с Marketplace ЧПУ-склад');
+    const body = encodeURIComponent(orderText);
+    window.location.href = `mailto:stepmotoren@yandex.ru?subject=${subject}&body=${body}`;
+
+    alert('Заказ сформирован! Откроется почтовый клиент для отправки.\nЕсли не открылся — скопируйте текст заказа и отправьте на stepmotoren@yandex.ru');
 }
 
 renderCart();

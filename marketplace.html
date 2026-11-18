@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Маркетплейс — ЧПУ-склад | Каталог товаров</title>
-    <meta name="description" content="Маркетплейс ЧПУ-склад: каталог товаров для станков ЧПУ — шпиндели, фрезы, направляющие, драйверы, расходники. Виртуальный склад-магазин.">
+    <meta name="description" content="Маркетплейс ЧПУ-склад: каталог товаров для станков ЧПУ — шпиндели, фрезы, направляющие, драйверы, расходники.">
     <link rel="stylesheet" href="style.css">
     <style>
         .marketplace-layout { display: flex; gap: 24px; margin-top: 10px; }
@@ -17,13 +17,11 @@
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
         .search-bar { display: flex; gap: 8px; max-width: 400px; flex: 1; }
         .search-bar input { flex: 1; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; }
-        .search-bar button, .cart-link { background: #0d6efd; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; text-decoration: none; }
-        .cart-link { position: relative; }
-        .cart-count { position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+        .search-bar button { background: #0d6efd; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
         .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: 0.2s; }
         .product-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
-        .product-image { height: 160px; background: #f0f2f5; display: flex; align-items: center; justify-content: center; color: #888; font-size: 0.85rem; }
+        .product-image { height: 160px; background: linear-gradient(135deg, #f0f2f5, #e0e4e8); display: flex; align-items: center; justify-content: center; color: #666; font-size: 0.85rem; text-align: center; padding: 10px; }
         .product-info { padding: 14px; }
         .product-title { font-weight: 600; margin: 0 0 6px; font-size: 0.95rem; line-height: 1.3; }
         .product-price { font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin: 6px 0; }
@@ -55,6 +53,7 @@
                 <li><a href="equipment.html">Оборудование</a></li>
                 <li><a href="marketplace.html" class="active">Marketplace</a></li>
                 <li><a href="cart.html">Корзина <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
+                <li><a href="generate-card.html">Генератор карточек</a></li>
                 <li><a href="https://universal-cnc.vercel.app/chat.html" target="_blank" rel="noopener">Обучение</a></li>
             </ul>
         </nav>
@@ -62,7 +61,7 @@
 </header>
 
 <main>
-    <div class="marketplace-header" style="text-align:center; margin-bottom:20px;">
+    <div style="text-align:center; margin-bottom:20px;">
         <h1>Marketplace ЧПУ-склад</h1>
         <p>Виртуальный склад-магазин. Каталог товаров для станков ЧПУ.</p>
     </div>
@@ -77,6 +76,7 @@
                 <button data-cat="mechanics">Механика и направляющие</button>
                 <button data-cat="electronics">Электроника</button>
                 <button data-cat="consumables">Расходники</button>
+                <button data-cat="software">ПО и аксессуары</button>
             </div>
         </aside>
 
@@ -105,15 +105,21 @@
 <script>
 const products = [
     { id: 'spindle-2.2', title: 'Шпиндель для ЧПУ 2.2 кВт', price: 18500, cat: 'spindle', desc: 'Водяное охлаждение, 24000 об/мин, ER20' },
-    { id: 'spindle-1.5', title: 'Шпиндель 1.5 кВт с водяным охлаждением', price: 14900, cat: 'spindle', desc: 'Для станков 3040/4060, надёжный' },
+    { id: 'spindle-1.5', title: 'Шпиндель 1.5 кВт с водяным охлаждением', price: 14900, cat: 'spindle', desc: 'Для станков 3040/4060' },
+    { id: 'spindle-800', title: 'Шпиндель 0.8 кВт воздушное охлаждение', price: 8900, cat: 'spindle', desc: 'Компактный, для небольших станков' },
     { id: 'frezy-set', title: 'Комплект фрез для ЧПУ (10 шт)', price: 4200, cat: 'tools', desc: 'По дереву, акрилу, пластику' },
-    { id: 'freza-6mm', title: 'Фреза спиральная 6 мм (однозаходная)', price: 890, cat: 'tools', desc: 'Для дерева и акрила' },
-    { id: 'guides-hgr', title: 'Линейные направляющие HGR15 (комплект)', price: 9200, cat: 'mechanics', desc: 'Для осей X/Y, высокая точность' },
+    { id: 'freza-6mm', title: 'Фреза спиральная 6 мм', price: 890, cat: 'tools', desc: 'Однозаходная, для дерева' },
+    { id: 'freza-3mm', title: 'Фреза концевая 3 мм', price: 450, cat: 'tools', desc: 'Твёрдосплавная' },
+    { id: 'guides-hgr', title: 'Линейные направляющие HGR15', price: 9200, cat: 'mechanics', desc: 'Комплект для осей X/Y' },
     { id: 'ballscrew', title: 'ШВП 1605 (500 мм) с гайкой', price: 6800, cat: 'mechanics', desc: 'Шарико-винтовая передача' },
-    { id: 'driver-tb6600', title: 'Драйвер шагового двигателя TB6600', price: 2900, cat: 'electronics', desc: '4 А, надёжный' },
-    { id: 'stepper-nema23', title: 'Шаговый двигатель NEMA 23 (2.8 Нм)', price: 4500, cat: 'electronics', desc: 'Для станков ЧПУ' },
-    { id: 'collet-set', title: 'Набор цанг ER11 (13 шт)', price: 1800, cat: 'consumables', desc: 'Для шпинделей с ER11' },
-    { id: 'coolant', title: 'СОЖ для чПУ (5 л)', price: 1200, cat: 'consumables', desc: 'Смазочно-охлаждающая жидкость' }
+    { id: 'coupler', title: 'Муфта соединительная 8x8', price: 650, cat: 'mechanics', desc: 'Для шаговых двигателей' },
+    { id: 'driver-tb6600', title: 'Драйвер TB6600 4А', price: 2900, cat: 'electronics', desc: 'Для шаговых двигателей' },
+    { id: 'stepper-nema23', title: 'Шаговый двигатель NEMA 23', price: 4500, cat: 'electronics', desc: '2.8 Н·м' },
+    { id: 'controller-grbl', title: 'Контроллер GRBL на Arduino', price: 3200, cat: 'electronics', desc: 'Готовый к работе' },
+    { id: 'collet-set', title: 'Набор цанг ER11 (13 шт)', price: 1800, cat: 'consumables', desc: 'Для шпинделей ER11' },
+    { id: 'coolant', title: 'СОЖ для ЧПУ 5 л', price: 1200, cat: 'consumables', desc: 'Смазочно-охлаждающая жидкость' },
+    { id: 'bit-set', title: 'Набор свёрел для ЧПУ', price: 980, cat: 'tools', desc: 'Разные диаметры' },
+    { id: 'cncv4-license', title: 'Лицензия CNCV4 (расширенная)', price: 0, cat: 'software', desc: 'Программа управления (бесплатно для клиентов)' }
 ];
 
 let currentCat = 'all';
@@ -140,10 +146,10 @@ function renderProducts() {
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
-            <div class="product-image">Фото товара</div>
+            <div class="product-image">Фото<br>${p.title.split(' ')[0]}</div>
             <div class="product-info">
                 <h3 class="product-title">${p.title}</h3>
-                <div class="product-price">${p.price.toLocaleString('ru')} ₽</div>
+                <div class="product-price">${p.price ? p.price.toLocaleString('ru') + ' ₽' : 'Бесплатно'}</div>
                 <p class="product-desc">${p.desc}</p>
                 <div class="product-actions">
                     <button class="btn btn-primary" onclick="addToCart('${p.id}')">В корзину</button>
