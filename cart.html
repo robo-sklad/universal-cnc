@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина — ЧПУ-склад Marketplace</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cart-container { max-width: 800px; margin: 0 auto; }
+        .cart-item { display: flex; gap: 16px; background: white; padding: 16px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); align-items: center; }
+        .cart-item img, .item-placeholder { width: 80px; height: 80px; background: #f0f2f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 0.8rem; }
+        .item-details { flex: 1; }
+        .item-title { font-weight: 600; margin: 0 0 4px; }
+        .item-price { color: #0d6efd; font-weight: bold; }
+        .qty { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+        .qty button { width: 28px; height: 28px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; }
+        .remove { background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+        .total { text-align: right; font-size: 1.4rem; font-weight: bold; margin: 20px 0; }
+        .checkout-btn { background: #0d6efd; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
+        .empty-cart { text-align: center; padding: 60px; color: #666; }
+    </style>
+</head>
+<body>
+<header>
+    <div class="nav-container">
+        <div class="logo">
+            <img src="logo.jpg" alt="ЧПУ-Склад">
+            ЧПУ склад
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="program.html">Программы</a></li>
+                <li><a href="equipment.html">Оборудование</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="cart.html" class="active">Корзина <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
+                <li><a href="https://universal-cnc.vercel.app/chat.html" target="_blank" rel="noopener">Обучение</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="cart-container">
+        <h1>Корзина</h1>
+        <div id="cartItems"></div>
+        <div id="emptyCart" class="empty-cart" style="display:none;">
+            <h3>Корзина пуста</h3>
+            <p><a href="marketplace.html">Перейти в Marketplace</a></p>
+        </div>
+        <div id="cartFooter" style="display:none;">
+            <div class="total">Итого: <span id="totalSum">0</span> ₽</div>
+            <button class="checkout-btn" onclick="checkout()">Оформить заказ</button>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>© 2026 ЧПУ-Склад • Все права защищены</p>
+</footer>
+
+<script>
+const products = [
+    { id: 'spindle-2.2', title: 'Шпиндель для ЧПУ 2.2 кВт', price: 18500 },
+    { id: 'spindle-1.5', title: 'Шпиндель 1.5 кВт с водяным охлаждением', price: 14900 },
+    { id: 'frezy-set', title: 'Комплект фрез для ЧПУ (10 шт)', price: 4200 },
+    { id: 'freza-6mm', title: 'Фреза спиральная 6 мм (однозаходная)', price: 890 },
+    { id: 'guides-hgr', title: 'Линейные направляющие HGR15 (комплект)', price: 9200 },
+    { id: 'ballscrew', title: 'ШВП 1605 (500 мм) с гайкой', price: 6800 },
+    { id: 'driver-tb6600', title: 'Драйвер шагового двигателя TB6600', price: 2900 },
+    { id: 'stepper-nema23', title: 'Шаговый двигатель NEMA 23 (2.8 Нм)', price: 4500 },
+    { id: 'collet-set', title: 'Набор цанг ER11 (13 шт)', price: 1800 },
+    { id: 'coolant', title: 'СОЖ для ЧПУ (5 л)', price: 1200 }
+];
+
+function getProduct(id) { return products.find(p => p.id === id); }
+
+function renderCart() {
+    const cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
+    const itemsEl = document.getElementById('cartItems');
+    const emptyEl = document.getElementById('emptyCart');
+    const footerEl = document.getElementById('cartFooter');
+    itemsEl.innerHTML = '';
+    let total = 0;
+    let count = 0;
+
+    for (const [id, qty] of Object.entries(cart)) {
+        if (qty <= 0) continue;
+        const p = getProduct(id);
+        if (!p) continue;
+        count += qty;
+        total += p.price * qty;
+
+        const item = document.createElement('div');
+        item.className = 'cart-item';
+        item.innerHTML = `
+            <div class="item-placeholder">Фото</div>
+            <div class="item-details">
+                <div class="item-title">${p.title}</div>
+                <div class="item-price">${p.price.toLocaleString('ru')} ₽</div>
+                <div class="qty">
+                    <button onclick="changeQty('${id}', -1)">−</button>
+                    <span>${qty}</span>
+                    <button onclick="changeQty('${id}', 1)">+</button>
+                </div>
+            </div>
+            <button class="remove" onclick="removeItem('${id}')">Удалить</button>
+        `;
+        itemsEl.appendChild(item);
+    }
+
+    document.getElementById('headerCartCount').textContent = count;
+    document.getElementById('totalSum').textContent = total.toLocaleString('ru');
+
+    if (count === 0) {
+        emptyEl.style.display = 'block';
+        footerEl.style.display = 'none';
+    } else {
+        emptyEl.style.display = 'none';
+        footerEl.style.display = 'block';
+    }
+}
+
+function changeQty(id, delta) {
+    const cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
+    cart[id] = (cart[id] || 0) + delta;
+    if (cart[id] <= 0) delete cart[id];
+    localStorage.setItem('cncCart', JSON.stringify(cart));
+    renderCart();
+}
+
+function removeItem(id) {
+    const cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
+    delete cart[id];
+    localStorage.setItem('cncCart', JSON.stringify(cart));
+    renderCart();
+}
+
+function checkout() {
+    alert('Спасибо за заказ! \n\nВ данный момент оформление заказа — демо. \nСвяжитесь с нами по телефону +7 (961) 991-01-76 или напишите на stepmotoren@yandex.ru');
+}
+
+renderCart();
+</script>
+</body>
+</html>
