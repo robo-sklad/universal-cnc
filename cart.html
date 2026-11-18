@@ -87,6 +87,7 @@
     <p>© 2026 ЧПУ-Склад • Все права защищены</p>
 </footer>
 
+<script src="data/spindles.js"></script>
 <script>
 const products = [
     { id: 'spindle-2.2', title: 'Шпиндель для ЧПУ 2.2 кВт', price: 18500 },
@@ -106,6 +107,15 @@ const products = [
     { id: 'bit-set', title: 'Набор свёрел для ЧПУ', price: 980 },
     { id: 'cncv4-license', title: 'Лицензия CNCV4 (расширенная)', price: 0 }
 ];
+// Шпиндели из data/spindles.js (единый источник данных)
+if (typeof SPINDLES !== 'undefined') {
+    SPINDLES.forEach(s => {
+        const item = { id: s.id, title: spindleTitle(s), price: s.price, priceOnRequest: !!s.priceOnRequest };
+        const i = products.findIndex(p => p.id === s.id);
+        if (i >= 0) products[i] = Object.assign({}, products[i], { priceOnRequest: item.priceOnRequest });
+        else products.push(item);
+    });
+}
 
 function getProduct(id) { return products.find(p => p.id === id); }
 
@@ -131,7 +141,7 @@ function renderCart() {
             <div class="item-placeholder">Фото</div>
             <div class="item-details">
                 <div class="item-title">${p.title}</div>
-                <div class="item-price">${p.price ? p.price.toLocaleString('ru') + ' ₽' : 'Бесплатно'}</div>
+                <div class="item-price">${p.price ? p.price.toLocaleString('ru') + ' ₽' : (p.priceOnRequest ? 'Цена по запросу' : 'Бесплатно')}</div>
                 <div class="qty">
                     <button onclick="changeQty('${id}', -1)">−</button>
                     <span>${qty}</span>
@@ -178,7 +188,7 @@ function submitOrder(e) {
     for (const [id, qty] of Object.entries(cart)) {
         const p = getProduct(id);
         if (p && qty > 0) {
-            orderText += `${p.title} × ${qty} = ${(p.price || 0) * qty} ₽\n`;
+            orderText += p.priceOnRequest ? `${p.title} × ${qty} = цена по запросу\n` : `${p.title} × ${qty} = ${(p.price || 0) * qty} ₽\n`;
             total += (p.price || 0) * qty;
         }
     }
