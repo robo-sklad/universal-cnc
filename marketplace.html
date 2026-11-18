@@ -21,7 +21,9 @@
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
         .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: 0.2s; }
         .product-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
-        .product-image { height: 160px; background: linear-gradient(135deg, #f0f2f5, #e0e4e8); display: flex; align-items: center; justify-content: center; color: #666; font-size: 0.85rem; text-align: center; padding: 10px; }
+        .product-image { height: 180px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; }
+        .product-image .placeholder { color: #888; font-size: 0.85rem; text-align: center; padding: 10px; }
         .product-info { padding: 14px; }
         .product-title { font-weight: 600; margin: 0 0 6px; font-size: 0.95rem; line-height: 1.3; }
         .product-price { font-size: 1.25rem; font-weight: bold; color: #0d6efd; margin: 6px 0; }
@@ -103,22 +105,18 @@
 
 <script>
 const products = [
-    { id: 'spindle-2.2', title: 'Шпиндель для ЧПУ 2.2 кВт', price: 18500, cat: 'spindle', desc: 'Водяное охлаждение, 24000 об/мин, ER20' },
-    { id: 'spindle-1.5', title: 'Шпиндель 1.5 кВт с водяным охлаждением', price: 14900, cat: 'spindle', desc: 'Для станков 3040/4060' },
+    { id: 'spindle-2.2', title: 'Шпиндель для ЧПУ 2.2 кВт GDZ', price: 18500, cat: 'spindle', desc: 'Водяное охлаждение, 24000 об/мин, ER20, диаметр 80 мм', img: 'https://nastanok.ru/files/resize/photo_5372976617141421138_y_1.720x720w.jpg' },
+    { id: 'spindle-1.5', title: 'Шпиндель 1.5 кВт с водяным охлаждением', price: 14900, cat: 'spindle', desc: 'Для станков 3040/4060, надёжный' },
     { id: 'spindle-800', title: 'Шпиндель 0.8 кВт воздушное охлаждение', price: 8900, cat: 'spindle', desc: 'Компактный, для небольших станков' },
     { id: 'frezy-set', title: 'Комплект фрез для ЧПУ (10 шт)', price: 4200, cat: 'tools', desc: 'По дереву, акрилу, пластику' },
-    { id: 'freza-6mm', title: 'Фреза спиральная 6 мм', price: 890, cat: 'tools', desc: 'Однозаходная, для дерева' },
-    { id: 'freza-3mm', title: 'Фреза концевая 3 мм', price: 450, cat: 'tools', desc: 'Твёрдосплавная' },
-    { id: 'guides-hgr', title: 'Линейные направляющие HGR15', price: 9200, cat: 'mechanics', desc: 'Комплект для осей X/Y' },
-    { id: 'ballscrew', title: 'ШВП 1605 (500 мм) с гайкой', price: 6800, cat: 'mechanics', desc: 'Шарико-винтовая передача' },
-    { id: 'coupler', title: 'Муфта соединительная 8x8', price: 650, cat: 'mechanics', desc: 'Для шаговых двигателей' },
-    { id: 'driver-tb6600', title: 'Драйвер TB6600 4А', price: 2900, cat: 'electronics', desc: 'Для шаговых двигателей' },
-    { id: 'stepper-nema23', title: 'Шаговый двигатель NEMA 23', price: 4500, cat: 'electronics', desc: '2.8 Н·м' },
-    { id: 'controller-grbl', title: 'Контроллер GRBL на Arduino', price: 3200, cat: 'electronics', desc: 'Готовый к работе' },
-    { id: 'collet-set', title: 'Набор цанг ER11 (13 шт)', price: 1800, cat: 'consumables', desc: 'Для шпинделей ER11' },
-    { id: 'coolant', title: 'СОЖ для ЧПУ 5 л', price: 1200, cat: 'consumables', desc: 'Смазочно-охлаждающая жидкость' },
-    { id: 'bit-set', title: 'Набор свёрел для ЧПУ', price: 980, cat: 'tools', desc: 'Разные диаметры' },
-    { id: 'cncv4-license', title: 'Лицензия CNCV4 (расширенная)', price: 0, cat: 'software', desc: 'Программа управления (бесплатно для клиентов)' }
+    { id: 'freza-6mm', title: 'Фреза спиральная 6 мм однозаходная', price: 890, cat: 'tools', desc: 'Для дерева и акрила' },
+    { id: 'guides-hgr15', title: 'Линейные направляющие HGR15 комплект', price: 9200, cat: 'mechanics', desc: 'Для осей X/Y, высокая точность' },
+    { id: 'ballscrew-1605', title: 'ШВП 1605 (500 мм) с гайкой', price: 6800, cat: 'mechanics', desc: 'Шарико-винтовая передача' },
+    { id: 'driver-tb6600', title: 'Драйвер шагового двигателя TB6600', price: 2900, cat: 'electronics', desc: '4 А, надёжный' },
+    { id: 'stepper-nema23', title: 'Шаговый двигатель NEMA 23 (2.8 Нм)', price: 4500, cat: 'electronics', desc: 'Для станков ЧПУ' },
+    { id: 'collet-er20', title: 'Набор цанг ER20 (13 шт)', price: 2100, cat: 'consumables', desc: 'Для шпинделей с ER20' },
+    { id: 'coolant-5l', title: 'СОЖ для ЧПУ (5 л)', price: 1200, cat: 'consumables', desc: 'Смазочно-охлаждающая жидкость' },
+    { id: 'cncv4', title: 'Программа CNCV4 (расширенная)', price: 0, cat: 'software', desc: 'Управление станками ЧПУ' }
 ];
 
 let currentCat = 'all';
@@ -142,10 +140,18 @@ function renderProducts() {
 
         visible++;
         const isFav = favs.includes(p.id);
+        const imgHtml = p.img 
+            ? `<img src="${p.img}" alt="${p.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`
+            : '';
+        const placeholder = `<div class="placeholder" ${p.img ? 'style="display:none"' : ''}>${p.title.split(' ')[0]}</div>`;
+
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
-            <div class="product-image">Фото<br>${p.title.split(' ')[0]}</div>
+            <div class="product-image">
+                ${imgHtml}
+                ${placeholder}
+            </div>
             <div class="product-info">
                 <h3 class="product-title">${p.title}</h3>
                 <div class="product-price">${p.price ? p.price.toLocaleString('ru') + ' ₽' : 'Бесплатно'}</div>
