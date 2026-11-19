@@ -1,0 +1,46 @@
+# Оплата через RedotPay Connect (Paylink)
+
+## Как это работает
+
+1. Покупатель на странице `payment-nonresident.html` вводит согласованную сумму, валюту и (по желанию) e-mail и комментарий, затем нажимает «Оплатить через RedotPay».
+2. Страница отправляет запрос на серверную функцию `api/redotpay/create-order` (Vercel).
+3. Функция формирует заказ, подписывает запрос приватным ключом (SHA256withRSA) и вызывает RedotPay `POST /openapi/v2/order/create` (поле `env: "WEB"`).
+4. RedotPay возвращает ссылку на страницу оплаты (`data.webUrl`), функция отдаёт её странице как `payUrl`, и покупатель перенаправляется в RedotPay.
+5. После оплаты RedotPay возвращает покупателя на `payment-nonresident.html?redotpay=return&order=...` и отправляет вебхук на `api/redotpay/notify`. Обработчик проверяет подпись публичным ключом RedotPay и пишет результат в логи Vercel (Deployments → Functions / Logs).
+
+Документация RedotPay: https://docs.redotpay.com/docs/en/api-reference
+
+## Переменные окружения (Vercel → Project Settings → Environment Variables)
+
+| Переменная | Обязательно | Значение |
+| --- | --- | --- |
+| `REDOTPAY_APP_KEY` | да | App Key из кабинета RedotPay (Live) |
+| `REDOTPAY_PRIVATE_KEY` | да | приватный ключ RSA в формате PKCS#8 PEM (`-----BEGIN PRIVATE KEY-----`), парный к публичному ключу, загруженному в кабинет RedotPay. Можно вставить с переводами строк или одной строкой с `\n` |
+| `REDOTPAY_API_VERSION` | нет | номер загрузки публичного ключа в кабинете (заголовок `X-R-KEY-VERSION`), по умолчанию `1` |
+| `REDOTPAY_BASE_URL` | нет | по умолчанию `https://acquirer.redotpay.com` (live). Для теста: `https://acquirersandbox.rp-2023app.com` и sandbox App Key |
+| `SITE_URL` | нет | адрес сайта для возврата после оплаты, по умолчанию `https://xn----8sbmwfvpo8a.xn--p1ai` |
+| `REDOTPAY_CURRENCIES` | нет | валюты счёта через запятую, по умолчанию `USD` (если добавляете валюты, добавьте их и в список на странице) |
+| `REDOTPAY_MAX_AMOUNT` | нет | максимальная сумма одного платежа, по умолчанию `50000` |
+| `REDOTPAY_MERCHANT_NAME` | нет | имя продавца на странице оплаты RedotPay |
+| `REDOTPAY_ALLOWED_ORIGINS` | нет | дополнительные разрешённые сайты (CORS) через запятую |
+| `NODEJS_HELPERS` | рекомендуется | `0` — чтобы обработчик вебхука получал «сырое» тело запроса для точной проверки подписи |
+
+Секреты задавайте с отметкой Sensitive, для окружений Production (и Preview, если нужно тестировать на превью). После изменения переменных сделайте Redeploy.
+
+В кабинете RedotPay укажите адрес вебхука: `https://universal-cnc.vercel.app/api/redotpay/notify` (или адрес на вашем домене, если сайт переедет на Vercel).
+
+## Важно: где работает сайт
+
+Боевой сайт `чпу-склад.рф` сейчас обслуживает **GitHub Pages** (файл `CNAME`, ветка `main`). GitHub Pages отдаёт только статические файлы и **не выполняет** функции из папки `api/`. Функции работают только на Vercel (публичный адрес боевого деплоя: `https://universal-cnc.vercel.app`).
+
+Варианты:
+
+- **(а) Перенести хостинг домена на Vercel.** Добавить `чпу-склад.рф` в Vercel → Project Settings → Domains и переключить DNS на Vercel, отключить GitHub Pages. Тогда `data-api-base` оставить пустым — кнопка будет обращаться к тому же сайту.
+- **(б) Оставить GitHub Pages.** В `payment-nonresident.html` у блока `<div id="redotpay-widget" ...>` указать `data-api-base="https://universal-cnc.vercel.app"`. Запросы с боевого домена к этому адресу уже разрешены (CORS).
+
+## Перед запуском
+
+- Задать переменные окружения и сделать Redeploy.
+- Проверить, что приватный ключ парный к публичному ключу, загруженному в кабинет RedotPay, и номер версии совпадает.
+- Сделать тестовый платёж на небольшую сумму и проверить логи вебхука.
+- Уточнить у юриста порядок приёма такой оплаты с учётом валютного контроля РФ.

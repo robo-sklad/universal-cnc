@@ -33,9 +33,19 @@
         .contacts { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin: 20px 0; }
         .contacts p { margin: 8px 0; }
         .contacts a { font-weight: 600; }
-        .redotpay-placeholder { background: #f8f9fa; border: 1px dashed #999; padding: 24px 22px; border-radius: 8px; margin: 16px 0 24px; color: #555; text-align: center; }
-        .redotpay-placeholder p { margin: 0 0 14px; }
-        .redotpay-placeholder .redotpay-btn { display: inline-block; background: #c5c9ce; color: #555; border: none; padding: 12px 22px; border-radius: 8px; font-size: 1rem; cursor: not-allowed; }
+        .redotpay-box { background: #fff; padding: 22px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin: 16px 0 24px; }
+        .redotpay-box p { margin: 0 0 12px; }
+        .redotpay-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+        .redotpay-form label { display: flex; flex-direction: column; font-size: 0.95rem; color: #333; gap: 6px; }
+        .redotpay-form .wide { grid-column: 1 / -1; }
+        .redotpay-form input, .redotpay-form select { padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
+        .redotpay-btn { background: #0d6efd; color: #fff; border: none; padding: 12px 22px; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+        .redotpay-btn:disabled { background: #c5c9ce; color: #555; cursor: wait; }
+        .redotpay-msg { margin-top: 12px; min-height: 1.2em; }
+        .redotpay-msg.error { color: #b02a37; }
+        .redotpay-msg.info { color: #0a58ca; }
+        .redotpay-note { font-size: 0.9rem; color: #666; }
+        @media (max-width: 600px) { .redotpay-form { grid-template-columns: 1fr; } }
     </style>
 
 <!-- Yandex.Metrika counter -->
@@ -86,10 +96,39 @@
 
         <h2>Оплата криптовалютой через RedotPay</h2>
         <p>Оплата проходит через платёжный шлюз RedotPay Connect. Средства зачисляются на иностранный счёт продавца. Условия согласовываются индивидуально, с учётом применимого законодательства. Размещение этой информации носит справочный характер и не является обещанием или гарантией проведения платежа в конкретной ситуации.</p>
-        <!-- Заглушка: сюда позже вставить кнопку, виджет или ссылку RedotPay Connect (скрипт, кнопку или ссылку платёжного шлюза). Пока интеграция не подключена — внешних запросов и скриптов шлюза нет. -->
-        <div id="redotpay-widget" class="redotpay-placeholder">
-            <p>Интеграция RedotPay будет подключена</p>
-            <button type="button" class="redotpay-btn" disabled>Интеграция RedotPay будет подключена</button>
+        <!--
+            Форма оплаты RedotPay Paylink. Кнопка отправляет сумму на серверную функцию
+            /api/redotpay/create-order (Vercel), которая подписывает запрос и создаёт заказ в RedotPay,
+            после чего покупатель перенаправляется на страницу оплаты RedotPay.
+            data-api-base — адрес, где работают серверные функции:
+              пусто = тот же сайт (подходит, если сайт открыт на Vercel);
+              для боевого сайта на GitHub Pages здесь нужно указать адрес деплоя Vercel,
+              например data-api-base="https://universal-cnc.vercel.app" (без "/" в конце).
+            Ключи RedotPay хранятся только в переменных окружения Vercel, на странице их нет.
+        -->
+        <div id="redotpay-widget" class="redotpay-box" data-api-base="">
+            <p>Сумму и валюту к оплате сообщает менеджер после подтверждения заказа. Укажите согласованную сумму и нажмите кнопку: откроется защищённая страница RedotPay, где можно выбрать способ оплаты криптовалютой.</p>
+            <form id="redotpay-form" class="redotpay-form" novalidate>
+                <label>Сумма к оплате
+                    <input type="number" name="amount" min="1" max="50000" step="0.01" inputmode="decimal" required placeholder="Например, 250">
+                </label>
+                <label>Валюта счёта
+                    <select name="currency">
+                        <option value="USD" selected>USD</option>
+                    </select>
+                </label>
+                <label class="wide">E-mail для связи (необязательно)
+                    <input type="email" name="email" maxlength="254" autocomplete="email" placeholder="name@example.com">
+                </label>
+                <label class="wide">Номер заказа или комментарий (необязательно)
+                    <input type="text" name="orderComment" maxlength="80" placeholder="Например, заказ от 19.11 или модель оборудования">
+                </label>
+                <div class="wide">
+                    <button type="submit" class="redotpay-btn">Оплатить через RedotPay</button>
+                </div>
+            </form>
+            <div id="redotpay-msg" class="redotpay-msg" role="status" aria-live="polite"></div>
+            <p class="redotpay-note">Перед оплатой убедитесь, что сумма согласована с менеджером. Проведение платежа зависит от правил RedotPay и применимого законодательства.</p>
         </div>
 
         <h2>Доставка</h2>
@@ -127,6 +166,60 @@
     <p>© 2026 ЧПУ-Склад • Все права защищены</p>
     <p><a href="payment-nonresident.html">Оплата и доставка для нерезидентов</a></p>
 </footer>
+
+<script>
+(function () {
+    var box = document.getElementById('redotpay-widget');
+    var form = document.getElementById('redotpay-form');
+    var msg = document.getElementById('redotpay-msg');
+    if (!box || !form || !msg) return;
+
+    function show(text, type) {
+        msg.textContent = text;
+        msg.className = 'redotpay-msg' + (type ? ' ' + type : '');
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('redotpay') === 'return') {
+        show('Вы вернулись со страницы оплаты RedotPay. Если оплата завершена, мы получим уведомление и свяжемся с вами. Номер платежа: ' + (params.get('order') || '—') + '.', 'info');
+    }
+
+    var apiBase = (box.getAttribute('data-api-base') || '').replace(/\/+$/, '');
+    var endpoint = apiBase + '/api/redotpay/create-order';
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var amount = parseFloat(String(form.amount.value).replace(',', '.'));
+        if (!(amount > 0)) { show('Укажите сумму больше нуля.', 'error'); return; }
+        var btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        show('Создаём платёж, подождите…', 'info');
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                amount: amount,
+                currency: form.currency.value,
+                email: form.email.value.trim(),
+                orderComment: form.orderComment.value.trim()
+            })
+        }).then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (data) { return { ok: r.ok, data: data }; });
+        }).then(function (res) {
+            if (res.ok && res.data && res.data.payUrl && /^https:\/\//i.test(res.data.payUrl)) {
+                show('Переходим на страницу оплаты RedotPay…', 'info');
+                window.location.href = res.data.payUrl;
+                return;
+            }
+            show((res.data && res.data.message) || 'Не удалось создать платёж. Свяжитесь с нами: stepmotoren@yandex.ru.', 'error');
+            btn.disabled = false;
+        }).catch(function () {
+            show('Оплата через RedotPay сейчас недоступна. Свяжитесь с нами: stepmotoren@yandex.ru.', 'error');
+            btn.disabled = false;
+        });
+    });
+})();
+</script>
 
 </body>
 </html>
