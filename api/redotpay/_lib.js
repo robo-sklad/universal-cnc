@@ -89,6 +89,7 @@ const ALLOWED_ORIGINS = new Set([
   'https://www.xn----8sbmwfvpo8a.xn--p1ai',
   // GitHub Pages сейчас не принуждает HTTPS, поэтому страница может открыться и по http
   'http://xn----8sbmwfvpo8a.xn--p1ai',
+  'http://www.xn----8sbmwfvpo8a.xn--p1ai',
 ]);
 // Деплои и превью Vercel этого проекта: universal-<...>-aleksandrs-projects-98e3f756.vercel.app
 const VERCEL_PREVIEW_RE = /^https:\/\/universal-[a-z0-9-]+-aleksandrs-projects-98e3f756\.vercel\.app$/;
