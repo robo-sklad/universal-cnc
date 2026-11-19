@@ -98,6 +98,15 @@ footer {
     margin-top: 40px;
 }
 
+footer a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+footer a:hover {
+    color: #e7f1ff;
+}
+
 a {
     color: #0d6efd;
 }
