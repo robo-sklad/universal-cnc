@@ -1,0 +1,42 @@
+﻿Артикул;Тип;Название;id (ключ корзины);Ссылка
+10001;Станок;Фрезерно-гравировальный станок ЧПУ 3040 / 4060 1500 Вт;cnc-3040;https://чпу-склад.рф/equipment/cnc-3040.html
+20001;Шпиндель;"Шпиндель Changsheng GDZ-80-1.5 80×213 1,5 кВт";cs-80-1.5-skf;https://чпу-склад.рф/spindles/changsheng-80-1-5kw-skf.html
+20002;Шпиндель;Шпиндель Changsheng GDZ-80-2.2B 2.2 кВт;cs-80-2.2-7;https://чпу-склад.рф/spindles/changsheng-gdz-80-2-2b.html
+20003;Шпиндель;Шпиндель Changsheng GDZ-80-2.2B SKF (экспортное исполнение) 2.2 кВт;cs-80-2.2-skf;https://чпу-склад.рф/spindles/changsheng-gdz-80-2-2b-skf.html
+20004;Шпиндель;Шпиндель Changsheng GDZ-80F-1.5 80×195 ER11 (воздушное) 1.5 кВт;cs-80f-1.5-air-er11;https://чпу-склад.рф/spindles/changsheng-gdz-80f-1-5-er11-skf.html
+20005;Шпиндель;Шпиндель Changsheng GDZ-80-2.2B(4) 80×238 2.2 кВт;cs-80-2.2b4-238;https://чпу-склад.рф/spindles/changsheng-gdz-80-2-2b4-80x238.html
+20006;Шпиндель;"Шпиндель Changsheng Ø85 2,2 кВт (380 В)";cs-85-2.2-380;https://чпу-склад.рф/spindles/changsheng-85-2-2kw-380v.html
+20007;Шпиндель;Шпиндель Changsheng GDZ-100-3.0 (220 В) 3.0 кВт;cs-100-3kw-220;https://чпу-склад.рф/spindles/changsheng-gdz-100-3-0-220v.html
+20008;Шпиндель;Шпиндель Changsheng GDZ-100-3.0 (380 В) 3.0 кВт;cs-100-3kw-380;https://чпу-склад.рф/spindles/changsheng-100-3kw-380v.html
+20009;Шпиндель;Шпиндель Changsheng GDZ-100-4.5 (220 В) 4.5 кВт;cs-100-4.5-220;https://чпу-склад.рф/spindles/changsheng-100-4-5kw-220v.html
+20010;Шпиндель;Шпиндель Changsheng GDZ-100-4.5 (380 В) 4.5 кВт;cs-100-4.5-380;https://чпу-склад.рф/spindles/changsheng-100-4-5kw-380v.html
+20011;Шпиндель;Шпиндель Changsheng GDZ-65F-800 (воздушное) 0.8 кВт;cs-65-800-air;https://чпу-склад.рф/spindles/changsheng-65-0-8kw-air.html
+20012;Шпиндель;Шпиндель Changsheng GDZ-80F-2.2 (воздушное) 2.2 кВт;cs-80-2.2-air;https://чпу-склад.рф/spindles/changsheng-80-2-2kw-air.html
+20013;Шпиндель;Шпиндель Changsheng GDZ-125-5.5 5.5 кВт;cs-125-5.5;https://чпу-склад.рф/spindles/changsheng-gdz-125-5-5.html
+20014;Шпиндель;Шпиндель Changsheng GDZ-65-800A 65×158 0.8 кВт;cs-65-800a-158;https://чпу-склад.рф/spindles/changsheng-gdz-65-800a-65x158.html
+20015;Шпиндель;Шпиндель Changsheng GDZ-65-800A 65×195 0.8 кВт;cs-65-800a-195;https://чпу-склад.рф/spindles/changsheng-gdz-65-800a-65x195.html
+20016;Шпиндель;Шпиндель Changsheng GDZ-80-1.5 80×188 1.5 кВт;cs-80-1.5-188;https://чпу-склад.рф/spindles/changsheng-gdz-80-1-5-80x188.html
+20017;Шпиндель;Шпиндель Changsheng GDZ-80-1.5 80×206 (4 подшипника) 1.5 кВт;cs-80-1.5-206;https://чпу-склад.рф/spindles/changsheng-gdz-80-1-5-80x206.html
+20018;Шпиндель;Шпиндель Changsheng GDZ-65-800A (42 000 об/мин) 0.8 кВт;cs-65-800-42k;https://чпу-склад.рф/spindles/changsheng-gdz-65-800a-42000.html
+20019;Шпиндель;"Шпиндель Changsheng GDZ-65-800A 0,8 кВт — комплект из 5 предметов";cs-65-800-kit5;https://чпу-склад.рф/spindles/changsheng-gdz-65-800a-komplekt.html
+20020;Шпиндель;"Шпиндель Changsheng 80×188 1,5 кВт — комплект из 5 предметов";cs-80-1.5-kit5;https://чпу-склад.рф/spindles/changsheng-80-1-5kw-komplekt.html
+20021;Шпиндель;Шпиндель Changsheng GDZ-80F-1.5 (воздушное) 1.5 кВт;cs-80f-1.5-air;https://чпу-склад.рф/spindles/changsheng-gdz-80f-1-5.html
+20022;Шпиндель;Шпиндель Changsheng GDZ-125-5.5 125×320 («пуля») 5.5 кВт;cs-125-5.5-320;https://чпу-склад.рф/spindles/changsheng-gdz-125-5-5-125x320.html
+20023;Шпиндель;Шпиндель Tongsheng THD-65-800C 0.8 кВт;tongsheng-65-0.8;https://чпу-склад.рф/spindles/tongsheng-thd-65-800c.html
+20024;Шпиндель;Шпиндель Tongsheng THD-80-2.2C 2.2 кВт;tongsheng-80-2.2-12k;https://чпу-склад.рф/spindles/tongsheng-thd-80-2-2c.html
+20025;Шпиндель;Шпиндель Tongsheng THD-80-1.5 1.5 кВт;tongsheng-80-1.5;https://чпу-склад.рф/spindles/tongsheng-thd-80-1-5.html
+20026;Шпиндель;"Шпиндель Jingyi серии 6, 2,2 кВт ER20 (квадратный, воздушное)";jingyi-2.2-er20-air;https://чпу-склад.рф/spindles/jingyi-2-2kw-er20-air.html
+20027;Шпиндель;"Шпиндель 6,0 кВт ER32 380 В (квадратный, воздушное)";spindle-6.0-er32-air;https://чпу-склад.рф/spindles/shpindel-6kw-er32-air-380v.html
+20028;Шпиндель;"Шпиндель THD-3.5K 3,5 кВт ER20 380 В (квадратный, воздушное)";thd-3.5k-380;https://чпу-склад.рф/spindles/thd-3-5k-er20-380v.html
+20029;Шпиндель;"Шпиндель 2,2 кВт GDZ";spindle-2.2;https://чпу-склад.рф/spindles/shpindel-2-2kw-gdz.html
+20030;Шпиндель;"Шпиндель 1,5 кВт с водяным охлаждением";spindle-1.5;https://чпу-склад.рф/spindles/shpindel-1-5kw-water.html
+20031;Шпиндель;"Шпиндель 0,8 кВт с воздушным охлаждением";spindle-800;https://чпу-склад.рф/spindles/shpindel-0-8kw-air.html
+30001;Marketplace;Комплект фрез для ЧПУ (10 шт);frezy-set;https://чпу-склад.рф/marketplace.html?q=30001
+30002;Marketplace;Фреза спиральная 6 мм однозаходная;freza-6mm;https://чпу-склад.рф/marketplace.html?q=30002
+30003;Marketplace;Линейные направляющие HGR15 комплект;guides-hgr15;https://чпу-склад.рф/marketplace.html?q=30003
+30004;Marketplace;ШВП 1605 (500 мм) с гайкой;ballscrew-1605;https://чпу-склад.рф/marketplace.html?q=30004
+30005;Marketplace;Драйвер шагового двигателя TB6600;driver-tb6600;https://чпу-склад.рф/marketplace.html?q=30005
+30006;Marketplace;Шаговый двигатель NEMA 23 (2.8 Нм);stepper-nema23;https://чпу-склад.рф/marketplace.html?q=30006
+30007;Marketplace;Набор цанг ER20 (13 шт);collet-er20;https://чпу-склад.рф/marketplace.html?q=30007
+30008;Marketplace;СОЖ для ЧПУ (5 л);coolant-5l;https://чпу-склад.рф/marketplace.html?q=30008
+30009;Marketplace;Программа CNCV4 (расширенная);cncv4;https://чпу-склад.рф/marketplace.html?q=30009

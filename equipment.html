@@ -153,6 +153,9 @@
                 height: 180px;
             }
         }
+        .sku-line { margin: 8px 0; color: #444; font-size: 0.95rem; }
+        .sku-code { font-family: monospace; font-weight: bold; background: #f0f2f5; padding: 1px 6px; border-radius: 4px; user-select: all; color: #222; }
+        .sku-copy { border: 1px solid #ccd; background: #fff; border-radius: 6px; padding: 2px 8px; font-size: 0.8rem; cursor: pointer; }
     </style>
 
 <main>
@@ -177,6 +180,7 @@
             <div class="product-card">
                     <div class="product-info">
                     <h3>ЧПУ3040(4060) (1500 Вт)</h3>
+                    <div class="sku-line">Артикул: <span class="sku-code">10001</span> <button type="button" class="sku-copy" onclick="copySku('10001', this)" title="Скопировать артикул">Копировать</button></div>
                     <p>Настольный фрезерный станок с ЧПУ<br>
                        Рабочее поле: 300(400)×400(600)×100 мм<br>
                        ШВП + профильные рельсы<br>
@@ -238,5 +242,6 @@
     });
 </script>
 
+<script src="data/catalog.js"></script>
 </body>
 </html>

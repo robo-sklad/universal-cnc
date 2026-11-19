@@ -40,6 +40,9 @@
             .sidebar { width: 100%; }
             .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
         }
+        .sku-line { margin: 0 0 6px; color: #555; font-size: 0.82rem; }
+        .sku-code { font-family: monospace; font-weight: bold; background: #f0f2f5; padding: 1px 5px; border-radius: 4px; user-select: all; color: #222; }
+        .sku-copy { border: 1px solid #ccd; background: #fff; border-radius: 6px; padding: 1px 6px; font-size: 0.75rem; cursor: pointer; }
     </style>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -98,7 +101,7 @@
         <div class="main-content">
             <div class="top-bar">
                 <div class="search-bar">
-                    <input type="text" placeholder="Поиск товаров..." id="searchInput">
+                    <input type="text" placeholder="Поиск по названию или артикулу..." id="searchInput">
                     <button onclick="filterProducts()">Найти</button>
                 </div>
             </div>
@@ -119,25 +122,19 @@
 </footer>
 
 <script src="data/spindles.js"></script>
+<script src="data/catalog.js"></script>
 <script>
 const products = [
     { id: 'changsheng-series', title: 'Шпиндели для ЧПУ — все модели (Changsheng, Tongsheng и др.)', price: 18500, cat: 'spindle', desc: 'Все шпиндели в одном разделе: Changsheng GDZ 0.8–5.5 кВт, Tongsheng THD-65/THD-80 и другие; водяное/воздушное охлаждение, ER11–ER25. Подробнее см. раздел', img: '', link: 'spindle-changsheng.html' },
     // Отдельные шпиндели подставляются из data/spindles.js (единый источник), у каждого своя страница spindles/<slug>.html
-    { id: 'frezy-set', title: 'Комплект фрез для ЧПУ (10 шт)', price: 4200, cat: 'tools', desc: 'По дереву, акрилу, пластику' },
-    { id: 'freza-6mm', title: 'Фреза спиральная 6 мм однозаходная', price: 890, cat: 'tools', desc: 'Для дерева и акрила' },
-    { id: 'guides-hgr15', title: 'Линейные направляющие HGR15 комплект', price: 9200, cat: 'mechanics', desc: 'Для осей X/Y, высокая точность' },
-    { id: 'ballscrew-1605', title: 'ШВП 1605 (500 мм) с гайкой', price: 6800, cat: 'mechanics', desc: 'Шарико-винтовая передача' },
-    { id: 'driver-tb6600', title: 'Драйвер шагового двигателя TB6600', price: 2900, cat: 'electronics', desc: '4 А, надёжный' },
-    { id: 'stepper-nema23', title: 'Шаговый двигатель NEMA 23 (2.8 Нм)', price: 4500, cat: 'electronics', desc: 'Для станков ЧПУ' },
-    { id: 'collet-er20', title: 'Набор цанг ER20 (13 шт)', price: 2100, cat: 'consumables', desc: 'Для шпинделей с ER20' },
-    { id: 'coolant-5l', title: 'СОЖ для ЧПУ (5 л)', price: 1200, cat: 'consumables', desc: 'Смазочно-охлаждающая жидкость' },
-    { id: 'cncv4', title: 'Программа CNCV4 (расширенная)', price: 0, cat: 'software', desc: 'Управление станками ЧПУ' }
+    // Остальные товары (с артикулами) — из data/catalog.js
+    ...(typeof CATALOG !== 'undefined' ? CATALOG : [])
 ];
 // Шпиндели из data/spindles.js — вставляем сразу после карточки «все модели»
 (function () {
     if (typeof SPINDLES === 'undefined') return;
     const items = SPINDLES.map(s => ({
-        id: s.id, title: spindleTitle(s), price: s.price, priceOnRequest: !!s.priceOnRequest,
+        id: s.id, sku: s.sku, title: spindleTitle(s), price: s.price, priceOnRequest: !!s.priceOnRequest,
         cat: 'spindle', desc: s.short, img: spindleMainPhoto(s), link: 'spindles/' + s.slug + '.html'
     }));
     const at = products.findIndex(p => p.id === 'changsheng-series') + 1;
@@ -154,14 +151,14 @@ function updateCartBadge() {
 }
 
 function renderProducts() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
+    const q = document.getElementById('searchInput').value.trim().toLowerCase().replace(/^арт(икул)?\.?\s*/, '');
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
     let visible = 0;
 
     products.forEach(p => {
         if (currentCat !== 'all' && p.cat !== currentCat) return;
-        if (q && !p.title.toLowerCase().includes(q) && !p.desc.toLowerCase().includes(q)) return;
+        if (q && !(p.sku && p.sku.includes(q)) && !p.title.toLowerCase().includes(q) && !p.desc.toLowerCase().includes(q)) return;
 
         visible++;
         const isFav = favs.includes(p.id);
@@ -179,6 +176,7 @@ function renderProducts() {
             </div>
             <div class="product-info">
                 <h3 class="product-title">${p.title}</h3>
+                ${p.sku ? `<div class="sku-line">Артикул: <span class="sku-code">${p.sku}</span> <button type="button" class="sku-copy" onclick="copySku('${p.sku}', this)" title="Скопировать артикул">Копировать</button></div>` : ''}
                 <div class="product-price">${p.price ? p.price.toLocaleString('ru') + ' ₽' : (p.priceOnRequest ? 'Цена по запросу' : 'Бесплатно')}</div>
                 <p class="product-desc">${p.desc}</p>
                 <div class="product-actions">
@@ -223,7 +221,10 @@ document.querySelectorAll('.categories button').forEach(btn => {
 document.getElementById('searchInput').addEventListener('input', filterProducts);
 
 // Прямая ссылка на категорию: marketplace.html?cat=spindle или marketplace.html#spindle
+// Поиск по ссылке: marketplace.html?q=20001 (артикул или часть названия)
 (function () {
+    const q0 = new URLSearchParams(location.search).get('q');
+    if (q0) document.getElementById('searchInput').value = q0;
     const want = new URLSearchParams(location.search).get('cat') || location.hash.replace('#', '');
     const btn = want && document.querySelector('.categories button[data-cat="' + want + '"]');
     if (btn) { document.querySelectorAll('.categories button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentCat = want; }

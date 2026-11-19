@@ -138,6 +138,9 @@
         .openbuilds-btn:hover::before {
             left: 100%;
         }
+        .sku-line { margin: 8px 0; color: #444; font-size: 0.95rem; }
+        .sku-code { font-family: monospace; font-weight: bold; background: #f0f2f5; padding: 1px 6px; border-radius: 4px; user-select: all; color: #222; }
+        .sku-copy { border: 1px solid #ccd; background: #fff; border-radius: 6px; padding: 2px 8px; font-size: 0.8rem; cursor: pointer; }
     </style>
 
     <script type="application/ld+json">
@@ -145,6 +148,8 @@
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "Фрезерно-гравировальный станок ЧПУ 3040 / 4060 1500Вт",
+  "sku": "10001",
+  "productID": "cnc-3040",
   "description": "Настольный фрезерно-гравировальный станок с ЧПУ, рабочее поле 300×400×100 мм (4060 — 400×600×120 мм), шпиндель 1500Вт с водяным охлаждением, управление CNCV4 или OpenBuilds CONTROL",
   "brand": {
     "@type": "Brand",
@@ -203,6 +208,7 @@
                     <li><strong>Обрабатываемые материалы:</strong> дерево, фанера, акрил, ПВХ, алюминий, цветные металлы</li>
                     <li><strong>Вес с упаковкой:</strong> ≈ 52(62) кг</li>
                 </ul>
+                <div class="sku-line">Артикул: <span class="sku-code">10001</span> <button type="button" class="sku-copy" onclick="copySku('10001', this)" title="Скопировать артикул">Копировать</button></div>
                 <div class="price-box">
                     <strong>Цена:</strong> от 199 000 ₽
                 </div>
@@ -288,5 +294,6 @@
             if (event.target == modal) closeVideoModal();
         }
     </script>
+<script src="../data/catalog.js"></script>
 </body>
 </html>
