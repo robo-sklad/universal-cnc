@@ -103,6 +103,7 @@
 </footer>
 
 <script src="data/spindles.js"></script>
+<script src="data/catalog.js"></script>
 <script>
 const products = [
     { id: 'spindle-2.2', title: 'Шпиндель для ЧПУ 2.2 кВт', price: 18500 },
@@ -125,10 +126,21 @@ const products = [
 // Шпиндели из data/spindles.js (единый источник данных)
 if (typeof SPINDLES !== 'undefined') {
     SPINDLES.forEach(s => {
-        const item = { id: s.id, title: spindleTitle(s), price: s.price, priceOnRequest: !!s.priceOnRequest };
+        const item = { id: s.id, sku: s.sku, title: spindleTitle(s), price: s.price, priceOnRequest: !!s.priceOnRequest };
         const i = products.findIndex(p => p.id === s.id);
-        if (i >= 0) products[i] = Object.assign({}, products[i], { priceOnRequest: item.priceOnRequest });
+        if (i >= 0) products[i] = Object.assign({}, products[i], { priceOnRequest: item.priceOnRequest, sku: s.sku });
         else products.push(item);
+    });
+}
+
+// Остальные товары с артикулами — из data/catalog.js (товары marketplace, которых нет в списке выше, тоже попадают в корзину)
+if (typeof CATALOG !== 'undefined') {
+    products.forEach(p => {
+        const c = CATALOG.find(x => x.id === (CATALOG_ALIASES[p.id] || p.id));
+        if (c) p.sku = c.sku;
+    });
+    CATALOG.forEach(c => {
+        if (!products.some(p => p.id === c.id)) products.push({ id: c.id, sku: c.sku, title: c.title, price: c.price });
     });
 }
 
@@ -156,6 +168,7 @@ function renderCart() {
             <div class="item-placeholder">Фото</div>
             <div class="item-details">
                 <div class="item-title">${p.title}</div>
+                ${p.sku ? `<div class="item-sku" style="font-size:0.85rem;color:#555;margin:0 0 4px;">Артикул: <b style="font-family:monospace;user-select:all;">${p.sku}</b></div>` : ''}
                 <div class="item-price">${p.price ? p.price.toLocaleString('ru') + ' ₽' : (p.priceOnRequest ? 'Цена по запросу' : 'Бесплатно')}</div>
                 <div class="qty">
                     <button onclick="changeQty('${id}', -1)">−</button>
@@ -203,7 +216,8 @@ function submitOrder(e) {
     for (const [id, qty] of Object.entries(cart)) {
         const p = getProduct(id);
         if (p && qty > 0) {
-            orderText += p.priceOnRequest ? `${p.title} × ${qty} = цена по запросу\n` : `${p.title} × ${qty} = ${(p.price || 0) * qty} ₽\n`;
+            const art = p.sku ? `[арт. ${p.sku}] ` : '';
+            orderText += p.priceOnRequest ? `${art}${p.title} × ${qty} = цена по запросу\n` : `${art}${p.title} × ${qty} = ${(p.price || 0) * qty} ₽\n`;
             total += (p.price || 0) * qty;
         }
     }

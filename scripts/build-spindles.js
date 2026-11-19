@@ -5,7 +5,9 @@
  * Делает:
  *   1) spindles/<slug>.html — отдельная SEO-страница каждого шпинделя;
  *   2) список всех шпинделей на spindle-changsheng.html (между маркерами SPINDLES:START/END);
- *   3) записи spindle-changsheng.html и spindles/*.html в sitemap.xml (между маркерами spindles:start/end).
+ *   3) записи spindle-changsheng.html и spindles/*.html в sitemap.xml (между маркерами spindles:start/end);
+ *   4) docs/articles.csv — таблица артикулов всех товаров (data/spindles.js + data/catalog.js).
+ * Шпинделю без поля sku сам вписывает следующий свободный артикул 2xxxx в data/spindles.js.
  * Удаляет из spindles/ страницы моделей, которых больше нет в данных.
  */
 'use strict';
@@ -14,7 +16,23 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'https://чпу-склад.рф';
+// --- артикулы: шпинделю без sku автоматически вписывается следующий свободный номер 2xxxx ---
+(function assignSpindleSkus() {
+  const file = path.join(ROOT, 'data', 'spindles.js');
+  let text = fs.readFileSync(file, 'utf8');
+  const used = [...text.matchAll(/sku:\s*'(2\d{4})'/g)].map(m => Number(m[1]));
+  let next = Math.max(20000, ...used) + 1;
+  let added = 0;
+  text = text.replace(/^(\s*id:\s*'[^']+',)(?!\s*sku:)/gm, (m, head) => {
+    if (next > 29999) throw new Error('Закончились артикулы группы 2xxxx');
+    added++;
+    return `${head} sku: '${next++}',`;
+  });
+  if (added) { fs.writeFileSync(file, text); console.log(`Артикулы: присвоено новых — ${added}`); }
+})();
+
 const { SPINDLES, SPINDLE_SPEC_LABELS, spindleTitle, spindlePhotos, spindleMainPhoto } = require(path.join(ROOT, 'data', 'spindles.js'));
+const { MACHINES, CATALOG } = require(path.join(ROOT, 'data', 'catalog.js'));
 const today = new Date().toISOString().slice(0, 10);
 
 const esc = s => String(s == null ? '' : s)
@@ -56,9 +74,25 @@ for (const s of SPINDLES) {
   }
 }
 
+// --- проверки артикулов (уникальны по всему сайту, 5 цифр, группа по типу товара) ---
+const skus = new Map();
+const checkSku = (sku, who, group) => {
+  if (!/^\d{5}$/.test(String(sku || ''))) throw new Error('Нет/плохой артикул (5 цифр): ' + who);
+  if (group && sku[0] !== group) throw new Error(`Артикул ${sku} у ${who} должен начинаться с ${group}`);
+  if (skus.has(sku)) throw new Error(`Дубль артикула ${sku}: ${skus.get(sku)} и ${who}`);
+  skus.set(sku, who);
+};
+for (const m of MACHINES) checkSku(m.sku, m.id, '1');
+for (const s of SPINDLES) checkSku(s.sku, s.id, '2');
+for (const c of CATALOG) checkSku(c.sku, c.id, '3');
+
+// Строка «Артикул: 20001 [Копировать]»
+const skuLine = sku => `<div class="sku-line">Артикул: <span class="sku-code">${esc(sku)}</span> <button type="button" class="sku-copy" onclick="copySku('${esc(sku)}', this)" title="Скопировать артикул">Копировать</button></div>`;
+
 function specsRows(s, withBrand) {
   const rows = [];
   if (withBrand) rows.push(`<tr><th>Производитель</th><td>${esc(s.brand)}</td></tr>`);
+  rows.push(`<tr><th>Артикул</th><td>${esc(s.sku)}</td></tr>`);
   rows.push(`<tr><th>Модель</th><td>${esc(s.model)}</td></tr>`);
   for (const [key, label] of SPINDLE_SPEC_LABELS) {
     const v = fmtVal(key, s.specs[key]);
@@ -68,7 +102,7 @@ function specsRows(s, withBrand) {
 }
 
 function metaDescription(s) {
-  return `${s.model}: ${s.short}. ${s.price ? 'Цена ' + priceText(s) + '.' : 'Цена по запросу.'} Характеристики, фото, применение — ЧПУ-склад.`;
+  return `${s.model} (арт. ${s.sku}): ${s.short}. ${s.price ? 'Цена ' + priceText(s) + '.' : 'Цена по запросу.'} Характеристики, фото, применение — ЧПУ-склад.`;
 }
 
 const NAV = p => `<header>
@@ -99,7 +133,12 @@ function updateCartBadge() {
   var el = document.getElementById('headerCartCount');
   if (el) el.textContent = n;
 }
-updateCartBadge();`;
+updateCartBadge();
+function copySku(sku, btn) {
+  function done() { if (!btn) return; var old = btn.getAttribute('data-label') || btn.textContent; btn.setAttribute('data-label', old); btn.textContent = 'Скопировано'; setTimeout(function () { btn.textContent = old; }, 1500); }
+  function fallback() { var t = document.createElement('textarea'); t.value = sku; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(t); done(); }
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(sku).then(done, fallback); else fallback();
+}`;
 
 const GALLERY_CSS = `
         .spindle-photo.gallery { flex-direction: column; background: transparent; min-height: 0; align-items: stretch; }
@@ -268,7 +307,7 @@ function detailPage(s) {
   const ld = {
     '@context': 'https://schema.org', '@type': 'Product', name: s.model, description: s.short,
     brand: /другие/i.test(s.brand) ? undefined : { '@type': 'Brand', name: s.brand.replace(/\s*\(.*\)$/, '') },
-    image: imgAbsList.length > 1 ? imgAbsList : (imgAbs || undefined), sku: s.id, url,
+    image: imgAbsList.length > 1 ? imgAbsList : (imgAbs || undefined), sku: s.sku, productID: s.id, url,
     offers: s.price ? { '@type': 'Offer', price: s.price, priceCurrency: 'RUB', url, availability: 'https://schema.org/InStock' } : undefined
   };
   const crumbs = {
@@ -285,7 +324,7 @@ function detailPage(s) {
     ? s.applications : ['Фрезерно-гравировальные станки ЧПУ по дереву, пластику, композитам и цветным металлам — подбор под мощность и цангу уточняйте у менеджера.'];
   const notes = (s.notes || []).map(n => `<li>${n.date ? `<span class="note-date">${esc(n.date)}</span> ` : ''}${esc(n.text)}</li>`).join('\n          ');
   const clarify = (s.clarify || []).map(c => esc(c)).join(', ');
-  const mailSubj = encodeURIComponent(`Вопрос по шпинделю ${s.model}`);
+  const mailSubj = encodeURIComponent(`Вопрос по артикулу ${s.sku} — шпиндель ${s.model}`);
   const others = SPINDLES.filter(o => o.slug !== s.slug && o.brand === s.brand)
     .map(o => `<li><a href="${o.slug}.html">${esc(o.model)}</a> — ${esc(o.specs.power)}, ${priceText(o)}</li>`).join('\n          ');
   const hasGallery = photos.length > 1;
@@ -326,6 +365,9 @@ function detailPage(s) {
         .tbd { color: #b26a00; }
         .section { background: white; border-radius: 12px; padding: 16px 20px; margin: 16px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
         .note-date { color: #888; font-size: 0.85rem; }
+        .sku-line { margin: 4px 0 8px; color: #444; font-size: 0.95rem; }
+        .sku-code { font-family: monospace; font-size: 1.05rem; font-weight: bold; background: #f0f2f5; padding: 1px 6px; border-radius: 4px; user-select: all; }
+        .sku-copy { border: 1px solid #ccd; background: #fff; border-radius: 6px; padding: 2px 8px; font-size: 0.8rem; cursor: pointer; }
 ${hasGallery ? GALLERY_CSS : ''}    </style>
     <script type="application/ld+json">${JSON.stringify(ld)}</script>
     <script type="application/ld+json">${JSON.stringify(crumbs)}</script>
@@ -351,6 +393,7 @@ ${NAV('../')}
     <div class="spindle-top">
         ${photoBlock(s)}
         <div class="spindle-buy">
+            ${skuLine(s.sku)}
             <p>${esc(s.name)}</p>
             <div class="spindle-price">${priceText(s)}${s.price && s.priceUsd ? ` <span class="price-usd">/ ${s.priceUsd} $</span>` : ''}</div>
             <p>${esc(s.short)}</p>
@@ -421,6 +464,7 @@ function listCard(s) {
   return `<div class="variant-card" id="${esc(s.id)}">
           <a href="spindles/${s.slug}.html">${img}</a>
           <div class="variant-title"><a href="spindles/${s.slug}.html">${esc(s.name)}</a></div>
+          ${skuLine(s.sku)}
           <div class="variant-price">${priceText(s)}${s.price && s.priceUsd ? ` <span class="price-usd">/ ${s.priceUsd} $</span>` : ''}</div>
           <table class="specs-table">
             ${specsRows(s, false)}
@@ -463,5 +507,16 @@ const smFile = path.join(ROOT, 'sitemap.xml');
 const entry = (loc, prio) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${prio}</priority>\n  </url>`;
 const sm = [entry(`${SITE}/spindle-changsheng.html`, '0.8'), ...SPINDLES.map(s => entry(`${SITE}/spindles/${s.slug}.html`, '0.7'))].join('\n');
 fs.writeFileSync(smFile, replaceBetween(fs.readFileSync(smFile, 'utf8'), '  <!-- spindles:start -->', '  <!-- spindles:end -->', sm, smFile));
+
+// 4) таблица артикулов docs/articles.csv (генерируется, руками не править)
+const csvCell = v => /[",;\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+const csvRows = [
+  ...MACHINES.map(m => [m.sku, 'Станок', m.title, m.id, `${SITE}/${m.link}`]),
+  ...SPINDLES.map(s => [s.sku, 'Шпиндель', spindleTitle(s), s.id, `${SITE}/spindles/${s.slug}.html`]),
+  ...CATALOG.map(c => [c.sku, 'Marketplace', c.title, c.id, c.link ? `${SITE}/${c.link}` : `${SITE}/marketplace.html?q=${c.sku}`])
+].sort((a, b) => a[0].localeCompare(b[0]));
+fs.mkdirSync(path.join(ROOT, 'docs'), { recursive: true });
+fs.writeFileSync(path.join(ROOT, 'docs', 'articles.csv'),
+  '\ufeff' + [['Артикул', 'Тип', 'Название', 'id (ключ корзины)', 'Ссылка'], ...csvRows].map(r => r.map(csvCell).join(';')).join('\r\n') + '\r\n');
 
 console.log(`OK: ${SPINDLES.length} страниц в spindles/, список и sitemap обновлены`);
