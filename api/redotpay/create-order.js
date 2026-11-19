@@ -13,25 +13,14 @@
 import crypto from 'node:crypto';
 import {
   DEFAULT_LIVE_BASE_URL, CREATE_ORDER_PATH, loadPrivateKey, signRequest, applyCors, isAllowedOrigin,
+  readJsonBody, sendJson, sendEmpty,
 } from './_lib.js';
 
 const DEFAULT_SITE_URL = 'https://xn----8sbmwfvpo8a.xn--p1ai';
 const EMAIL_RE = /^[^\s@,]{1,64}@[^\s@,]{1,190}\.[a-zA-Z]{2,}$/;
 
 function fail(res, status, error, message) {
-  return res.status(status).json({ ok: false, error, message });
-}
-
-function readJsonBody(req) {
-  const b = req.body;
-  if (!b) return {};
-  if (typeof b === 'string') {
-    try { return JSON.parse(b); } catch (e) { return null; }
-  }
-  if (Buffer.isBuffer(b)) {
-    try { return JSON.parse(b.toString('utf8')); } catch (e) { return null; }
-  }
-  return typeof b === 'object' ? b : null;
+  return sendJson(res, status, { ok: false, error, message });
 }
 
 function makeOrderId() {
@@ -49,7 +38,7 @@ export default async function handler(req, res) {
   const origin = applyCors(req, res);
 
   if (req.method === 'OPTIONS') {
-    return res.status(isAllowedOrigin(origin) ? 204 : 403).end();
+    return sendEmpty(res, isAllowedOrigin(origin) ? 204 : 403);
   }
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST, OPTIONS');
@@ -72,7 +61,7 @@ export default async function handler(req, res) {
     return fail(res, 503, 'not_configured', 'Оплата пока не настроена. Свяжитесь с нами для согласования оплаты.');
   }
 
-  const body = readJsonBody(req);
+  const body = await readJsonBody(req);
   if (body === null) return fail(res, 400, 'bad_json', 'Некорректный запрос');
 
   const amount = Number(String(body.amount ?? '').replace(',', '.'));
@@ -169,5 +158,5 @@ export default async function handler(req, res) {
   }
 
   console.log('[redotpay] order created', orderId, rp.data.orderSn, roundedAmount, currency);
-  return res.status(200).json({ ok: true, payUrl, orderId, orderSn: rp.data.orderSn || null });
+  return sendJson(res, 200, { ok: true, payUrl, orderId, orderSn: rp.data.orderSn || null });
 }

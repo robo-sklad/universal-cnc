@@ -4,6 +4,9 @@
 // Секретов в коде нет: ключи берутся только из переменных окружения.
 import crypto from 'node:crypto';
 
+// HTTP-помощники, работающие и без помощников Vercel (NODEJS_HELPERS=0).
+export { readRawBody, readJsonBody, sendJson, sendEmpty } from '../_http.js';
+
 export const DEFAULT_LIVE_BASE_URL = 'https://acquirer.redotpay.com';
 export const SANDBOX_BASE_URL = 'https://acquirersandbox.rp-2023app.com';
 export const CREATE_ORDER_PATH = '/openapi/v2/order/create';
