@@ -1,4 +1,5 @@
 // api/chat.js
+import { readJsonBody, sendJson } from './_http.js'; // работает и с NODEJS_HELPERS=0
 let cachedKnowledge = { context: "", files: [], timestamp: 0 };
 const CACHE_TTL = 10 * 60 * 1000; // 10 минут
 const MAX_CONTEXT_TOKENS = 25000;
@@ -9,17 +10,17 @@ const ALLOWED_EXTENSIONS = [
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Только POST запросы' });
+        return sendJson(res, 405, { error: 'Только POST запросы' });
     }
 
-    const { message } = req.body;
+    const { message } = (await readJsonBody(req)) || {};
     if (!message || message.trim() === '') {
-        return res.status(400).json({ error: 'Сообщение не может быть пустым' });
+        return sendJson(res, 400, { error: 'Сообщение не может быть пустым' });
     }
 
     const apiKey = process.env.MISTRAL_API_KEY;
     if (!apiKey) {
-        return res.status(500).json({ error: 'API ключ не настроен' });
+        return sendJson(res, 500, { error: 'API ключ не настроен' });
     }
 
     const now = Date.now();
@@ -116,10 +117,10 @@ ${cachedKnowledge.context}
         }
 
         const data = await response.json();
-        return res.status(200).json({ reply: data.choices[0].message.content });
+        return sendJson(res, 200, { reply: data.choices[0].message.content });
 
     } catch (error) {
         console.error('Ошибка:', error);
-        return res.status(500).json({ reply: 'Ошибка соединения. Попробуйте позже.' });
+        return sendJson(res, 500, { reply: 'Ошибка соединения. Попробуйте позже.' });
     }
 }

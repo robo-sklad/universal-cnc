@@ -4,26 +4,13 @@
 // по строке "{appKey}.{X-R-TS}.{тело запроса}" (SHA256withRSA, Base64).
 // URL этого обработчика указывается в кабинете мерчанта RedotPay:
 //   https://<домен Vercel>/api/redotpay/notify
-// Для точной проверки подписи нужно «сырое» тело запроса. Рекомендуется в Vercel
-// задать переменную NODEJS_HELPERS=0, чтобы тело не разбиралось заранее.
+// Для точной проверки подписи нужно «сырое» тело запроса, поэтому в Vercel задана
+// переменная NODEJS_HELPERS=0 (тело не разбирается заранее, res.status()/res.json() нет).
 import crypto from 'node:crypto';
 import {
   DEFAULT_LIVE_BASE_URL, REDOTPAY_PLATFORM_PUBLIC_KEYS, verifyWebhookSignature, environmentFromBaseUrl,
+  readRawBody, sendJson,
 } from './_lib.js';
-
-async function readRawBody(req) {
-  if (typeof req.body === 'string') return req.body;
-  if (Buffer.isBuffer(req.body)) return req.body.toString('utf8');
-  const chunks = [];
-  try {
-    for await (const chunk of req) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-  } catch (e) { /* поток уже прочитан */ }
-  if (chunks.length) return Buffer.concat(chunks).toString('utf8');
-  // Запасной вариант: тело уже разобрано платформой. Подпись может не совпасть,
-  // если исходный JSON отличался форматированием.
-  if (req.body && typeof req.body === 'object') return JSON.stringify(req.body);
-  return '';
-}
 
 function header(req, name) {
   const v = req.headers[name.toLowerCase()];
@@ -34,15 +21,20 @@ export default async function handler(req, res) {
   const requestId = crypto.randomUUID();
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
-    return res.status(405).json({ code: 'FAIL', requestId, msg: 'method not allowed' });
+    return sendJson(res, 405, { code: 'FAIL', requestId, msg: 'method not allowed' });
   }
 
   const appKey = (process.env.REDOTPAY_APP_KEY || '').trim();
   if (!appKey) {
-    return res.status(503).json({ code: 'FAIL', requestId, msg: 'not configured' });
+    return sendJson(res, 503, { code: 'FAIL', requestId, msg: 'not configured' });
   }
 
-  const raw = await readRawBody(req);
+  let raw;
+  try {
+    raw = (await readRawBody(req)).toString('utf8'); // подпись проверяется по точной строке тела
+  } catch (e) {
+    return sendJson(res, 400, { code: 'FAIL', requestId, msg: 'bad body' });
+  }
   const ts = header(req, 'X-R-TS');
   const signature = header(req, 'X-R-Signature');
   const version = parseInt(header(req, 'X-R-KEY-VERSION') || '1', 10);
@@ -51,11 +43,11 @@ export default async function handler(req, res) {
 
   if (!ts || !signature || !publicKey) {
     console.warn('[redotpay notify] missing headers or unknown key version', env, version);
-    return res.status(401).json({ code: 'FAIL', requestId, msg: 'signature required' });
+    return sendJson(res, 401, { code: 'FAIL', requestId, msg: 'signature required' });
   }
   if (!verifyWebhookSignature({ appKey, timestamp: ts, body: raw, signature, publicKey })) {
     console.warn('[redotpay notify] bad signature');
-    return res.status(401).json({ code: 'FAIL', requestId, msg: 'invalid signature' });
+    return sendJson(res, 401, { code: 'FAIL', requestId, msg: 'invalid signature' });
   }
 
   let event = {};
@@ -72,5 +64,5 @@ export default async function handler(req, res) {
     console.log('[redotpay notify] event received');
   }
 
-  return res.status(200).json({ code: 'SUCCESS', requestId });
+  return sendJson(res, 200, { code: 'SUCCESS', requestId });
 }

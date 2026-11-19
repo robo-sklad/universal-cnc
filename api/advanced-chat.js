@@ -1,13 +1,14 @@
 // api/advanced-chat.js
+import { readJsonBody, sendJson } from './_http.js'; // работает и с NODEJS_HELPERS=0
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Только POST запросы' });
+        return sendJson(res, 405, { error: 'Только POST запросы' });
     }
 
-    const { message, context = "" } = req.body;
+    const { message, context = "" } = (await readJsonBody(req)) || {};
 
     if (!message || message.trim() === '') {
-        return res.status(400).json({ error: 'Сообщение не может быть пустым' });
+        return sendJson(res, 400, { error: 'Сообщение не может быть пустым' });
     }
 
     const apiKey = process.env.MISTRAL_API_KEY;
@@ -53,11 +54,11 @@ export default async function handler(req, res) {
         const data = await response.json();
         const reply = data.choices[0].message.content;
 
-        return res.status(200).json({ reply });
+        return sendJson(res, 200, { reply });
 
     } catch (error) {
         console.error('Ошибка:', error);
-        return res.status(500).json({ 
+        return sendJson(res, 500, { 
             reply: 'Извини, сейчас небольшая техническая проблема. Попробуй через минуту или напиши мне напрямую.' 
         });
     }
