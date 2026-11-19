@@ -69,7 +69,7 @@ export default async function handler(req, res) {
   const maxAmount = Number(process.env.REDOTPAY_MAX_AMOUNT || 50000);
 
   if (!appKey || !privateKeyRaw) {
-    return fail(res, 503, 'not_configured', 'Оплата через RedotPay пока не настроена. Свяжитесь с нами для согласования оплаты.');
+    return fail(res, 503, 'not_configured', 'Оплата пока не настроена. Свяжитесь с нами для согласования оплаты.');
   }
 
   const body = readJsonBody(req);
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
   const orderId = makeOrderId();
   const outerUid = `web-${crypto.createHash('sha256').update(email || orderId).digest('hex').slice(0, 24)}`; // <= 32
   const orderDesc = cleanText(`Order ${orderId}${comment ? ': ' + comment : ''}`, 120);
-  const redirectUrl = `${siteUrl}/payment-nonresident.html?redotpay=return&order=${orderId}`;
+  const redirectUrl = `${siteUrl}/payment-nonresident.html?pay=return&order=${orderId}`;
 
   // Поля запроса — по схеме PreOrderCreateRequestV2 из документации RedotPay.
   const payload = {

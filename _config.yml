@@ -1,0 +1,8 @@
+# GitHub Pages собирает сайт через Jekyll (в репозитории нет .nojekyll).
+# Страницы сайта — обычный HTML, без шаблонов Jekyll. Этот файл только
+# исключает служебные каталоги и файлы из публичной выдачи Pages.
+exclude:
+  - docs
+  - api
+  - scripts
+  - .env.example

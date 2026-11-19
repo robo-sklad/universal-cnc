@@ -2,11 +2,11 @@
 
 ## Как это работает
 
-1. Покупатель на странице `payment-nonresident.html` вводит согласованную сумму, валюту и (по желанию) e-mail и комментарий, затем нажимает «Оплатить через RedotPay».
-2. Страница отправляет запрос на серверную функцию `api/redotpay/create-order` (Vercel).
+1. Покупатель на странице `payment-nonresident.html` вводит согласованную сумму, валюту и (по желанию) e-mail и комментарий, затем нажимает «Оплатить». На публичной странице провайдер не упоминается (заголовок «Оплата криптовалютой», нейтральные идентификаторы).
+2. Страница отправляет запрос на серверную функцию `api/pay/create-order` (Vercel). Путь `api/redotpay/create-order` тоже работает (тот же обработчик).
 3. Функция формирует заказ, подписывает запрос приватным ключом (SHA256withRSA) и вызывает RedotPay `POST /openapi/v2/order/create` (поле `env: "WEB"`).
 4. RedotPay возвращает ссылку на страницу оплаты (`data.webUrl`), функция отдаёт её странице как `payUrl`, и покупатель перенаправляется в RedotPay.
-5. После оплаты RedotPay возвращает покупателя на `payment-nonresident.html?redotpay=return&order=...` и отправляет вебхук на `api/redotpay/notify`. Обработчик проверяет подпись публичным ключом RedotPay и пишет результат в логи Vercel (Deployments → Functions / Logs).
+5. После оплаты RedotPay возвращает покупателя на `payment-nonresident.html?pay=return&order=...` и отправляет вебхук на `api/redotpay/notify`. Обработчик проверяет подпись публичным ключом RedotPay и пишет результат в логи Vercel (Deployments → Functions / Logs).
 
 Документация RedotPay: https://docs.redotpay.com/docs/en/api-reference
 
@@ -36,7 +36,7 @@
 Варианты:
 
 - **(а) Перенести хостинг домена на Vercel.** Добавить `чпу-склад.рф` в Vercel → Project Settings → Domains и переключить DNS на Vercel, отключить GitHub Pages. Тогда `data-api-base` оставить пустым — кнопка будет обращаться к тому же сайту.
-- **(б) Оставить GitHub Pages.** В `payment-nonresident.html` у блока `<div id="redotpay-widget" ...>` указать `data-api-base="https://universal-cnc.vercel.app"`. Запросы с боевого домена к этому адресу уже разрешены (CORS).
+- **(б) Оставить GitHub Pages.** В `payment-nonresident.html` у блока `<div id="crypto-pay" ...>` указать `data-api-base="https://universal-cnc.vercel.app"`. Запросы с боевого домена к этому адресу уже разрешены (CORS).
 
 ## Перед запуском
 
