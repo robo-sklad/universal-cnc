@@ -106,7 +106,7 @@
 </footer>
 
 <script src="data/spindles.js?v=1f03f879"></script>
-<script src="data/catalog.js?v=096d063c"></script>
+<script src="data/catalog.js?v=6d95ed27"></script>
 <script>
 const products = [
     { id: 'frezy-set', title: 'Комплект фрез для ЧПУ (10 шт)', price: 4200 },
@@ -141,6 +141,16 @@ if (typeof CATALOG !== 'undefined') {
     });
     CATALOG.forEach(c => {
         if (!products.some(p => p.id === c.id)) products.push({ id: c.id, sku: c.sku, title: c.title, price: c.price });
+    });
+}
+
+// Станки из data/catalog.js → MACHINES (артикул, название и цена в заказе)
+if (typeof MACHINES !== 'undefined') {
+    MACHINES.forEach(m => {
+        const item = { id: m.id, sku: m.sku, title: m.title, price: m.price };
+        const i = products.findIndex(p => p.id === m.id);
+        if (i >= 0) products[i] = Object.assign({}, products[i], item);
+        else products.push(item);
     });
 }
 
