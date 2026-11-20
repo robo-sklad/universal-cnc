@@ -107,6 +107,7 @@
 
 <script src="data/spindles.js?v=1f03f879"></script>
 <script src="data/catalog.js?v=6d95ed27"></script>
+<script src="data/products.js?v=6b911766"></script>
 <script>
 const products = [
     { id: 'frezy-set', title: 'Комплект фрез для ЧПУ (10 шт)', price: 4200 },
@@ -141,6 +142,13 @@ if (typeof CATALOG !== 'undefined') {
     });
     CATALOG.forEach(c => {
         if (!products.some(p => p.id === c.id)) products.push({ id: c.id, sku: c.sku, title: c.title, price: c.price });
+    });
+}
+
+// Товары из data/products.js (карточки products/<slug>.html): артикул, название и цена в заказе
+if (typeof PRODUCTS !== 'undefined') {
+    PRODUCTS.forEach(p => {
+        if (!products.some(x => x.id === p.id)) products.push({ id: p.id, sku: p.sku, title: p.title, price: p.price });
     });
 }
 
