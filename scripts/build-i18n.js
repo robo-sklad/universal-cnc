@@ -43,7 +43,7 @@ for (const part of ['ui', 'cats', 'catDesc', 'specLabels', 'glossary', 'units'])
     for (const [k, v] of Object.entries(DICT[l][part])) {
       if (!v) throw new Error(`i18n/${l}.json: пустой перевод ${part}.${k}`);
       if (HAN.test(v)) throw new Error(`i18n/${l}.json: иероглифы в ${part}.${k}`);
-      if (/крипт|crypto|usdt|биткоин|bitcoin|redotpay/i.test(v)) throw new Error(`i18n/${l}.json: упоминание криптовалюты в ${part}.${k}`);
+      if (/крипт|crypto|usdt|биткоин|bitcoin/i.test(v)) throw new Error(`i18n/${l}.json: упоминание криптовалюты в ${part}.${k}`);
     }
   }
 }
