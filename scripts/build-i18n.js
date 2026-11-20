@@ -210,7 +210,7 @@ function header(l, file, pg, active) {
   const ui = DICT[l].ui, r = t => esc(relFrom(file, t));
   const a = k => (k === active ? ' active' : '');
   return `<header>
-    <div class="nav-container">
+    <div class="nav-container has-lang">
         <div class="logo">
             <a href="${r(`${l}/index.html`)}" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;"><img src="${r('logo.jpg')}" alt="${esc(ui.brand)}"> ${esc(ui.brand)}</a>
         </div>
@@ -625,7 +625,11 @@ for (const full of htmlFiles(ROOT)) {
   t = t.replace(/\n?\s*<!-- HREFLANG:START[\s\S]*?<!-- HREFLANG:END -->/g, '');
   if (pg) t = t.replace(/(<link rel="canonical"[^>]*>)/, `$1\n    <!-- HREFLANG:START (генерируется scripts/build-i18n.js) -->\n    ${hreflangLinks(pg)}\n    <!-- HREFLANG:END -->`);
   t = t.replace(/\s*<!-- LANG:START[\s\S]*?<!-- LANG:END -->/g, '');
-  if (/<div class="nav-container">/.test(t) && /<\/nav>/.test(t)) t = t.replace(/(<\/nav>)/, `$1\n        ${langSwitch(rel, 'ru', pg)}`);
+  t = t.replace(/<div class="nav-container has-lang">/g, '<div class="nav-container">');
+  if (/<div class="nav-container">/.test(t) && /<\/nav>/.test(t)) {
+    t = t.replace(/(<\/nav>)/, `$1\n        ${langSwitch(rel, 'ru', pg)}`);
+    t = t.replace('<div class="nav-container">', '<div class="nav-container has-lang">'); // сетка шапки: переключатель всегда справа (style.css)
+  }
   // главная: если посетитель раньше сам выбрал другой язык — открыть его (только для людей, не для роботов)
   t = t.replace(/\n?<script>\/\* LANG-REMEMBER \*\/[\s\S]*?<\/script>/g, '');
   if (rel === 'index.html') t = t.replace(/(<\/head>)/, `<script>/* LANG-REMEMBER */(function(){try{var l=localStorage.getItem('siteLang');if(!l||l==='ru'||!/^(en|kk|uz|hy|ka|ky)$/.test(l))return;if(/bot|crawl|spider|slurp|yandex|google|bing|baidu|duckduck|lighthouse|headless|preview/i.test(navigator.userAgent))return;location.replace('${''}'+l+'/');}catch(e){}})();</script>\n$1`);
