@@ -7,6 +7,7 @@
  *   2) список всех шпинделей на spindle-changsheng.html (между маркерами SPINDLES:START/END);
  *   3) записи spindle-changsheng.html и spindles/*.html в sitemap.xml (между маркерами spindles:start/end);
  *   4) docs/articles.csv — таблица артикулов всех товаров (data/spindles.js + data/catalog.js).
+ *   5) метки ?v=<хэш> у подключений data/spindles.js, data/catalog.js и style.css во всех страницах сайта.
  * Шпинделю без поля sku сам вписывает следующий свободный артикул 2xxxx в data/spindles.js.
  * Удаляет из spindles/ страницы моделей, которых больше нет в данных; для выбывших (SPINDLES_RETIRED)
  * пишет страницы-переадресации на модель-замену.
@@ -589,5 +590,33 @@ const csvRows = [
 fs.mkdirSync(path.join(ROOT, 'docs'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'docs', 'articles.csv'),
   '\ufeff' + [['Артикул', 'Тип', 'Название', 'id (ключ корзины)', 'Ссылка'], ...csvRows].map(r => r.map(csvCell).join(';')).join('\r\n') + '\r\n');
+
+// 5) метки версии ?v=<хэш> у общих файлов с данными и стилями — чтобы после обновления цен
+//    браузер не брал старую копию из кэша (GitHub Pages отдаёт их с max-age=600).
+//    Хэш = первые 8 символов sha256 содержимого файла; меняется только когда меняется сам файл.
+const crypto = require('crypto');
+const VERSIONED = ['data/spindles.js', 'data/catalog.js', 'style.css'];
+const versions = Object.fromEntries(VERSIONED.map(f =>
+  [f, crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8)]));
+const SKIP_DIRS = new Set(['.git', 'node_modules', 'docs', 'api', 'scripts', 'mistral-advanced-bot', '_site']);
+function htmlFiles(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap(d => {
+    const full = path.join(dir, d.name);
+    if (d.isDirectory()) return SKIP_DIRS.has(d.name) ? [] : htmlFiles(full);
+    return d.name.endsWith('.html') ? [full] : [];
+  });
+}
+let versionedFiles = 0;
+for (const file of htmlFiles(ROOT)) {
+  const text = fs.readFileSync(file, 'utf8');
+  const out = text.replace(/(\b(?:src|href)=")([^"?#]+\.(?:js|css))(?:\?v=[0-9a-f]*)?"/g, (m, attr, ref) => {
+    if (/^[a-z]+:|^\/\//i.test(ref)) return m; // внешние адреса не трогаем
+    const rel = path.relative(ROOT, path.resolve(path.dirname(file), ref)).split(path.sep).join('/');
+    return versions[rel] ? `${attr}${ref}?v=${versions[rel]}"` : m;
+  });
+  if (out !== text) fs.writeFileSync(file, out);
+  if (/\?v=[0-9a-f]{8}"/.test(out)) versionedFiles++;
+}
+console.log(`Версии файлов: ${VERSIONED.map(f => `${f}?v=${versions[f]}`).join(', ')} (страниц с метками: ${versionedFiles})`);
 
 console.log(`OK: ${SPINDLES.length} страниц в spindles/, список и sitemap обновлены`);
