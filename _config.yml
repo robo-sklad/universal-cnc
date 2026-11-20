@@ -6,3 +6,4 @@ exclude:
   - api
   - scripts
   - .env.example
+  - mistral-advanced-bot

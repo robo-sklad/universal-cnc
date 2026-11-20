@@ -22,7 +22,13 @@ var CATALOG = [
   { id: 'stepper-nema23', sku: '30006', title: 'Шаговый двигатель NEMA 23 (2.8 Нм)', price: 4500, cat: 'electronics', desc: 'Для станков ЧПУ' },
   { id: 'collet-er20', sku: '30007', title: 'Набор цанг ER20 (13 шт)', price: 2100, cat: 'consumables', desc: 'Для шпинделей с ER20' },
   { id: 'coolant-5l', sku: '30008', title: 'СОЖ для ЧПУ (5 л)', price: 1200, cat: 'consumables', desc: 'Смазочно-охлаждающая жидкость' },
-  { id: 'cncv4', sku: '30009', title: 'Программа CNCV4 (расширенная)', price: 0, cat: 'software', desc: 'Управление станками ЧПУ' }
+  { id: 'cncv4', sku: '30009', title: 'Программа CNCV4 (расширенная)', price: 0, cat: 'software', desc: 'Управление станками ЧПУ', link: 'program/CNCV4.html' },
+  // Позиции, которые раньше были только в корзине (цены — из cart.html, без изменений)
+  { id: 'freza-3mm', sku: '30010', title: 'Фреза концевая 3 мм', price: 450, cat: 'tools', desc: 'Концевая фреза, диаметр 3 мм' },
+  { id: 'coupler', sku: '30011', title: 'Муфта соединительная 8x8', price: 650, cat: 'mechanics', desc: 'Соединительная муфта 8×8 мм' },
+  { id: 'controller-grbl', sku: '30012', title: 'Контроллер GRBL на Arduino', price: 3200, cat: 'electronics', desc: 'Контроллер на Arduino с прошивкой GRBL' },
+  { id: 'collet-set', sku: '30013', title: 'Набор цанг ER11 (13 шт)', price: 1800, cat: 'consumables', desc: 'Для шпинделей с ER11' },
+  { id: 'bit-set', sku: '30014', title: 'Набор свёрел для ЧПУ', price: 980, cat: 'tools', desc: 'Набор свёрел для станков ЧПУ' }
 ];
 
 // Старые ключи корзины (cart.html) → id товара в каталоге, чтобы в корзине тоже был виден артикул

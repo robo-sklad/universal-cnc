@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Чат • ЧПУ-Склад</title>
+    <meta name="description" content="Чат-помощник ЧПУ-склад: вопросы по станкам ЧПУ и программам.">
+    <link rel="canonical" href="https://чпу-склад.рф/chat.html">
+    <meta name="robots" content="noindex, follow">
+    <link rel="stylesheet" href="style.css">
     <style>
         body { font-family: Arial, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 0; }
         .chat-container { max-width: 800px; margin: 20px auto; background: #1e2937; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
@@ -32,6 +36,23 @@
 <!-- /Yandex.Metrika counter -->
 </head>
 <body>
+<header>
+    <div class="nav-container">
+        <div class="logo">
+            <a href="https://чпу-склад.рф/index.html" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;"><img src="https://чпу-склад.рф/logo.jpg" alt="ЧПУ-склад"> ЧПУ-склад</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="https://чпу-склад.рф/index.html">Главная</a></li>
+                <li><a href="https://чпу-склад.рф/program.html">Программы</a></li>
+                <li><a href="https://чпу-склад.рф/equipment.html">Оборудование</a></li>
+                <li><a href="https://чпу-склад.рф/marketplace.html">Marketplace</a></li>
+                <li><a href="https://чпу-склад.рф/cart.html">Корзина</a></li>
+                <li><a href="https://universal-cnc.vercel.app/chat.html" target="_blank" rel="noopener" class="active">Обучение</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
     <div class="chat-container">
         <div class="header">💬 Чат со специалистом </div>
         <div class="messages" id="messages"></div>
@@ -40,6 +61,11 @@
             <button onclick="sendMessage()">Отправить</button>
         </div>
     </div>
+<footer>
+    <p>© 2026 ЧПУ-склад • Все права защищены</p>
+    <p>Поддержка: <a href="tel:+79619910176">+7 961 991 01 76</a> (WhatsApp) | <a href="mailto:stepmotoren@yandex.ru">stepmotoren@yandex.ru</a></p>
+    <p><a href="https://чпу-склад.рф/payment-nonresident.html">Оплата и доставка для нерезидентов</a></p>
+</footer>
 
     <script>
         const messagesDiv = document.getElementById('messages');
