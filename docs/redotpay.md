@@ -36,7 +36,7 @@
 Варианты:
 
 - **(а) Перенести хостинг домена на Vercel.** Добавить `чпу-склад.рф` в Vercel → Project Settings → Domains и переключить DNS на Vercel, отключить GitHub Pages. Тогда `data-api-base` оставить пустым — кнопка будет обращаться к тому же сайту.
-- **(б) Оставить GitHub Pages.** В `payment-nonresident.html` у блока `<div id="crypto-pay" ...>` указать `data-api-base="https://universal-cnc.vercel.app"`. Запросы с боевого домена к этому адресу уже разрешены (CORS).
+- **(б) Оставить GitHub Pages.** В `payment-nonresident.html` у блока `<div id="online-pay" ...>` указать `data-api-base="https://universal-cnc.vercel.app"`. Запросы с боевого домена к этому адресу уже разрешены (CORS).
 
 ## Перед запуском
 
