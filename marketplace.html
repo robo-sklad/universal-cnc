@@ -125,20 +125,19 @@
 <script src="data/catalog.js"></script>
 <script>
 const products = [
-    { id: 'changsheng-series', title: 'Шпиндели для ЧПУ — все модели (Changsheng, Tongsheng и др.)', price: 18500, cat: 'spindle', desc: 'Все шпиндели в одном разделе: Changsheng GDZ 0.8–5.5 кВт, Tongsheng THD-65/THD-80 и другие; водяное/воздушное охлаждение, ER11–ER25. Подробнее см. раздел', img: '', link: 'spindle-changsheng.html' },
     // Отдельные шпиндели подставляются из data/spindles.js (единый источник), у каждого своя страница spindles/<slug>.html
     // Остальные товары (с артикулами) — из data/catalog.js
     ...(typeof CATALOG !== 'undefined' ? CATALOG : [])
 ];
-// Шпиндели из data/spindles.js — вставляем сразу после карточки «все модели»
+// Шпиндели из data/spindles.js — вставляем в начало каталога (категория «Шпиндели» показывает все модели сразу,
+// без отдельной обзорной карточки; полный список по брендам — spindle-changsheng.html)
 (function () {
     if (typeof SPINDLES === 'undefined') return;
     const items = SPINDLES.map(s => ({
         id: s.id, sku: s.sku, title: spindleTitle(s), price: s.price, priceOnRequest: !!s.priceOnRequest,
         cat: 'spindle', desc: s.short, img: spindleMainPhoto(s), link: 'spindles/' + s.slug + '.html'
     }));
-    const at = products.findIndex(p => p.id === 'changsheng-series') + 1;
-    products.splice(at, 0, ...items);
+    products.unshift(...items);
 })();
 
 let currentCat = 'all';
