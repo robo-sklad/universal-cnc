@@ -152,13 +152,41 @@ a {
         padding: 0 12px;
     }
 }
-/* Переключатель языка в шапке (генерирует scripts/build-i18n.js) */
-.lang-switch { position: relative; }
+/* Переключатель языка в шапке (разметку ставит scripts/build-i18n.js).
+   Шапка с переключателем — сетка: логотип | меню | язык. Переключатель всегда справа,
+   даже когда меню переносится на несколько строк (раньше на русских страницах меню длиннее,
+   шапка переносилась, и переключатель уезжал отдельной строкой влево). */
+.nav-container.has-lang {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "logo nav lang";
+    align-items: center;
+    column-gap: 15px;
+    row-gap: 10px;
+}
+.nav-container.has-lang > .logo { grid-area: logo; min-width: 0; }
+.nav-container.has-lang > nav { grid-area: nav; min-width: 0; }
+.nav-container.has-lang > .lang-switch { grid-area: lang; justify-self: end; }
+.lang-switch { position: relative; z-index: 1000; }
+.lang-switch details { position: relative; }
 .lang-switch summary { cursor: pointer; list-style: none; color: #fff; font-size: 0.9rem; padding: 7px 12px; border: 1px solid rgba(255,255,255,0.55); border-radius: 8px; white-space: nowrap; user-select: none; }
 .lang-switch summary::-webkit-details-marker { display: none; }
-.lang-switch summary:hover { background: rgba(255,255,255,0.18); }
-.lang-switch ul { position: absolute; right: 0; top: calc(100% + 6px); background: #fff; list-style: none; margin: 0; padding: 6px 0; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.18); z-index: 1000; min-width: 160px; text-align: left; }
-.lang-switch li a { display: block; padding: 7px 16px; color: #222; text-decoration: none; font-size: 0.95rem; white-space: nowrap; }
+.lang-switch summary:hover, .lang-switch details[open] summary { background: rgba(255,255,255,0.18); }
+.lang-switch ul { position: absolute; right: 0; left: auto; top: calc(100% + 6px); background: #fff; list-style: none; margin: 0; padding: 6px 0; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.25); z-index: 1001; min-width: 170px; max-width: calc(100vw - 24px); max-height: calc(100vh - 120px); overflow-y: auto; text-align: left; box-sizing: border-box; }
+.lang-switch li a { display: block; padding: 9px 16px; color: #222; text-decoration: none; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lang-switch li a:hover { background: #f0f4ff; }
 .lang-switch li a[aria-current="true"] { font-weight: 700; color: #0d6efd; }
-@media (max-width: 768px) { .lang-switch ul { right: 50%; transform: translateX(50%); } }
+@media (max-width: 768px) {
+    .nav-container.has-lang {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas: "logo lang" "nav nav";
+        text-align: left;
+        padding: 10px 12px;
+    }
+    .nav-container.has-lang > .logo { justify-content: flex-start; }
+}
+@media (max-width: 400px) {
+    .nav-container.has-lang > .logo { font-size: 1.25rem; }
+    .nav-container.has-lang > .logo img { height: 40px; }
+    .lang-switch summary { padding: 6px 9px; font-size: 0.85rem; }
+}
