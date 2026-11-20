@@ -5,6 +5,7 @@
  * Делает:
  *   1) spindles/<slug>.html — отдельная SEO-страница каждого шпинделя;
  *   1б) machines/<slug>.html — простые карточки станков из data/catalog.js → MACHINES;
+ *   1в) products/<slug>.html — карточки товаров из data/products.js → PRODUCTS (лазеры, частотники, приводы и т.д.);
  *   2) список всех шпинделей на spindle-changsheng.html (между маркерами SPINDLES:START/END);
  *   3) записи spindle-changsheng.html и spindles/*.html в sitemap.xml (между маркерами spindles:start/end);
  *   4) docs/articles.csv — таблица артикулов всех товаров (data/spindles.js + data/catalog.js).
@@ -36,6 +37,7 @@ const SITE = 'https://чпу-склад.рф';
 
 const { SPINDLES, SPINDLES_RETIRED = [], SPINDLE_SPEC_LABELS, spindleTitle, spindlePhotos, spindleMainPhoto } = require(path.join(ROOT, 'data', 'spindles.js'));
 const { MACHINES, CATALOG } = require(path.join(ROOT, 'data', 'catalog.js'));
+const { PRODUCTS, PRODUCT_CATS } = require(path.join(ROOT, 'data', 'products.js'));
 const today = new Date().toISOString().slice(0, 10);
 
 const esc = s => String(s == null ? '' : s)
@@ -95,6 +97,24 @@ for (const m of MACHINES) {
 }
 for (const s of SPINDLES) checkSku(s.sku, s.id, '2');
 for (const c of CATALOG) checkSku(c.sku, c.id, '3');
+for (const p of PRODUCTS) checkSku(p.sku, p.id, '3');
+// товары data/products.js: уникальные id/slug, есть цена (без «по запросу»), категория, нет иероглифов и слов о криптовалюте
+{
+  const pIds = new Set([...CATALOG.map(c => c.id), ...MACHINES.map(m => m.id), ...SPINDLES.map(s => s.id)]), pSlugs = new Set();
+  for (const p of PRODUCTS) {
+    if (!p.id || !p.slug || !p.title) throw new Error('Нет id/slug/title товара: ' + JSON.stringify(p));
+    if (!/^[a-z0-9-]+$/.test(p.slug)) throw new Error('Плохой slug товара: ' + p.slug);
+    if (pIds.has(p.id)) throw new Error('Дубль id товара: ' + p.id);
+    if (pSlugs.has(p.slug)) throw new Error('Дубль slug товара: ' + p.slug);
+    pIds.add(p.id); pSlugs.add(p.slug);
+    if (!PRODUCT_CATS[p.cat]) throw new Error('Неизвестная категория товара ' + p.id + ': ' + p.cat);
+    if (!(p.price > 0)) throw new Error('Нет цены у товара: ' + p.id);
+    const json = JSON.stringify(p);
+    if (HAN.test(json)) throw new Error('Иероглифы в данных товара: ' + p.id);
+    if (/крипт|crypto|usdt|биткоин|bitcoin|redotpay/i.test(json)) throw new Error('Упоминание криптовалюты в товаре: ' + p.id);
+    if (p.img && !/^https?:/.test(p.img) && !fs.existsSync(path.join(ROOT, p.img))) throw new Error('Нет файла фото товара: ' + p.img + ' (' + p.id + ')');
+  }
+}
 // выбывшие артикулы занимают номер навсегда; переадресация должна вести на существующую модель
 for (const r of SPINDLES_RETIRED) {
   checkSku(r.sku, r.id + ' (выбыл)', '2');
@@ -574,7 +594,25 @@ const MACHINE_SPEC_LABELS = [
 ];
 
 function machineDetailPage(m) {
-  const url = `${SITE}/machines/${m.slug}.html`;
+  return cardPage(m, {
+    dir: 'machines', srcNote: 'data/catalog.js → MACHINES',
+    specRows: MACHINE_SPEC_LABELS
+      .map(([key, label]) => m.specs && m.specs[key] ? `<tr><th>${label}</th><td>${esc(m.specs[key])}</td></tr>` : '')
+      .filter(Boolean).join('\n            ')
+  });
+}
+
+function productDetailPage(p) {
+  return cardPage(Object.assign({}, p, { link: `products/${p.slug}.html` }), {
+    dir: 'products', srcNote: 'data/products.js → PRODUCTS',
+    catName: PRODUCT_CATS[p.cat], catHref: `../marketplace.html?cat=${p.cat}`,
+    specRows: [['Артикул', p.sku], ...(p.specs || [])]
+      .map(([label, v]) => `<tr><th>${esc(label)}</th><td>${esc(v)}</td></tr>`).join('\n            ')
+  });
+}
+
+function cardPage(m, opt) {
+  const url = `${SITE}/${opt.dir}/${m.slug}.html`;
   const title = `${m.title} — характеристики и цена | ЧПУ-склад`;
   const desc = `${m.title} (арт. ${m.sku}): ${m.short}. Цена ${m.price.toLocaleString('ru-RU').replace(/\u00a0/g, ' ')} ₽. Характеристики, фото — ЧПУ-склад.`;
   const imgRel = m.img || '';
@@ -583,13 +621,12 @@ function machineDetailPage(m) {
   const photoHtml = imgSrc
     ? `<img src="${esc(imgSrc)}" alt="${esc(m.title)}">`
     : '<div class="no-photo">Фото уточняется</div>';
-  const specRows = MACHINE_SPEC_LABELS
-    .map(([key, label]) => m.specs && m.specs[key] ? `<tr><th>${label}</th><td>${esc(m.specs[key])}</td></tr>` : '')
-    .filter(Boolean).join('\n            ');
+  const specRows = opt.specRows;
   const description = (m.description && m.description.length ? m.description : [m.short])
     .map(p => `<p>${esc(p)}</p>`).join('\n        ');
   const tech = m.techLink
     ? `<p><a href="../${esc(m.techLink)}">Техническая информация, инструкции и файлы</a> · <a href="../marketplace.html">Товары</a></p>`
+    : opt.catName ? `<p><a href="${esc(opt.catHref)}">← ${esc(opt.catName)}</a> · <a href="../marketplace.html">Все товары</a></p>`
     : `<p><a href="../marketplace.html">← К товарам</a></p>`;
   const ld = {
     '@context': 'https://schema.org', '@type': 'Product', name: m.title, description: m.short,
@@ -600,7 +637,8 @@ function machineDetailPage(m) {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Главная', item: `${SITE}/` },
       { '@type': 'ListItem', position: 2, name: 'Товары', item: `${SITE}/marketplace.html` },
-      { '@type': 'ListItem', position: 3, name: m.title, item: url }
+      ...(opt.catName ? [{ '@type': 'ListItem', position: 3, name: opt.catName, item: `${SITE}/marketplace.html?cat=${m.cat}` }] : []),
+      { '@type': 'ListItem', position: opt.catName ? 4 : 3, name: m.title, item: url }
     ]
   };
   return `<!DOCTYPE html>
@@ -608,7 +646,7 @@ function machineDetailPage(m) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Сгенерировано scripts/build-spindles.js из data/catalog.js → MACHINES — правьте данные, а не этот файл -->
+    <!-- Сгенерировано scripts/build-spindles.js из ${opt.srcNote} — правьте данные, а не этот файл -->
     <title>${esc(title)}</title>
     <meta name="description" content="${esc(desc)}">
     <meta name="robots" content="index, follow">
@@ -648,7 +686,7 @@ ${METRIKA}
 <body>
 ${NAV('../')}
 <main style="max-width:1100px;margin:20px auto;padding:0 16px;">
-    <nav class="breadcrumbs" aria-label="Навигация"><a href="../index.html">Главная</a> › <a href="../marketplace.html">Товары</a> › ${esc(m.title)}</nav>
+    <nav class="breadcrumbs" aria-label="Навигация"><a href="../index.html">Главная</a> › <a href="../marketplace.html">Товары</a> › ${opt.catName ? `<a href="${esc(opt.catHref)}">${esc(opt.catName)}</a> › ` : ''}${esc(m.title)}</nav>
     <h1>${esc(m.title)}</h1>
     <div class="machine-top">
         <div class="machine-photo">${photoHtml}</div>
@@ -696,6 +734,13 @@ const wantedMachines = new Set(MACHINES.map(m => m.slug + '.html'));
 for (const f of fs.readdirSync(machDir)) if (f.endsWith('.html') && !wantedMachines.has(f)) fs.unlinkSync(path.join(machDir, f));
 for (const m of MACHINES) fs.writeFileSync(path.join(machDir, m.slug + '.html'), machineDetailPage(m));
 
+// 1в) карточки товаров data/products.js
+const prodDir = path.join(ROOT, 'products');
+fs.mkdirSync(prodDir, { recursive: true });
+const wantedProducts = new Set(PRODUCTS.map(p => p.slug + '.html'));
+for (const f of fs.readdirSync(prodDir)) if (f.endsWith('.html') && !wantedProducts.has(f)) fs.unlinkSync(path.join(prodDir, f));
+for (const p of PRODUCTS) fs.writeFileSync(path.join(prodDir, p.slug + '.html'), productDetailPage(p));
+
 // 2) список
 const listFile = path.join(ROOT, 'spindle-changsheng.html');
 fs.writeFileSync(listFile, replaceBetween(fs.readFileSync(listFile, 'utf8'),
@@ -703,7 +748,7 @@ fs.writeFileSync(listFile, replaceBetween(fs.readFileSync(listFile, 'utf8'),
 
 // 2б) разметка ItemList/BreadcrumbList на marketplace.html (между маркерами ITEMLIST:START/END)
 const mpFile = path.join(ROOT, 'marketplace.html');
-const mpItems = [...MACHINES.map(m => [`${m.title} (арт. ${m.sku})`, `${SITE}/${m.link}`]), ...spindleItems(), ...CATALOG.map(c => [`${c.title} (арт. ${c.sku})`, c.link ? `${SITE}/${c.link}` : `${SITE}/marketplace.html?q=${c.sku}`])];
+const mpItems = [...MACHINES.map(m => [`${m.title} (арт. ${m.sku})`, `${SITE}/${m.link}`]), ...spindleItems(), ...PRODUCTS.map(p => [`${p.title} (арт. ${p.sku})`, `${SITE}/products/${p.slug}.html`]), ...CATALOG.map(c => [`${c.title} (арт. ${c.sku})`, c.link ? `${SITE}/${c.link}` : `${SITE}/marketplace.html?q=${c.sku}`])];
 fs.writeFileSync(mpFile, replaceBetween(fs.readFileSync(mpFile, 'utf8'),
   '<!-- ITEMLIST:START (генерируется scripts/build-spindles.js) -->', '<!-- ITEMLIST:END -->',
   '    ' + ldScript(itemListLd('Товары ЧПУ-склад', mpItems)) + '\n    ' +
@@ -714,6 +759,8 @@ const smFile = path.join(ROOT, 'sitemap.xml');
 const entry = (loc, prio) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${prio}</priority>\n  </url>`;
 const smMachines = MACHINES.map(m => entry(`${SITE}/machines/${m.slug}.html`, '0.8')).join('\n');
 fs.writeFileSync(smFile, replaceBetween(fs.readFileSync(smFile, 'utf8'), '  <!-- machines:start -->', '  <!-- machines:end -->', smMachines, smFile));
+const smProducts = PRODUCTS.map(p => entry(`${SITE}/products/${p.slug}.html`, '0.7')).join('\n');
+fs.writeFileSync(smFile, replaceBetween(fs.readFileSync(smFile, 'utf8'), '  <!-- products:start -->', '  <!-- products:end -->', smProducts, smFile));
 const sm = [entry(`${SITE}/spindle-changsheng.html`, '0.8'), ...SPINDLES.map(s => entry(`${SITE}/spindles/${s.slug}.html`, '0.7'))].join('\n');
 fs.writeFileSync(smFile, replaceBetween(fs.readFileSync(smFile, 'utf8'), '  <!-- spindles:start -->', '  <!-- spindles:end -->', sm, smFile));
 
@@ -722,6 +769,7 @@ const csvCell = v => /[",;\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '
 const csvRows = [
   ...MACHINES.map(m => [m.sku, 'Станок', m.title, m.id, `${SITE}/${m.link}`]),
   ...SPINDLES.map(s => [s.sku, 'Шпиндель', spindleTitle(s), s.id, `${SITE}/spindles/${s.slug}.html`]),
+  ...PRODUCTS.map(p => [p.sku, 'Товары', p.title, p.id, `${SITE}/products/${p.slug}.html`]),
   ...CATALOG.map(c => [c.sku, 'Товары', c.title, c.id, c.link ? `${SITE}/${c.link}` : `${SITE}/marketplace.html?q=${c.sku}`]),
   ...SPINDLES_RETIRED.map(r => { const to = SPINDLES.find(s => s.id === r.to); return [r.sku, 'Выбыл (не использовать)', `${r.title} → арт. ${to.sku}`, r.id, `${SITE}/spindles/${to.slug}.html`]; })
 ].sort((a, b) => a[0].localeCompare(b[0]));
@@ -733,7 +781,7 @@ fs.writeFileSync(path.join(ROOT, 'docs', 'articles.csv'),
 //    браузер не брал старую копию из кэша (GitHub Pages отдаёт их с max-age=600).
 //    Хэш = первые 8 символов sha256 содержимого файла; меняется только когда меняется сам файл.
 const crypto = require('crypto');
-const VERSIONED = ['data/spindles.js', 'data/catalog.js', 'style.css'];
+const VERSIONED = ['data/spindles.js', 'data/catalog.js', 'data/products.js', 'style.css'];
 const versions = Object.fromEntries(VERSIONED.map(f =>
   [f, crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, f))).digest('hex').slice(0, 8)]));
 const SKIP_DIRS = new Set(['.git', 'node_modules', 'docs', 'api', 'scripts', 'mistral-advanced-bot', '_site']);
@@ -757,4 +805,4 @@ for (const file of htmlFiles(ROOT)) {
 }
 console.log(`Версии файлов: ${VERSIONED.map(f => `${f}?v=${versions[f]}`).join(', ')} (страниц с метками: ${versionedFiles})`);
 
-console.log(`OK: ${SPINDLES.length} страниц в spindles/, ${MACHINES.length} карточек станков в machines/, список и sitemap обновлены`);
+console.log(`OK: ${SPINDLES.length} страниц в spindles/, ${MACHINES.length} карточек станков в machines/, ${PRODUCTS.length} карточек товаров в products/, список и sitemap обновлены`);

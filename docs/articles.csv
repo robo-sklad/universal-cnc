@@ -46,3 +46,29 @@
 30012;Товары;Контроллер GRBL на Arduino;controller-grbl;https://чпу-склад.рф/marketplace.html?q=30012
 30013;Товары;Набор цанг ER11 (13 шт);collet-set;https://чпу-склад.рф/marketplace.html?q=30013
 30014;Товары;Набор свёрел для ЧПУ;bit-set;https://чпу-склад.рф/marketplace.html?q=30014
+30015;Товары;"Диодный лазерный гравер ATOMSTACK A10 Pro V2, 10 Вт";laser-atomstack-a10-pro-v2;https://чпу-склад.рф/products/lazernyj-graver-atomstack-a10-pro-v2-10vt.html
+30016;Товары;"Диодный лазерный гравер ATOMSTACK A20 Pro V2, 20 Вт";laser-atomstack-a20-pro-v2;https://чпу-склад.рф/products/lazernyj-graver-atomstack-a20-pro-v2-20vt.html
+30017;Товары;"Волоконный лазерный маркер 20 Вт (источник Raycus), поле 110×110 мм";fiber-marker-20w-raycus;https://чпу-склад.рф/products/volokonnyj-lazernyj-marker-20vt-raycus.html
+30018;Товары;"Волоконный лазерный маркер 30 Вт (источник Raycus), поле 200×200 мм";fiber-marker-30w-raycus;https://чпу-склад.рф/products/volokonnyj-lazernyj-marker-30vt-raycus.html
+30019;Товары;"Частотный преобразователь Huanyang HY01D523B, 1,5 кВт, 220 В";vfd-hy01d523b;https://чпу-склад.рф/products/chastotnyj-preobrazovatel-huanyang-hy01d523b-1-5kvt.html
+30020;Товары;"Частотный преобразователь Huanyang HY02D223B, 2,2 кВт, 220 В";vfd-hy02d223b;https://чпу-склад.рф/products/chastotnyj-preobrazovatel-huanyang-hy02d223b-2-2kvt.html
+30021;Товары;"Частотный преобразователь Huanyang HY04D023B, 4,0 кВт, 220 В";vfd-hy04d023b;https://чпу-склад.рф/products/chastotnyj-preobrazovatel-huanyang-hy04d023b-4kvt.html
+30022;Товары;"Комплект: шпиндель 2,2 кВт (водяное охлаждение, ER20) + частотный преобразователь 2,2 кВт";kit-spindle-2-2kw-water-vfd;https://чпу-склад.рф/products/komplekt-shpindel-2-2kvt-vodyanoe-chastotnik.html
+30023;Товары;"Комплект: шпиндель 1,5 кВт (воздушное охлаждение, ER11) + частотный преобразователь 1,5 кВт";kit-spindle-1-5kw-air-vfd;https://чпу-склад.рф/products/komplekt-shpindel-1-5kvt-vozdushnoe-chastotnik.html
+30024;Товары;"Шаговый двигатель с обратной связью NEMA 23, 2,2 Н·м + драйвер HBS57 (комплект на ось)";closed-loop-nema23-2-2nm;https://чпу-склад.рф/products/shagovyj-dvigatel-obratnaya-svyaz-nema23-2-2nm-hbs57.html
+30025;Товары;"Шаговый двигатель с обратной связью NEMA 34, 8,5 Н·м + драйвер HBS86H (комплект на ось)";closed-loop-nema34-8-5nm;https://чпу-склад.рф/products/shagovyj-dvigatel-obratnaya-svyaz-nema34-8-5nm-hbs86h.html
+30026;Товары;"Сервопривод переменного тока 400 Вт, 60 мм, 1,27 Н·м, 3000 об/мин (двигатель + драйвер)";ac-servo-400w-60mm;https://чпу-склад.рф/products/servoprivod-400vt-60mm-1-27nm-komplekt.html
+30027;Товары;"Автономный DSP-контроллер RichAuto A11E (3 оси, полный комплект)";controller-richauto-a11e;https://чпу-склад.рф/products/kontroller-dsp-richauto-a11e.html
+30028;Товары;"Автономный контроллер DDCS V3.1, 4 оси";controller-ddcs-v3-1;https://чпу-склад.рф/products/avtonomnyj-kontroller-ddcs-v3-1-4-osi.html
+30029;Товары;"Плата управления Mach3 USB, 4 оси, 100 кГц";controller-mach3-usb-4axis;https://чпу-склад.рф/products/plata-upravleniya-mach3-usb-4-osi.html
+30030;Товары;"Поворотная ось с патроном K11-100 (3 кулачка), шаговый двигатель NEMA 23";rotary-k11-100-3jaw;https://чпу-склад.рф/products/povorotnaya-os-k11-100-3-kulachka.html
+30031;Товары;"Поворотная ось с патроном K12-100 (4 кулачка), шаговый двигатель NEMA 23";rotary-k12-100-4jaw;https://чпу-склад.рф/products/povorotnaya-os-k12-100-4-kulachka.html
+30032;Товары;"Лазерная трубка CO2 80 Вт, длина 1250 мм, Ø80 мм";co2-tube-80w-1250;https://чпу-склад.рф/products/lazernaya-trubka-co2-80vt-1250mm.html
+30033;Товары;"Блок питания CO2-лазера MYJG-100, 100 Вт";co2-psu-myjg-100;https://чпу-склад.рф/products/blok-pitaniya-co2-lazera-myjg-100.html
+30034;Товары;"Фокусирующая линза ZnSe D20 F50,8 мм (2″) для CO2-лазера";co2-lens-znse-d20-f50-8;https://чпу-склад.рф/products/fokusiruyushchaya-linza-znse-d20-f50-8.html
+30035;Товары;Набор зеркал Mo D25 мм для CO2-лазера (3 шт);co2-mirrors-mo-d25-3pcs;https://чпу-склад.рф/products/zerkala-mo-d25-co2-lazer-3-sht.html
+30036;Товары;Контроллер Ruida RDC6445G для CO2-лазерных станков;co2-ruida-rdc6445g;https://чпу-склад.рф/products/kontroller-ruida-rdc6445g.html
+30037;Товары;"Комплект линейных направляющих HGR20, 2 рельса × 600 мм + 4 каретки HGH20CA";guides-hgr20-600-kit;https://чпу-склад.рф/products/komplekt-napravlyayushchih-hgr20-600mm.html
+30038;Товары;"ШВП SFU1605, 600 мм, с гайкой и опорами BK12/BF12";ballscrew-sfu1605-600-kit;https://чпу-склад.рф/products/shvp-sfu1605-600mm-opory-bk12-bf12.html
+30039;Товары;"Фреза компрессионная Ø6 мм, рабочая длина 22 мм, Z2+2";freza-compression-6mm;https://чпу-склад.рф/products/freza-kompressionnaya-6mm-z2-2.html
+30040;Товары;"Набор цанг ER16 (10 шт, 1–10 мм)";collet-er16-set-10;https://чпу-склад.рф/products/nabor-cang-er16-10-sht.html
