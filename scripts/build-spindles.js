@@ -160,7 +160,7 @@ const NAV = p => `<header>
         <nav>
             <ul>
                 <li><a href="${p}index.html">Главная</a></li>
-                <li><a href="${p}marketplace.html" class="nav-catalog active">Каталог</a></li>
+                <li><a href="${p}marketplace.html" class="nav-catalog active">Товары</a></li>
                 <li><a href="${p}equipment.html">Оборудование</a></li>
                 <li><a href="${p}program.html">Программы</a></li>
                 <li><a href="${p}cart.html">Корзина <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
@@ -363,7 +363,7 @@ function detailPage(s) {
   const crumbs = {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Главная', item: `${SITE}/` },
-      { '@type': 'ListItem', position: 2, name: 'Каталог', item: `${SITE}/marketplace.html` },
+      { '@type': 'ListItem', position: 2, name: 'Товары', item: `${SITE}/marketplace.html` },
       { '@type': 'ListItem', position: 3, name: 'Шпиндели', item: `${SITE}/spindle-changsheng.html` },
       { '@type': 'ListItem', position: 4, name: s.model, item: url }
     ]
@@ -438,7 +438,7 @@ ${hasGallery ? GALLERY_CSS : ''}    </style>
 <body>
 ${NAV('../')}
 <main style="max-width:1100px;margin:20px auto;padding:0 16px;">
-    <nav class="breadcrumbs" aria-label="Навигация"><a href="../index.html">Главная</a> › <a href="../marketplace.html">Каталог</a> › <a href="../spindle-changsheng.html">Шпиндели</a> › ${esc(s.model)}</nav>
+    <nav class="breadcrumbs" aria-label="Навигация"><a href="../index.html">Главная</a> › <a href="../marketplace.html">Товары</a> › <a href="../spindle-changsheng.html">Шпиндели</a> › ${esc(s.model)}</nav>
     <h1>${esc(spindleTitle(s))}</h1>
     <div class="spindle-top">
         ${photoBlock(s)}
@@ -493,7 +493,7 @@ ${notes ? `
         </ul>
     </section>
 ` : ''}
-    <p><a href="../spindle-changsheng.html">← Все шпиндели</a> · <a href="../marketplace.html">Каталог</a></p>
+    <p><a href="../spindle-changsheng.html">← Все шпиндели</a> · <a href="../marketplace.html">Товары</a></p>
 </main>
 <footer>
     <p>© 2026 ЧПУ-склад • Все права защищены</p>
@@ -539,7 +539,7 @@ const spindleItems = () => SPINDLES.map(s => [`${spindleTitle(s)} (арт. ${s.s
 function listHtml() {
   const brands = [...new Set(SPINDLES.map(s => s.brand))];
   return ldScript(itemListLd('Шпиндели для ЧПУ', spindleItems())) + '\n    ' +
-    ldScript(crumbsLd([['Главная', `${SITE}/`], ['Каталог', `${SITE}/marketplace.html`], ['Шпиндели', `${SITE}/spindle-changsheng.html`]])) + '\n    ' +
+    ldScript(crumbsLd([['Главная', `${SITE}/`], ['Товары', `${SITE}/marketplace.html`], ['Шпиндели', `${SITE}/spindle-changsheng.html`]])) + '\n    ' +
     brands.map(b => `<h2 class="brand-title">${esc(b)}</h2>
     <div class="variant-list">
         ${SPINDLES.filter(s => s.brand === b).map(listCard).join('\n        ')}
@@ -570,8 +570,8 @@ const mpFile = path.join(ROOT, 'marketplace.html');
 const mpItems = [...spindleItems(), ...CATALOG.map(c => [`${c.title} (арт. ${c.sku})`, c.link ? `${SITE}/${c.link}` : `${SITE}/marketplace.html?q=${c.sku}`])];
 fs.writeFileSync(mpFile, replaceBetween(fs.readFileSync(mpFile, 'utf8'),
   '<!-- ITEMLIST:START (генерируется scripts/build-spindles.js) -->', '<!-- ITEMLIST:END -->',
-  '    ' + ldScript(itemListLd('Каталог товаров ЧПУ-склад', mpItems)) + '\n    ' +
-  ldScript(crumbsLd([['Главная', `${SITE}/`], ['Каталог', `${SITE}/marketplace.html`]])) + '\n    ', mpFile));
+  '    ' + ldScript(itemListLd('Товары ЧПУ-склад', mpItems)) + '\n    ' +
+  ldScript(crumbsLd([['Главная', `${SITE}/`], ['Товары', `${SITE}/marketplace.html`]])) + '\n    ', mpFile));
 
 // 3) sitemap
 const smFile = path.join(ROOT, 'sitemap.xml');
@@ -584,7 +584,7 @@ const csvCell = v => /[",;\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '
 const csvRows = [
   ...MACHINES.map(m => [m.sku, 'Станок', m.title, m.id, `${SITE}/${m.link}`]),
   ...SPINDLES.map(s => [s.sku, 'Шпиндель', spindleTitle(s), s.id, `${SITE}/spindles/${s.slug}.html`]),
-  ...CATALOG.map(c => [c.sku, 'Каталог', c.title, c.id, c.link ? `${SITE}/${c.link}` : `${SITE}/marketplace.html?q=${c.sku}`]),
+  ...CATALOG.map(c => [c.sku, 'Товары', c.title, c.id, c.link ? `${SITE}/${c.link}` : `${SITE}/marketplace.html?q=${c.sku}`]),
   ...SPINDLES_RETIRED.map(r => { const to = SPINDLES.find(s => s.id === r.to); return [r.sku, 'Выбыл (не использовать)', `${r.title} → арт. ${to.sku}`, r.id, `${SITE}/spindles/${to.slug}.html`]; })
 ].sort((a, b) => a[0].localeCompare(b[0]));
 fs.mkdirSync(path.join(ROOT, 'docs'), { recursive: true });

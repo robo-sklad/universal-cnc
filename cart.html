@@ -7,7 +7,7 @@
     <meta name="description" content="Корзина и оформление заказа на сайте ЧПУ-склад.">
     <link rel="canonical" href="https://чпу-склад.рф/cart.html">
     <meta name="robots" content="noindex, follow">
-    <link rel="stylesheet" href="style.css?v=b161d6e0">
+    <link rel="stylesheet" href="style.css?v=43514b8d">
     <style>
         .cart-container { max-width: 900px; margin: 0 auto; }
         .cart-item { display: flex; gap: 16px; background: white; padding: 16px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); align-items: center; }
@@ -50,7 +50,7 @@
         <nav>
             <ul>
                 <li><a href="index.html">Главная</a></li>
-                <li><a href="marketplace.html" class="nav-catalog">Каталог</a></li>
+                <li><a href="marketplace.html" class="nav-catalog">Товары</a></li>
                 <li><a href="equipment.html">Оборудование</a></li>
                 <li><a href="program.html">Программы</a></li>
                 <li><a href="cart.html" class="active">Корзина <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
@@ -66,7 +66,7 @@
         <div id="cartItems"></div>
         <div id="emptyCart" class="empty-cart" style="display:none;">
             <h3>Корзина пуста</h3>
-            <p><a href="marketplace.html">Перейти в каталог</a></p>
+            <p><a href="marketplace.html">Перейти к товарам</a></p>
         </div>
         <p class="nonresident-note" style="margin: 16px 0; font-size: 0.95rem;">Покупаете из-за пределов РФ? <a href="payment-nonresident.html">Оплата и доставка для нерезидентов</a></p>
         <div id="cartFooter" style="display:none;">
@@ -237,7 +237,7 @@ function submitOrder(e) {
     orderText += `Email: ${document.getElementById('email').value || 'не указан'}\n`;
     orderText += `Комментарий: ${document.getElementById('comment').value || 'нет'}\n`;
 
-    const subject = encodeURIComponent('Заказ из каталога ЧПУ-склад');
+    const subject = encodeURIComponent('Заказ товаров ЧПУ-склад');
     const body = encodeURIComponent(orderText);
     window.location.href = `mailto:stepmotoren@yandex.ru?subject=${subject}&body=${body}`;
 

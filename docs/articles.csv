@@ -31,17 +31,17 @@
 20029;Выбыл (не использовать);"Шпиндель 2,2 кВт GDZ → арт. 20002";spindle-2.2;https://чпу-склад.рф/spindles/changsheng-gdz-80-2-2b.html
 20030;Выбыл (не использовать);"Шпиндель 1,5 кВт с водяным охлаждением → арт. 20001";spindle-1.5;https://чпу-склад.рф/spindles/changsheng-80-1-5kw-skf.html
 20031;Выбыл (не использовать);"Шпиндель 0,8 кВт с воздушным охлаждением → арт. 20011";spindle-800;https://чпу-склад.рф/spindles/changsheng-65-0-8kw-air.html
-30001;Каталог;Комплект фрез для ЧПУ (10 шт);frezy-set;https://чпу-склад.рф/marketplace.html?q=30001
-30002;Каталог;Фреза спиральная 6 мм однозаходная;freza-6mm;https://чпу-склад.рф/marketplace.html?q=30002
-30003;Каталог;Линейные направляющие HGR15 комплект;guides-hgr15;https://чпу-склад.рф/marketplace.html?q=30003
-30004;Каталог;ШВП 1605 (500 мм) с гайкой;ballscrew-1605;https://чпу-склад.рф/marketplace.html?q=30004
-30005;Каталог;Драйвер шагового двигателя TB6600;driver-tb6600;https://чпу-склад.рф/marketplace.html?q=30005
-30006;Каталог;Шаговый двигатель NEMA 23 (2.8 Нм);stepper-nema23;https://чпу-склад.рф/marketplace.html?q=30006
-30007;Каталог;Набор цанг ER20 (13 шт);collet-er20;https://чпу-склад.рф/marketplace.html?q=30007
-30008;Каталог;СОЖ для ЧПУ (5 л);coolant-5l;https://чпу-склад.рф/marketplace.html?q=30008
-30009;Каталог;Программа CNCV4 (расширенная);cncv4;https://чпу-склад.рф/program/CNCV4.html
-30010;Каталог;Фреза концевая 3 мм;freza-3mm;https://чпу-склад.рф/marketplace.html?q=30010
-30011;Каталог;Муфта соединительная 8x8;coupler;https://чпу-склад.рф/marketplace.html?q=30011
-30012;Каталог;Контроллер GRBL на Arduino;controller-grbl;https://чпу-склад.рф/marketplace.html?q=30012
-30013;Каталог;Набор цанг ER11 (13 шт);collet-set;https://чпу-склад.рф/marketplace.html?q=30013
-30014;Каталог;Набор свёрел для ЧПУ;bit-set;https://чпу-склад.рф/marketplace.html?q=30014
+30001;Товары;Комплект фрез для ЧПУ (10 шт);frezy-set;https://чпу-склад.рф/marketplace.html?q=30001
+30002;Товары;Фреза спиральная 6 мм однозаходная;freza-6mm;https://чпу-склад.рф/marketplace.html?q=30002
+30003;Товары;Линейные направляющие HGR15 комплект;guides-hgr15;https://чпу-склад.рф/marketplace.html?q=30003
+30004;Товары;ШВП 1605 (500 мм) с гайкой;ballscrew-1605;https://чпу-склад.рф/marketplace.html?q=30004
+30005;Товары;Драйвер шагового двигателя TB6600;driver-tb6600;https://чпу-склад.рф/marketplace.html?q=30005
+30006;Товары;Шаговый двигатель NEMA 23 (2.8 Нм);stepper-nema23;https://чпу-склад.рф/marketplace.html?q=30006
+30007;Товары;Набор цанг ER20 (13 шт);collet-er20;https://чпу-склад.рф/marketplace.html?q=30007
+30008;Товары;СОЖ для ЧПУ (5 л);coolant-5l;https://чпу-склад.рф/marketplace.html?q=30008
+30009;Товары;Программа CNCV4 (расширенная);cncv4;https://чпу-склад.рф/program/CNCV4.html
+30010;Товары;Фреза концевая 3 мм;freza-3mm;https://чпу-склад.рф/marketplace.html?q=30010
+30011;Товары;Муфта соединительная 8x8;coupler;https://чпу-склад.рф/marketplace.html?q=30011
+30012;Товары;Контроллер GRBL на Arduino;controller-grbl;https://чпу-склад.рф/marketplace.html?q=30012
+30013;Товары;Набор цанг ER11 (13 шт);collet-set;https://чпу-склад.рф/marketplace.html?q=30013
+30014;Товары;Набор свёрел для ЧПУ;bit-set;https://чпу-склад.рф/marketplace.html?q=30014
