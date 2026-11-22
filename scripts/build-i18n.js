@@ -294,6 +294,11 @@ ${cartJs(l)}
 }
 
 // --- каталог ---
+// Русская marketplace.html ведётся вручную: в начале <main> стоит предупреждение
+// «сайт в разработке!» и строка с телефоном (как на старой equipment.html).
+// Сборка обновляет только маркеры HREFLANG/LANG и не перезаписывает тело русской страницы.
+// На языковые /<lang>/marketplace.html это предупреждение не выносится: отдельного
+// локализованного баннера на сайте не было.
 const CAT_ORDER = ['machines', 'spindle', 'kits', 'vfd', 'lasers', 'co2', 'drives', 'controllers', 'rotary', 'tools', 'mechanics', 'electronics', 'consumables', 'software'];
 function marketplacePage(l) {
   const ui = DICT[l].ui, file = `${l}/marketplace.html`, pg = PAGES.find(p => p.key === 'marketplace');
