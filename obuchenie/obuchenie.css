@@ -1,0 +1,52 @@
+.ob-wrap { max-width: 980px; margin: 0 auto; }
+.ob-crumbs { font-size: 0.9rem; color: #666; margin: 8px 0 18px; }
+.ob-crumbs a { color: #0d6efd; text-decoration: none; }
+.ob-lead { font-size: 1.08rem; }
+.ob-legal { background: #fff8e6; border-left: 5px solid #e0a800; padding: 14px 18px; border-radius: 8px; margin: 16px 0 8px; }
+.ob-note { background: #e7f3ff; border-left: 5px solid #0d6efd; padding: 14px 18px; border-radius: 8px; margin: 16px 0; }
+.ob-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 12px 0 8px; }
+.ob-card { background: #fff; border: 1px solid #e5e8ee; border-radius: 12px; padding: 18px 18px 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+.ob-card h3 { margin: 0 0 8px; font-size: 1.15rem; color: #0d6efd; }
+.ob-card p { margin: 0 0 10px; flex: 1; }
+.ob-price { font-size: 1.25rem; font-weight: 700; color: #0d6efd; margin: 4px 0 12px; }
+.ob-btn { display: inline-block; padding: 10px 18px; background: #0d6efd; color: #fff !important; text-decoration: none; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; font-size: 0.95rem; text-align: center; }
+.ob-btn:hover { background: #0b5ed7; }
+.ob-btn-ghost { background: #f0f2f5; color: #222 !important; }
+.ob-btn-ghost:hover { background: #e4e7ec; }
+.ob-list { margin: 8px 0 0; padding-left: 20px; }
+.ob-list li { margin: 6px 0; }
+.ob-table { width: 100%; border-collapse: collapse; background: #fff; margin: 10px 0 16px; }
+.ob-table th, .ob-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; vertical-align: top; }
+.ob-table th { width: 36%; color: #555; font-weight: 600; }
+.ob-form { display: grid; gap: 12px; max-width: 640px; }
+.ob-form label { font-weight: 600; display: block; margin-bottom: 4px; }
+.ob-form input, .ob-form select, .ob-form textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #ccd; border-radius: 8px; font: inherit; }
+.ob-form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ob-faq details { background: #fff; border: 1px solid #e5e8ee; border-radius: 10px; padding: 12px 16px; margin: 0 0 10px; }
+.ob-faq summary { cursor: pointer; font-weight: 700; color: #0d6efd; }
+.ob-faq details p { margin: 10px 0 4px; }
+.ob-sim { display: grid; grid-template-columns: 280px 1fr; gap: 16px; align-items: start; }
+.ob-panel { background: #1e2430; color: #d7deea; border-radius: 10px; padding: 12px; font-family: Consolas, "Liberation Mono", Menlo, monospace; font-size: 13px; }
+.ob-panel h3 { color: #9ec5fe; margin: 0 0 10px; font-family: Arial, sans-serif; font-size: 0.95rem; letter-spacing: 0.04em; }
+.ob-dro { display: grid; grid-template-columns: 36px 1fr; gap: 6px 8px; margin: 0 0 12px; align-items: center; }
+.ob-dro b { color: #ffd43b; }
+.ob-dro span { background: #0f131a; color: #7dff9a; padding: 4px 8px; border-radius: 4px; text-align: right; font-size: 1.05rem; }
+.ob-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 12px; }
+.ob-btns button, .ob-panel button { padding: 8px 6px; border: 0; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.82rem; }
+.ob-go { background: #2f9e44; color: #fff; }
+.ob-hold { background: #f59f00; color: #111; }
+.ob-stop { background: #c92a2a; color: #fff; }
+.ob-reset { background: #4c6ef5; color: #fff; }
+.ob-panel label { display: block; margin: 8px 0 4px; color: #adb5bd; font-size: 0.75rem; }
+.ob-panel input, .ob-panel textarea, .ob-panel select { width: 100%; box-sizing: border-box; background: #0f131a; color: #e9ecef; border: 1px solid #3b4250; border-radius: 4px; padding: 6px; font: inherit; }
+.ob-canvas-wrap { background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 12px; }
+.ob-canvas-wrap canvas { width: 100%; height: auto; display: block; background: #0b1020; border-radius: 8px; }
+.ob-legend { font-size: 0.85rem; color: #555; margin-top: 8px; }
+.ob-legend i { display: inline-block; width: 14px; height: 3px; margin: 0 6px 0 12px; vertical-align: middle; }
+.ob-legend i.rapid { background: #74c0fc; }
+.ob-legend i.feed { background: #69db7c; }
+.ob-legend i.tool { background: #ff6b6b; }
+@media (max-width: 800px) {
+    .ob-sim { grid-template-columns: 1fr; }
+    .ob-form .row { grid-template-columns: 1fr; }
+}
