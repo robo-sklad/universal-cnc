@@ -189,7 +189,6 @@ const NAV = p => `<header>
             <ul>
                 <li><a href="${p}index.html">Главная</a></li>
                 <li><a href="${p}marketplace.html" class="nav-catalog active">Товары</a></li>
-                <li><a href="${p}equipment.html">Оборудование</a></li>
                 <li><a href="${p}program.html">Программы</a></li>
                 <li><a href="${p}cart.html">Корзина <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
                 <li><a href="${p}obuchenie/">Обучение</a></li>

@@ -4,7 +4,7 @@
  * Запускается из scripts/build-spindles.js (до простановки меток ?v=), можно и отдельно:
  *   node scripts/build-i18n.js
  * Делает:
- *   1) /<lang>/index.html, marketplace.html, equipment.html, payment.html;
+ *   1) /<lang>/index.html, marketplace.html, payment.html; equipment.html — заглушка-переадресация на marketplace.html;
  *   2) /<lang>/spindles|machines|products/<slug>.html — карточки всех товаров с отдельной страницей;
  *   3) на русских страницах: переключатель языка в шапке (маркеры LANG:START/END)
  *      и <link rel="alternate" hreflang> (маркеры HREFLANG:START/END);
@@ -96,7 +96,6 @@ const PAGES = []; // { key, ru: путь от корня, lang: l => путь о
 const addPage = (key, ruPath, langPath) => PAGES.push({ key, ruPath, langPath });
 addPage('home', 'index.html', l => `${l}/index.html`);
 addPage('marketplace', 'marketplace.html', l => `${l}/marketplace.html`);
-addPage('equipment', 'equipment.html', l => `${l}/equipment.html`);
 addPage('payment', 'payment-nonresident.html', l => `${l}/payment.html`);
 for (const it of ITEMS) if (it.kind) addPage('item:' + it.id, `${it.kind}/${it.slug}.html`, l => `${l}/${it.kind}/${it.slug}.html`);
 const absUrl = p => `${SITE}/${p.replace(/(^|\/)index\.html$/, '$1')}`;
@@ -218,7 +217,6 @@ function header(l, file, pg, active) {
             <ul>
                 <li><a href="${r(`${l}/index.html`)}" class="${a('home').trim()}">${esc(ui.navHome)}</a></li>
                 <li><a href="${r(`${l}/marketplace.html`)}" class="nav-catalog${a('marketplace')}">${esc(ui.navCatalog)}</a></li>
-                <li><a href="${r(`${l}/equipment.html`)}" class="${a('equipment').trim()}">${esc(ui.navEquipment)}</a></li>
                 <li><a href="${r(`${l}/payment.html`)}" class="${a('payment').trim()}">${esc(ui.navPayment)}</a></li>
                 <li><a href="${r('cart.html')}">${esc(ui.navCart)} <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
             </ul>
@@ -446,36 +444,34 @@ ${cartJs(l)}
 `;
 }
 
-// --- оборудование ---
+// --- оборудование: страница сохраняется как переадресация на каталог товаров (GitHub Pages без 301) ---
+const EQ_MOVED = {
+  en: { desc: 'The Machines section has been merged into the Products catalogue.', body: 'The Machines section has been merged into the <a href="marketplace.html">Products</a> catalogue.' },
+  kk: { desc: '«Станоктар» бөлімі «Тауарлар» каталогымен біріктірілді.', body: '«Станоктар» бөлімі <a href="marketplace.html">Тауарлар</a> каталогымен біріктірілді.' },
+  uz: { desc: 'Dastgohlar bo‘limi Mahsulotlar katalogiga birlashtirildi.', body: 'Dastgohlar bo‘limi <a href="marketplace.html">Mahsulotlar</a> katalogiga birlashtirildi.' },
+  hy: { desc: '«Հաստոցներ» բաժինը միավորվել է «Ապրանքներ» ցանկի հետ։', body: '«Հաստոցներ» բաժինը միավորվել է <a href="marketplace.html">Ապրանքներ</a> ցանկի հետ։' },
+  ka: { desc: 'განყოფილება «ჩარხები» გაერთიანდა კატალოგთან «პროდუქცია».', body: 'განყოფილება «ჩარხები» გაერთიანდა კატალოგთან <a href="marketplace.html">პროდუქცია</a>.' },
+  ky: { desc: '«Станоктор» бөлүмү «Товарлар» каталогу менен бириктирилди.', body: '«Станоктор» бөлүмү <a href="marketplace.html">Товарлар</a> каталогу менен бириктирилди.' }
+};
 function equipmentPage(l) {
-  const ui = DICT[l].ui, file = `${l}/equipment.html`, pg = PAGES.find(p => p.key === 'equipment');
-  const machines = ITEMS.filter(it => it.kind === 'machines');
-  return `${head(l, file, pg, { title: fill(ui.eqTitle, { brand: ui.brand }), desc: ui.eqIntro })}
+  const ui = DICT[l].ui, msg = EQ_MOVED[l];
+  const title = `${ui.navEquipment} — ${ui.navCatalog} | ${ui.brand}`;
+  const canonical = `${SITE}/${l}/marketplace.html`;
+  return `<!DOCTYPE html>
+<html lang="${l}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${esc(title)}</title>
+    <meta name="description" content="${esc(msg.desc)}">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="${canonical}">
+    <meta http-equiv="refresh" content="0; url=marketplace.html">
+    <script>location.replace('marketplace.html' + location.search + location.hash);</script>
+${METRIKA}
+</head>
 <body>
-${header(l, file, pg, 'equipment')}
-<main style="max-width:1100px;margin:20px auto;padding:0 16px;">
-    <h1>${esc(ui.eqH1)}</h1>
-    <p>${esc(ui.eqIntro)}</p>
-    <div class="card-top">
-        ${machines.map(it => `<div class="section" style="flex:1 1 320px;">
-            ${it.img ? `<img src="${esc(relFrom(file, it.img))}" alt="${esc(tr(l, it.title))}" style="width:100%;max-height:260px;object-fit:contain;">` : `<div class="no-photo">${esc(ui.photoTbd)}</div>`}
-            <h2 style="font-size:1.2rem;">${esc(tr(l, it.title))}</h2>
-            ${skuLine(l, it.sku)}
-            <div class="card-price">${priceOf(l, it)}</div>
-            <p><a class="btn btn-primary" href="machines/${esc(it.slug)}.html">${esc(ui.details)}</a></p>
-        </div>`).join('\n        ')}
-    </div>
-    <div class="section">
-        <p>${esc(ui.eqTech)}</p>
-        <p><a href="${esc(relFrom(file, 'equipment/cnc-3040.html'))}">${esc(ui.eqTechLink)}</a></p>
-        <p>${esc(ui.pricesNote)}</p>
-        ${contactsBlock(l)}
-    </div>
-</main>
-${footer(l, file)}
-<script>
-${cartJs(l)}
-</script>
+    <p>${msg.body}</p>
 </body>
 </html>
 `;
