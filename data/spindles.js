@@ -120,7 +120,12 @@ var SPINDLES = [
     price: 21900, priceUsd: 231,
     specs: { power: '3.0 кВт', voltage: '220В', current: '12А', frequency: '400 Гц', rpm: '24000', collet: 'ER20', cooling: 'Водяное', bearings: '3 шт., класс P4', size: '100×220 мм', weight: '8.9 кг', warranty: '1 год (включая подшипники и обмотку)' },
     img: 'images/changsheng-gdz100-3kw-ru.jpg',
-    photos: ['images/changsheng-gdz100-3kw-ru.jpg'],
+    photos: [
+      'images/changsheng-gdz100-3kw-ru.jpg',
+      'equipment-data/changsheng-gdz-100-3-0-220v/2.jpg',
+      'equipment-data/changsheng-gdz-100-3-0-220v/3.jpg',
+      'equipment-data/changsheng-gdz-100-3-0-220v/4.jpg'
+    ],
     description: ['Шпиндель Changsheng GDZ-100-3.0 (220 В) для фрезерно-гравировальных станков с ЧПУ: мощность 3,0 кВт, напряжение 220 В, до 24 000 об/мин, цанга ER20, водяное охлаждение, размер 100×220 мм.'], applications: [], notes: [], clarify: ['модель подшипников', 'вес (8,9 или 9,1 кг)']
   },
   {
@@ -186,7 +191,12 @@ var SPINDLES = [
     price: 59900, priceUsd: 631,
     specs: { power: '5.5 кВт', voltage: '380В', current: '8А', frequency: '400 Гц', rpm: '24000', collet: 'ER25', cooling: 'Водяное', bearings: '4 шт., класс P4', size: '125×298 мм', weight: '22 кг' },
     img: 'images/changsheng-gdz125-5.5kw-ru.jpg',
-    photos: ['images/changsheng-gdz125-5.5kw-ru.jpg'],
+    photos: [
+      'images/changsheng-gdz125-5.5kw-ru.jpg',
+      'equipment-data/changsheng-gdz-125-5-5/2.jpg',
+      'equipment-data/changsheng-gdz-125-5-5/3.jpg',
+      'equipment-data/changsheng-gdz-125-5-5/4.jpg'
+    ],
     description: ['Шпиндель Changsheng GDZ-125-5.5 для фрезерно-гравировальных станков с ЧПУ: мощность 5,5 кВт, напряжение 380 В, до 24 000 об/мин, цанга ER25, водяное охлаждение, размер 125×298 мм.'], applications: [], notes: [], clarify: ['ток (8 А для 5,5 кВт при 380 В — проверить)', 'модель подшипников', 'гарантия']
   },
   {
@@ -225,7 +235,12 @@ var SPINDLES = [
     price: 12500, priceUsd: 132,
     specs: { power: '1.5 кВт', voltage: '220В', current: '5А', frequency: '400 Гц', rpm: '24000', collet: 'ER11', cooling: 'Водяное', bearings: '3 шт., TPI (2×7002C P4 DT + 1×7002C P4)', size: '80×188 мм', weight: '4 кг', warranty: '1 год (включая подшипники и обмотку)' },
     img: 'images/changsheng-gdz80-1.5-80x188-ru.jpg',
-    photos: ['images/changsheng-gdz80-1.5-80x188-ru.jpg'],
+    photos: [
+      'images/changsheng-gdz80-1.5-80x188-ru.jpg',
+      'equipment-data/changsheng-gdz-80-1-5-80x188/2.jpg',
+      'equipment-data/changsheng-gdz-80-1-5-80x188/3.jpg',
+      'equipment-data/changsheng-gdz-80-1-5-80x188/4.jpg'
+    ],
     description: ['Популярный шпиндель 1,5 кВт с водяным охлаждением для станков 3040/6040: корпус Ø80×188 мм, три подшипника, консистентная смазка. Питание от частотного преобразователя 220 В, 400 Гц, цанга ER11 (хвостовик до 7 мм).'],
     applications: ['Фрезеровка и гравировка дерева, МДФ, пластика, акрила', 'Фрезерно-гравировальные станки ЧПУ 3040, 4060, 6040'],
     notes: [{ date: '2026-11-19', text: 'Карточка создана по фото из письма от 19.11.2026: маркировка на корпусе GDZ-80-1.5 Φ80×188, 220 В, 1,5 кВт, 5 А, 400 Гц, 24 000 об/мин; в описании продавца — 3 подшипника TPI, вес 4 кг.' }, { date: '2026-11-19', text: 'Дополнено по фото из письма 19.11.2026 16:45: вариант продавца «80×188/1,5 кВт, 3 подшипника, серия 7», вес нетто 4 кг и маркировка на корпусе подтверждены.' }],
