@@ -747,7 +747,8 @@ const listFile = path.join(ROOT, 'spindle-changsheng.html');
 fs.writeFileSync(listFile, replaceBetween(fs.readFileSync(listFile, 'utf8'),
   '<!-- SPINDLES:START (генерируется scripts/build-spindles.js) -->', '<!-- SPINDLES:END -->', '    ' + listHtml(), listFile));
 
-// 2б) разметка ItemList/BreadcrumbList на marketplace.html (между маркерами ITEMLIST:START/END)
+// 2б) разметка ItemList/BreadcrumbList на marketplace.html (между маркерами ITEMLIST:START/END).
+// Тело страницы, в том числе блок DEV-BANNER («сайт в разработке!» и телефон) в <main>, не перезаписывать.
 const mpFile = path.join(ROOT, 'marketplace.html');
 const mpItems = [...MACHINES.map(m => [`${m.title} (арт. ${m.sku})`, `${SITE}/${m.link}`]), ...spindleItems(), ...PRODUCTS.map(p => [`${p.title} (арт. ${p.sku})`, `${SITE}/products/${p.slug}.html`]), ...CATALOG.map(c => [`${c.title} (арт. ${c.sku})`, c.link ? `${SITE}/${c.link}` : `${SITE}/marketplace.html?q=${c.sku}`])];
 fs.writeFileSync(mpFile, replaceBetween(fs.readFileSync(mpFile, 'utf8'),
