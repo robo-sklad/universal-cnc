@@ -192,7 +192,7 @@ const NAV = p => `<header>
                 <li><a href="${p}equipment.html">Оборудование</a></li>
                 <li><a href="${p}program.html">Программы</a></li>
                 <li><a href="${p}cart.html">Корзина <span id="headerCartCount" style="background:#dc3545;color:white;border-radius:10px;padding:1px 6px;font-size:0.75rem;">0</span></a></li>
-                <li><a href="https://universal-cnc.vercel.app/chat.html" target="_blank" rel="noopener">Обучение</a></li>
+                <li><a href="${p}obuchenie/">Обучение</a></li>
             </ul>
         </nav>
     </div>
@@ -527,6 +527,7 @@ ${notes ? `
     <p>© 2026 ЧПУ-склад • Все права защищены</p>
     <p>Поддержка: <a href="tel:+79619910176">+7 961 991 01 76</a> (WhatsApp) | <a href="mailto:stepmotoren@yandex.ru">stepmotoren@yandex.ru</a></p>
     <p><a href="../payment-nonresident.html">Оплата и доставка для нерезидентов</a></p>
+    <p><a href="../obuchenie/">Обучение операторов ЧПУ</a></p>
 </footer>
 ${hasGallery ? lightboxHtml(s) + '\n' : ''}<script>
 ${CART_JS}${hasGallery ? '\n' + GALLERY_JS : ''}
@@ -710,6 +711,7 @@ ${NAV('../')}
     <p>© 2026 ЧПУ-склад • Все права защищены</p>
     <p>Поддержка: <a href="tel:+79619910176">+7 961 991 01 76</a> (WhatsApp) | <a href="mailto:stepmotoren@yandex.ru">stepmotoren@yandex.ru</a></p>
     <p><a href="../payment-nonresident.html">Оплата и доставка для нерезидентов</a></p>
+    <p><a href="../obuchenie/">Обучение операторов ЧПУ</a></p>
 </footer>
 <script>
 ${CART_JS}
