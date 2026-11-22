@@ -48,8 +48,27 @@
         .sku-line { margin: 4px 0 8px; color: #444; font-size: 0.95rem; }
         .sku-code { font-family: monospace; font-size: 1.05rem; font-weight: bold; background: #f0f2f5; padding: 1px 6px; border-radius: 4px; user-select: all; }
         .sku-copy { border: 1px solid #ccd; background: #fff; border-radius: 6px; padding: 2px 8px; font-size: 0.8rem; cursor: pointer; }
+
+        .spindle-photo.gallery { flex-direction: column; background: transparent; min-height: 0; align-items: stretch; }
+        .gallery-main { position: relative; background: #f8f9fa; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; }
+        .gallery-main-img { width: 100%; max-height: 460px; object-fit: contain; border-radius: 12px; cursor: zoom-in; }
+        .gallery-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 1.5rem; line-height: 1; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,0.15); z-index: 1; color: #222; }
+        .gallery-nav:hover { background: #fff; }
+        .gallery-prev { left: 8px; }
+        .gallery-next { right: 8px; }
+        .gallery-counter { position: absolute; right: 10px; bottom: 10px; background: rgba(0,0,0,0.6); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.85rem; }
+        .gallery-thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; width: 100%; }
+        .gallery-thumb { border: 2px solid transparent; border-radius: 8px; padding: 0; background: #f8f9fa; cursor: pointer; width: 72px; height: 72px; overflow: hidden; }
+        .gallery-thumb.is-active { border-color: #0d6efd; }
+        .gallery-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .gallery-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .gallery-lightbox[hidden] { display: none; }
+        .gallery-lightbox-img { max-width: 92vw; max-height: 88vh; object-fit: contain; }
+        .gallery-lightbox-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 2; }
+        .gallery-lightbox .gallery-nav { background: rgba(255,255,255,0.92); }
+        .gallery-lightbox .gallery-counter { right: 16px; bottom: 16px; }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Changsheng GDZ-125-5.5","description":"380 В, 8 А, 400 Гц, 24 000 об/мин, ER25, Ø125×298 мм, водяное охлаждение, 22 кг","brand":{"@type":"Brand","name":"Changsheng"},"image":"https://чпу-склад.рф/images/changsheng-gdz125-5.5kw-ru.jpg","sku":"20013","productID":"cs-125-5.5","url":"https://чпу-склад.рф/spindles/changsheng-gdz-125-5-5.html","offers":{"@type":"Offer","price":59900,"priceCurrency":"RUB","url":"https://чпу-склад.рф/spindles/changsheng-gdz-125-5-5.html","availability":"https://schema.org/InStock"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Changsheng GDZ-125-5.5","description":"380 В, 8 А, 400 Гц, 24 000 об/мин, ER25, Ø125×298 мм, водяное охлаждение, 22 кг","brand":{"@type":"Brand","name":"Changsheng"},"image":["https://чпу-склад.рф/images/changsheng-gdz125-5.5kw-ru.jpg","https://чпу-склад.рф/equipment-data/changsheng-gdz-125-5-5/2.jpg","https://чпу-склад.рф/equipment-data/changsheng-gdz-125-5-5/3.jpg","https://чпу-склад.рф/equipment-data/changsheng-gdz-125-5-5/4.jpg"],"sku":"20013","productID":"cs-125-5.5","url":"https://чпу-склад.рф/spindles/changsheng-gdz-125-5-5.html","offers":{"@type":"Offer","price":59900,"priceCurrency":"RUB","url":"https://чпу-склад.рф/spindles/changsheng-gdz-125-5-5.html","availability":"https://schema.org/InStock"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://чпу-склад.рф/"},{"@type":"ListItem","position":2,"name":"Товары","item":"https://чпу-склад.рф/marketplace.html"},{"@type":"ListItem","position":3,"name":"Шпиндели","item":"https://чпу-склад.рф/spindle-changsheng.html"},{"@type":"ListItem","position":4,"name":"Changsheng GDZ-125-5.5","item":"https://чпу-склад.рф/spindles/changsheng-gdz-125-5-5.html"}]}</script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -87,7 +106,18 @@
     <nav class="breadcrumbs" aria-label="Навигация"><a href="../index.html">Главная</a> › <a href="../marketplace.html">Товары</a> › <a href="../spindle-changsheng.html">Шпиндели</a> › Changsheng GDZ-125-5.5</nav>
     <h1>Шпиндель Changsheng GDZ-125-5.5 5.5 кВт</h1>
     <div class="spindle-top">
-        <div class="spindle-photo"><img src="../images/changsheng-gdz125-5.5kw-ru.jpg" alt="Шпиндель Changsheng GDZ-125-5.5"></div>
+        <div class="spindle-photo gallery" data-spindle-gallery data-model="Changsheng GDZ-125-5.5" data-photos="[&quot;../images/changsheng-gdz125-5.5kw-ru.jpg&quot;,&quot;../equipment-data/changsheng-gdz-125-5-5/2.jpg&quot;,&quot;../equipment-data/changsheng-gdz-125-5-5/3.jpg&quot;,&quot;../equipment-data/changsheng-gdz-125-5-5/4.jpg&quot;]">
+        <div class="gallery-main">
+            <button type="button" class="gallery-nav gallery-prev" aria-label="Предыдущее фото">‹</button>
+            <img class="gallery-main-img" src="../images/changsheng-gdz125-5.5kw-ru.jpg" alt="Шпиндель Changsheng GDZ-125-5.5 — фото 1 из 4">
+            <button type="button" class="gallery-nav gallery-next" aria-label="Следующее фото">›</button>
+            <span class="gallery-counter" aria-live="polite">1 / 4</span>
+        </div>
+        <div class="gallery-thumbs"><button type="button" class="gallery-thumb is-active" data-i="0" aria-label="Шпиндель Changsheng GDZ-125-5.5 — фото 1 из 4" aria-current="true"><img src="../images/changsheng-gdz125-5.5kw-ru.jpg" alt=""></button>
+        <button type="button" class="gallery-thumb" data-i="1" aria-label="Шпиндель Changsheng GDZ-125-5.5 — фото 2 из 4" aria-current="false"><img src="../equipment-data/changsheng-gdz-125-5-5/2.jpg" alt=""></button>
+        <button type="button" class="gallery-thumb" data-i="2" aria-label="Шпиндель Changsheng GDZ-125-5.5 — фото 3 из 4" aria-current="false"><img src="../equipment-data/changsheng-gdz-125-5-5/3.jpg" alt=""></button>
+        <button type="button" class="gallery-thumb" data-i="3" aria-label="Шпиндель Changsheng GDZ-125-5.5 — фото 4 из 4" aria-current="false"><img src="../equipment-data/changsheng-gdz-125-5-5/4.jpg" alt=""></button></div>
+    </div>
         <div class="spindle-buy">
             <div class="sku-line">Артикул: <span class="sku-code">20013</span> <button type="button" class="sku-copy" onclick="copySku('20013', this)" title="Скопировать артикул">Копировать</button></div>
             <p>Чаншэн GDZ-125-5.5 125×298 / 5.5 кВт / ER25 / 380В / 4 подшипника P4</p>
@@ -172,6 +202,13 @@
     <p><a href="../payment-nonresident.html">Оплата и доставка для нерезидентов</a></p>
     <p><a href="../obuchenie/">Обучение операторов ЧПУ</a></p>
 </footer>
+<div class="gallery-lightbox" hidden data-gallery-lightbox>
+    <button type="button" class="gallery-lightbox-close" aria-label="Закрыть">×</button>
+    <button type="button" class="gallery-nav gallery-prev" aria-label="Предыдущее фото">‹</button>
+    <img class="gallery-lightbox-img" src="../images/changsheng-gdz125-5.5kw-ru.jpg" alt="Шпиндель Changsheng GDZ-125-5.5 — фото 1 из 4">
+    <button type="button" class="gallery-nav gallery-next" aria-label="Следующее фото">›</button>
+    <span class="gallery-counter" aria-live="polite">1 / 4</span>
+</div>
 <script>
 function addToCart(id) {
   var cart = JSON.parse(localStorage.getItem('cncCart') || '{}');
@@ -192,6 +229,99 @@ function copySku(sku, btn) {
   function fallback() { var t = document.createElement('textarea'); t.value = sku; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(t); done(); }
   if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(sku).then(done, fallback); else fallback();
 }
+function initSpindleGallery() {
+  var root = document.querySelector('[data-spindle-gallery]');
+  if (!root) return;
+  var srcs = JSON.parse(root.getAttribute('data-photos'));
+  var model = root.getAttribute('data-model') || '';
+  var i = 0;
+  var mainImg = root.querySelector('.gallery-main-img');
+  var mainCounter = root.querySelector('.gallery-counter');
+  var thumbs = root.querySelectorAll('.gallery-thumb');
+  var lb = document.querySelector('[data-gallery-lightbox]');
+  var lbImg = lb && lb.querySelector('.gallery-lightbox-img');
+  var lbCounter = lb && lb.querySelector('.gallery-counter');
+  var lbOpen = false;
+
+  function alt(k) {
+    return 'Шпиндель ' + model + ' — фото ' + (k + 1) + ' из ' + srcs.length;
+  }
+  function show(n) {
+    i = (n + srcs.length) % srcs.length;
+    mainImg.src = srcs[i];
+    mainImg.alt = alt(i);
+    mainCounter.textContent = (i + 1) + ' / ' + srcs.length;
+    for (var t = 0; t < thumbs.length; t++) {
+      thumbs[t].classList.toggle('is-active', t === i);
+      thumbs[t].setAttribute('aria-current', t === i ? 'true' : 'false');
+    }
+    if (lbImg) {
+      lbImg.src = srcs[i];
+      lbImg.alt = alt(i);
+    }
+    if (lbCounter) lbCounter.textContent = (i + 1) + ' / ' + srcs.length;
+  }
+  function prev() { show(i - 1); }
+  function next() { show(i + 1); }
+  function openLb() {
+    if (!lb) return;
+    lb.hidden = false;
+    lbOpen = true;
+    show(i);
+    var closeBtn = lb.querySelector('.gallery-lightbox-close');
+    if (closeBtn) closeBtn.focus();
+  }
+  function closeLb() {
+    if (!lb) return;
+    lb.hidden = true;
+    lbOpen = false;
+  }
+
+  root.querySelector('.gallery-prev').addEventListener('click', prev);
+  root.querySelector('.gallery-next').addEventListener('click', next);
+  mainImg.addEventListener('click', openLb);
+  for (var t = 0; t < thumbs.length; t++) {
+    (function (k) {
+      thumbs[k].addEventListener('click', function () { show(k); });
+    })(t);
+  }
+  if (lb) {
+    lb.querySelector('.gallery-prev').addEventListener('click', prev);
+    lb.querySelector('.gallery-next').addEventListener('click', next);
+    lb.querySelector('.gallery-lightbox-close').addEventListener('click', closeLb);
+    lb.addEventListener('click', function (e) {
+      if (e.target === lb) closeLb();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    var tag = e.target && e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (e.key === 'ArrowLeft') prev();
+    else if (e.key === 'ArrowRight') next();
+    else if (e.key === 'Escape' && lbOpen) closeLb();
+  });
+
+  var startX = null;
+  function onStart(e) {
+    startX = (e.touches ? e.touches[0].clientX : e.clientX);
+  }
+  function onEnd(e) {
+    if (startX == null) return;
+    var x = (e.changedTouches ? e.changedTouches[0].clientX : e.clientX);
+    var dx = x - startX;
+    startX = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0) next(); else prev();
+  }
+  var swipeEl = root.querySelector('.gallery-main');
+  swipeEl.addEventListener('touchstart', onStart, { passive: true });
+  swipeEl.addEventListener('touchend', onEnd);
+  if (lb) {
+    lb.addEventListener('touchstart', onStart, { passive: true });
+    lb.addEventListener('touchend', onEnd);
+  }
+}
+initSpindleGallery();
 </script>
 </body>
 </html>
