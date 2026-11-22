@@ -39,7 +39,7 @@ var MACHINES = [
     title: 'Станок ЧПУ 4060, 1500 Вт',
     short: 'Настольный фрезерно-гравировальный станок, рабочее поле 400×600×120 мм',
     price: 239000, cat: 'machines',
-    img: '',
+    img: 'equipment-data/cnc-4060/main.jpg',
     link: 'machines/cnc-4060.html',
     techLink: 'equipment/cnc-3040.html',
     description: [
