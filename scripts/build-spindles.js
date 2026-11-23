@@ -810,4 +810,21 @@ for (const file of htmlFiles(ROOT)) {
 }
 console.log(`Версии файлов: ${VERSIONED.map(f => `${f}?v=${versions[f]}`).join(', ')} (страниц с метками: ${versionedFiles})`);
 
+// 6) чистые адреса главных страниц разделов: ссылки вида "../index.html", "en/index.html" ведём на "../", "en/".
+//    Канонический адрес главной — https://чпу-склад.рф/ (и /en/, /obuchenie/ ...), а ссылки на .../index.html
+//    создавали второй адрес той же страницы: поисковики видели дубли title/description.
+//    Пустую Mach3.html и технический раздел 3040 не трогаем (как и build-i18n.js).
+const CLEAN_SKIP_FILES = new Set(['program/Mach3.html', 'equipment/cnc-3040.html']);
+const CLEAN_SKIP_DIRS = new Set(['knowledge', 'equipment-data']);
+let cleanFiles = 0;
+for (const file of htmlFiles(ROOT)) {
+  const rel = path.relative(ROOT, file).split(path.sep).join('/');
+  if (CLEAN_SKIP_FILES.has(rel) || CLEAN_SKIP_DIRS.has(rel.split('/')[0])) continue;
+  const text = fs.readFileSync(file, 'utf8');
+  const out = text.replace(/\bhref="((?:\.\.\/)*(?:[a-z0-9_-]+\/)*)index\.html(#[^"]*)?"/gi, (m, dir, hash) => `href="${dir || './'}${hash || ''}"`)
+    .replace(/\bhref="(https:\/\/чпу-склад\.рф\/(?:[a-z0-9_-]+\/)*)index\.html"/gi, 'href="$1"');
+  if (out !== text) { fs.writeFileSync(file, out); cleanFiles++; }
+}
+console.log(`Чистые адреса главных (без index.html): обновлено страниц ${cleanFiles}`);
+
 console.log(`OK: ${SPINDLES.length} страниц в spindles/, ${MACHINES.length} карточек станков в machines/, ${PRODUCTS.length} карточек товаров в products/, список и sitemap обновлены`);
