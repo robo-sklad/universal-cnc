@@ -4,6 +4,9 @@ Allow: /
 User-agent: Yandex
 Allow: /
 Crawl-delay: 1
+# ?cat= и ?q= — фильтр и поиск того же каталога (canonical без параметров), utm/yclid/gclid — метки рекламы: для Яндекса это не отдельные страницы
+Clean-param: cat&q
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&gclid&fbclid
 
 User-agent: Googlebot
 Allow: /

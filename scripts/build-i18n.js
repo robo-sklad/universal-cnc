@@ -112,7 +112,8 @@ const relFrom = (fromFile, toFile) => {
 // переключатель языка: ссылки на ту же страницу на других языках (или на главную языка)
 function langSwitch(file, cur, pg) {
   const items = ALL.map(l => {
-    const target = pg ? (l === 'ru' ? pg.ruPath : pg.langPath(l)) : (l === 'ru' ? 'index.html' : `${l}/index.html`);
+    // страница без перевода: «Русский» ведёт на неё же, остальные языки — на главную языка
+    const target = pg ? (l === 'ru' ? pg.ruPath : pg.langPath(l)) : (l === 'ru' ? (cur === 'ru' ? file : 'index.html') : `${l}/index.html`);
     const cur1 = l === cur ? ' aria-current="true"' : '';
     return `<li><a href="${esc(relFrom(file, target))}" hreflang="${l}" lang="${l}"${cur1} onclick="try{localStorage.setItem('siteLang','${l}')}catch(e){}">${NATIVE[l]}</a></li>`;
   }).join('');
@@ -451,16 +452,16 @@ ${cartJs(l)}
 
 // --- оборудование: страница сохраняется как переадресация на каталог товаров (GitHub Pages без 301) ---
 const EQ_MOVED = {
-  en: { desc: 'The Machines section has been merged into the Products catalogue.', body: 'The Machines section has been merged into the <a href="marketplace.html">Products</a> catalogue.' },
-  kk: { desc: '«Станоктар» бөлімі «Тауарлар» каталогымен біріктірілді.', body: '«Станоктар» бөлімі <a href="marketplace.html">Тауарлар</a> каталогымен біріктірілді.' },
-  uz: { desc: 'Dastgohlar bo‘limi Mahsulotlar katalogiga birlashtirildi.', body: 'Dastgohlar bo‘limi <a href="marketplace.html">Mahsulotlar</a> katalogiga birlashtirildi.' },
-  hy: { desc: '«Հաստոցներ» բաժինը միավորվել է «Ապրանքներ» ցանկի հետ։', body: '«Հաստոցներ» բաժինը միավորվել է <a href="marketplace.html">Ապրանքներ</a> ցանկի հետ։' },
-  ka: { desc: 'განყოფილება «ჩარხები» გაერთიანდა კატალოგთან «პროდუქცია».', body: 'განყოფილება «ჩარხები» გაერთიანდა კატალოგთან <a href="marketplace.html">პროდუქცია</a>.' },
-  ky: { desc: '«Станоктор» бөлүмү «Товарлар» каталогу менен бириктирилди.', body: '«Станоктор» бөлүмү <a href="marketplace.html">Товарлар</a> каталогу менен бириктирилди.' }
+  en: { title: 'Machines — moved to the Products catalogue | CNC-Sklad', desc: 'The Machines section has been merged into the Products catalogue.', body: 'The Machines section has been merged into the <a href="marketplace.html">Products</a> catalogue.' },
+  kk: { title: 'Станоктар — Тауарлар каталогына көшірілді | ЧПУ-склад', desc: '«Станоктар» бөлімі «Тауарлар» каталогымен біріктірілді.', body: '«Станоктар» бөлімі <a href="marketplace.html">Тауарлар</a> каталогымен біріктірілді.' },
+  uz: { title: 'Dastgohlar — Mahsulotlar katalogiga ko‘chirildi | CNC-Sklad', desc: 'Dastgohlar bo‘limi Mahsulotlar katalogiga birlashtirildi.', body: 'Dastgohlar bo‘limi <a href="marketplace.html">Mahsulotlar</a> katalogiga birlashtirildi.' },
+  hy: { title: 'Հաստոցներ — տեղափոխված է Ապրանքներ ցանկ | CNC-Sklad', desc: '«Հաստոցներ» բաժինը միավորվել է «Ապրանքներ» ցանկի հետ։', body: '«Հաստոցներ» բաժինը միավորվել է <a href="marketplace.html">Ապրանքներ</a> ցանկի հետ։' },
+  ka: { title: 'ჩარხები — გადატანილია კატალოგში პროდუქცია | CNC-Sklad', desc: 'განყოფილება «ჩარხები» გაერთიანდა კატალოგთან «პროდუქცია».', body: 'განყოფილება «ჩარხები» გაერთიანდა კატალოგთან <a href="marketplace.html">პროდუქცია</a>.' },
+  ky: { title: 'Станоктор — Товарлар каталогуна көчүрүлдү | ЧПУ-склад', desc: '«Станоктор» бөлүмү «Товарлар» каталогу менен бириктирилди.', body: '«Станоктор» бөлүмү <a href="marketplace.html">Товарлар</a> каталогу менен бириктирилди.' }
 };
 function equipmentPage(l) {
   const ui = DICT[l].ui, msg = EQ_MOVED[l];
-  const title = `${ui.navEquipment} — ${ui.navCatalog} | ${ui.brand}`;
+  const title = msg.title || `${ui.navEquipment} — ${ui.navCatalog} | ${ui.brand}`;
   const canonical = `${SITE}/${l}/marketplace.html`;
   return `<!DOCTYPE html>
 <html lang="${l}">
