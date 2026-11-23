@@ -84,7 +84,7 @@
   <!-- obuchenie:end -->
   <url>
     <loc>https://чпу-склад.рф/program.html</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -103,6 +103,12 @@
   <url>
     <loc>https://чпу-склад.рф/program/CNCV4.html</loc>
     <lastmod>2026-11-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://чпу-склад.рф/program/Mach3.html</loc>
+    <lastmod>2026-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
